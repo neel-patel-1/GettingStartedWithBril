@@ -12,6 +12,7 @@
   FNV_prime: int = const 16777619;
   FNV_offset_basis: int = const 2166136261;
   hash: int = id FNV_offset_basis;
+  one: int = const 1;
   i: int = const 0;
   loc: ptr<int> = id data;
   continue: bool = lt i size;

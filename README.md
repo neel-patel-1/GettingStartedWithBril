@@ -1,10 +1,11 @@
 # Lesson 2:  Representing Programs
 
 ## Benchmark
-*
+* depends on the [bril2json utility](https://capra.cs.cornell.edu/bril/tools/brilirs.html), and [brili interpreter](https://capra.cs.cornell.edu/bril/tools/brilirs.html)
 ```sh
-# Compile the typescript benchmark into bril, and run it using brili
-
+# Convert the fnv1hash bril code to json, and run it using brili
+cd bench
+cat fnv1_hash.bril |  bril2json  | brili
 ```
 
 ## Bril Program Analysis
