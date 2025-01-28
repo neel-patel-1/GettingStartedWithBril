@@ -1,6 +1,6 @@
 import json
 
-
+TERMINATORS = 'br', 'jmp', 'ret'
 file_path = 'bril/test/parse/add.json'
 
 with open(file_path, 'r') as file:
@@ -11,10 +11,18 @@ with open(file_path, 'r') as file:
 functions = data['functions']
 for function in functions:
   instrs = function['instrs']
+  bbs = []
   bb = []
   for instr in instrs:
-    if instr['op'] == 'jmp':
-      bb.append(instr['label'])
+    if 'op' in instr:
+      bb.append(instr)
+      # print(instr)
+      if instr['op'] in TERMINATORS:
+        # print(bb)
+        bbs.append(bb)
+        bb = []
+  if bb:
+    bbs.append(bb)
+  print(bbs)
 
-
-print(data)
+# print(data)
