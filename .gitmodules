@@ -1,0 +1,6 @@
+[submodule "bril"]
+	path = bril
+	url = git@github.com:neel-patel-1/bril.git
+[submodule "turnt"]
+	path = turnt
+	url = https://github.com/cucapra/turnt.git
