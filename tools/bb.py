@@ -1,4 +1,5 @@
 import json
+from collections import OrderedDict
 
 TERMINATORS = 'br', 'jmp', 'ret'
 file_path = 'bril/test/parse/positions.json'
@@ -13,20 +14,22 @@ def form_bbs(data):
     bbs = []
     bb = []
     for instr in instrs:
+      bb.append(instr)
       if 'op' in instr:
-        bb.append(instr)
-        # print(instr)
         if instr['op'] in TERMINATORS:
-          # print(bb)
           bbs.append(bb)
           bb = []
     if bb:
       bbs.append(bb)
     return bbs
 
+def form_bb_map(bbs):
+  for bb in bbs:
+    print(bb)
 
 # to form edges, it may be useful to have a mapping from labels to blocks
 # if the last instruction is a jump, get the
+# pretty print the CFG: print it so that the labels are matched with successors
 def form_cfg(bbs):
   cfg = {}
   for bb in bbs:
@@ -37,9 +40,9 @@ def form_cfg(bbs):
       cfg[bb] = [bbs[bbs.index(bb) + 1], bbs[bb['args'][0]]]
     elif last_inst[op] == 'jmp':
       cfg[bb] = [bbs[bb['args'][0]]]
-
+  return cfg
 
 with open(file_path, 'r') as file:
   data = json.load(file)
   bbs = form_bbs(data)
-  cfg = form_cfg(bbs)
+  form_bb_map(bbs)
