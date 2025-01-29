@@ -9,8 +9,8 @@
 
 # FNV-1a hash function
 @fnv1a_hash(data: ptr<char>, size: int): int {
-  FNV_prime: int = const 1099511628211;
-  FNV_offset_basis: int = const 14695981039346656037;
+  FNV_prime: int = const 16777619;
+  FNV_offset_basis: int = const 2166136261;
   hash: int = id FNV_offset_basis;
   one: int = const 1;
   i: int = const 0;
