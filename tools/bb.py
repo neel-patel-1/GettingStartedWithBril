@@ -59,11 +59,22 @@ def form_cfg():
       cfg[label] = [next_block]
   print(cfg)
 
+def count_add_instructions(data):
+  count = 0
+  for function in data['functions']:
+    for instr in function['instrs']:
+      if 'op' in instr:
+        if instr['op'] == 'add':
+          count += 1
+  return count
+
 with open(file_path, 'r') as file:
   data = json.load(file)
   bbs = form_bbs(data)
   form_bb_map(bbs)
   form_cfg()
+  add_instrs = count_add_instructions(data)
 
 print(f"Number of basic blocks: {num_bbs}")
 print(f"Number of edges: {num_edges}")
+print(f"Number of add instructions: {add_instrs}")
