@@ -22,8 +22,9 @@ def form_bbs(data):
           bb = []
           num_bbs += 1
       if 'label' in instr and len(bb) > 1:
+        bb = bb[:-1]
         bbs.append(bb)
-        bb = []
+        bb = [instr]
         num_bbs += 1
     if bb:
       bbs.append(bb)
@@ -49,7 +50,6 @@ cfg = OrderedDict()
 def form_cfg():
   global num_edges, cfg
   for label, block in block_map.items():
-    # print(f"Label: {label}, Block: {block}")
     try:
       if block[-1]['op'] in ('jmp', 'br'):
         succ = block[-1]['labels']
@@ -62,8 +62,7 @@ def form_cfg():
         cfg[label] = []
       else:
         num_edges += 1
-        # print(f"Block map: {block_map}")
-        next_block = list(block_map.values())[list(block_map.keys()).index(label) + 1]
+        next_block = label
         cfg[label] = [next_block]
     except:
       print(f"Error: {label}, {block}")
