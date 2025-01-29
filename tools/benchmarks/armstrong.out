@@ -1,7 +1,13 @@
-Error: b0, [{'dest': 'zero', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'ten', 'op': 'const', 'type': 'int', 'value': 10}, {'dest': 'sum', 'op': 'const', 'type': 'int', 'value': 0}, {'args': ['input'], 'dest': 'digits', 'funcs': ['getDigits'], 'op': 'call', 'type': 'int'}, {'args': ['input'], 'dest': 'tmp', 'op': 'id', 'type': 'int'}, {'label': 'loop'}]
-Error: b8, [{'dest': 'ten', 'op': 'const', 'type': 'int', 'value': 10}, {'dest': 'zero', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'res', 'op': 'const', 'type': 'int', 'value': 1}, {'label': 'loop'}]
-OrderedDict([('b1', ['body', 'done']), ('body', ['loop']), ('done', [[{'dest': 'ten', 'op': 'const', 'type': 'int', 'value': 10}, {'dest': 'zero', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['n', 'ten'], 'dest': 'div', 'op': 'div', 'type': 'int'}, {'args': ['div', 'zero'], 'dest': 'cond', 'op': 'eq', 'type': 'bool'}, {'args': ['cond'], 'labels': ['then', 'else'], 'op': 'br'}]]), ('b4', ['then', 'else']), ('then', [[{'args': ['div'], 'dest': 'rec', 'funcs': ['getDigits'], 'op': 'call', 'type': 'int'}, {'args': ['rec', 'one'], 'dest': 'res', 'op': 'add', 'type': 'int'}, {'args': ['res'], 'op': 'ret'}]]), ('else', [[{'args': ['a', 'b'], 'dest': 'q', 'op': 'div', 'type': 'int'}, {'args': ['b', 'q'], 'dest': 'aq', 'op': 'mul', 'type': 'int'}, {'args': ['a', 'aq'], 'dest': 'mod', 'op': 'sub', 'type': 'int'}, {'args': ['mod'], 'op': 'ret'}]]), ('b7', [[{'dest': 'ten', 'op': 'const', 'type': 'int', 'value': 10}, {'dest': 'zero', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'res', 'op': 'const', 'type': 'int', 'value': 1}, {'label': 'loop'}]]), ('b9', ['done', 'body'])])
 Number of functions: 4
-Number of basic blocks: 12
-Number of edges: 11
-Number of add instructions: 2
+Function: main, Number of basic blocks: 4, Number of edges in CFG: 4
+CFG: OrderedDict([('b0', ['b0']), ('loop', ['body', 'done']), ('body', ['loop']), ('done', [])])
+Number of add instructions: 1
+Function: getDigits, Number of basic blocks: 3, Number of edges in CFG: 12
+CFG: OrderedDict([('b0', ['b0']), ('loop', ['body', 'done']), ('body', ['loop']), ('done', ['done']), ('b4', ['then', 'else']), ('then', ['then']), ('else', [])])
+Number of add instructions: 1
+Function: mod, Number of basic blocks: 1, Number of edges in CFG: 21
+CFG: OrderedDict([('b0', ['b0']), ('loop', ['body', 'done']), ('body', ['loop']), ('done', ['done']), ('b4', ['then', 'else']), ('then', ['then']), ('else', ['else']), ('b7', [])])
+Number of add instructions: 0
+Function: power, Number of basic blocks: 4, Number of edges in CFG: 31
+CFG: OrderedDict([('b0', ['b0']), ('loop', ['done', 'body']), ('body', ['loop']), ('done', ['done']), ('b4', ['then', 'else']), ('then', ['then']), ('else', ['else']), ('b7', ['b7']), ('b8', [])])
+Number of add instructions: 0

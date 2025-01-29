@@ -1,6 +1,7 @@
-Error: b0, [{'dest': 'sum', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'two', 'op': 'const', 'type': 'int', 'value': 2}, {'dest': 'zero', 'op': 'const', 'type': 'int', 'value': 0}, {'label': 'loop'}]
-OrderedDict([('b1', ['done', 'body']), ('body', ['loop']), ('done', [[{'args': ['dividend', 'divisor'], 'dest': 'quotient', 'op': 'div', 'type': 'int'}, {'dest': 'two', 'op': 'const', 'type': 'int', 'value': 2}, {'args': ['two', 'quotient'], 'dest': 'prod', 'op': 'mul', 'type': 'int'}, {'args': ['dividend', 'prod'], 'dest': 'diff', 'op': 'sub', 'type': 'int'}, {'args': ['diff'], 'op': 'ret'}]]), ('b4', [])])
 Number of functions: 2
-Number of basic blocks: 5
-Number of edges: 4
+Function: main, Number of basic blocks: 4, Number of edges in CFG: 4
+CFG: OrderedDict([('b0', ['b0']), ('loop', ['done', 'body']), ('body', ['loop']), ('done', [])])
 Number of add instructions: 1
+Function: mod, Number of basic blocks: 1, Number of edges in CFG: 9
+CFG: OrderedDict([('b0', ['b0']), ('loop', ['done', 'body']), ('body', ['loop']), ('done', ['done']), ('b4', [])])
+Number of add instructions: 0

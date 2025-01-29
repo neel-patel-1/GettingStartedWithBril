@@ -1,6 +1,7 @@
-Error: else, [{'args': ['zero'], 'dest': 'sum', 'op': 'id', 'type': 'int'}, {'args': ['zero'], 'dest': 'idx', 'op': 'id', 'type': 'int'}, {'args': ['n', 'one'], 'dest': 'n', 'op': 'sub', 'type': 'int'}, {'label': 'while'}]
-OrderedDict([('b0', [[{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'zero', 'op': 'const', 'type': 'int', 'value': 0}, {'args': ['n', 'zero'], 'dest': 'guard0', 'op': 'eq', 'type': 'bool'}, {'args': ['guard0'], 'labels': ['if', 'else'], 'op': 'br'}]]), ('b1', ['if', 'else']), ('if', [[{'args': ['zero'], 'dest': 'sum', 'op': 'id', 'type': 'int'}, {'args': ['zero'], 'dest': 'idx', 'op': 'id', 'type': 'int'}, {'args': ['n', 'one'], 'dest': 'n', 'op': 'sub', 'type': 'int'}, {'label': 'while'}]]), ('b4', ['while.body', 'while.end']), ('while.body', ['while']), ('while.end', [])])
 Number of functions: 2
-Number of basic blocks: 7
-Number of edges: 7
+Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
+Number of add instructions: 0
+Function: catalan, Number of basic blocks: 6, Number of edges in CFG: 8
+CFG: OrderedDict([('b0', ['b0']), ('b1', ['if', 'else']), ('if', ['if']), ('else', ['else']), ('while', ['while.body', 'while.end']), ('while.body', ['while']), ('while.end', [])])
 Number of add instructions: 2

@@ -1,6 +1,10 @@
-Error: b1, [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'sum', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'i', 'op': 'const', 'type': 'int', 'value': 1}, {'label': 'for_start'}]
-OrderedDict([('b0', [[{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'sum', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'i', 'op': 'const', 'type': 'int', 'value': 1}, {'label': 'for_start'}]]), ('b2', ['for', 'end']), ('for', ['for_start']), ('end', [[{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'two', 'op': 'const', 'type': 'int', 'value': 2}, {'args': ['one', 'n'], 'dest': 'n_1', 'op': 'add', 'type': 'int'}, {'args': ['n_1', 'n'], 'dest': 'multi', 'op': 'mul', 'type': 'int'}, {'args': ['multi', 'two'], 'dest': 'sum', 'op': 'div', 'type': 'int'}, {'args': ['sum'], 'op': 'ret'}]]), ('b5', [])])
 Number of functions: 3
-Number of basic blocks: 6
-Number of edges: 5
-Number of add instructions: 3
+Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
+Number of add instructions: 0
+Function: sum_by_loop, Number of basic blocks: 4, Number of edges in CFG: 5
+CFG: OrderedDict([('b0', ['b0']), ('b1', ['b1']), ('for_start', ['for', 'end']), ('for', ['for_start']), ('end', [])])
+Number of add instructions: 2
+Function: sum_by_formula, Number of basic blocks: 1, Number of edges in CFG: 11
+CFG: OrderedDict([('b0', ['b0']), ('b1', ['b1']), ('for_start', ['for', 'end']), ('for', ['for_start']), ('end', ['end']), ('b5', [])])
+Number of add instructions: 1

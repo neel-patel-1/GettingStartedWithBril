@@ -1,6 +1,7 @@
-Error: else.0, [{'label': 'endif.0'}]
-OrderedDict([('b0', [[{'args': ['x'], 'dest': 'v1', 'op': 'id', 'type': 'int'}, {'dest': 'v2', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['v1', 'v2'], 'dest': 'v3', 'op': 'le', 'type': 'bool'}, {'args': ['v3'], 'labels': ['then.0', 'else.0'], 'op': 'br'}]]), ('b1', ['then.0', 'else.0']), ('then.0', [[{'labels': ['endif.0'], 'op': 'jmp'}]]), ('b3', ['endif.0']), ('b5', [])])
 Number of functions: 2
-Number of basic blocks: 6
-Number of edges: 5
+Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
+Number of add instructions: 0
+Function: fac, Number of basic blocks: 5, Number of edges in CFG: 5
+CFG: OrderedDict([('b0', ['b0']), ('b1', ['then.0', 'else.0']), ('then.0', ['then.0']), ('b3', ['endif.0']), ('endif.0', [])])
 Number of add instructions: 0

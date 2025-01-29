@@ -1,6 +1,4 @@
-Error: odd, [{'args': ['x', 'three'], 'dest': 'x', 'op': 'mul', 'type': 'int'}, {'args': ['x', 'one'], 'dest': 'x', 'op': 'add', 'type': 'int'}, {'label': 'print'}]
-OrderedDict([('b0', ['print']), ('cond', ['end', 'loop']), ('loop', ['even', 'odd']), ('even', ['print']), ('b5', ['cond']), ('end', [])])
 Number of functions: 1
-Number of basic blocks: 7
-Number of edges: 7
+Function: main, Number of basic blocks: 7, Number of edges in CFG: 8
+CFG: OrderedDict([('b0', ['print']), ('cond', ['end', 'loop']), ('loop', ['even', 'odd']), ('even', ['print']), ('odd', ['odd']), ('print', ['cond']), ('end', [])])
 Number of add instructions: 1

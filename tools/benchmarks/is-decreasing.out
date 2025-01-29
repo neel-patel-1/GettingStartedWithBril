@@ -1,6 +1,10 @@
-Error: b1, [{'args': ['x'], 'dest': 'tmp', 'op': 'id', 'type': 'int'}, {'dest': 'tmp1', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'tmp2', 'op': 'const', 'type': 'int', 'value': -1}, {'args': ['tmp1', 'tmp2'], 'dest': 'tmp3', 'op': 'mul', 'type': 'int'}, {'args': ['tmp3'], 'dest': 'prev', 'op': 'id', 'type': 'int'}, {'label': 'label4'}]
-OrderedDict([('b0', [[{'args': ['x'], 'dest': 'tmp', 'op': 'id', 'type': 'int'}, {'dest': 'tmp1', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'tmp2', 'op': 'const', 'type': 'int', 'value': -1}, {'args': ['tmp1', 'tmp2'], 'dest': 'tmp3', 'op': 'mul', 'type': 'int'}, {'args': ['tmp3'], 'dest': 'prev', 'op': 'id', 'type': 'int'}, {'label': 'label4'}]]), ('b2', ['label5', 'label6']), ('label5', ['label11', 'label12']), ('label11', [[{'labels': ['label13'], 'op': 'jmp'}]]), ('b5', ['label13']), ('label12', ['label13']), ('label13', ['label4']), ('label6', [[{'dest': 'tmp18', 'op': 'const', 'type': 'int', 'value': 10}, {'args': ['x', 'tmp18'], 'dest': 'tmp19', 'op': 'div', 'type': 'int'}, {'dest': 'tmp20', 'op': 'const', 'type': 'int', 'value': 10}, {'args': ['tmp19', 'tmp20'], 'dest': 'tmp21', 'op': 'mul', 'type': 'int'}, {'args': ['x', 'tmp21'], 'dest': 'tmp22', 'op': 'sub', 'type': 'int'}, {'args': ['tmp22'], 'op': 'ret'}]]), ('b9', [])])
 Number of functions: 3
-Number of basic blocks: 10
-Number of edges: 10
+Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
+Number of add instructions: 0
+Function: is_decreasing, Number of basic blocks: 8, Number of edges in CFG: 10
+CFG: OrderedDict([('b0', ['b0']), ('b1', ['b1']), ('label4', ['label5', 'label6']), ('label5', ['label11', 'label12']), ('label11', ['label11']), ('b5', ['label13']), ('label12', ['label13']), ('label13', ['label4']), ('label6', [])])
+Number of add instructions: 0
+Function: last_digit, Number of basic blocks: 1, Number of edges in CFG: 21
+CFG: OrderedDict([('b0', ['b0']), ('b1', ['b1']), ('label4', ['label5', 'label6']), ('label5', ['label11', 'label12']), ('label11', ['label11']), ('b5', ['label13']), ('label12', ['label13']), ('label13', ['label4']), ('label6', ['label6']), ('b9', [])])
 Number of add instructions: 0

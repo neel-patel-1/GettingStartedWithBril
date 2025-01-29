@@ -1,6 +1,4 @@
-Error: b0, [{'dest': 'vc0', 'op': 'const', 'type': 'int', 'value': 0}, {'args': ['op1'], 'dest': 'v0', 'op': 'id', 'type': 'int'}, {'args': ['op2'], 'dest': 'v1', 'op': 'id', 'type': 'int'}, {'label': 'cmp.val'}]
-OrderedDict([('b1', ['if.1', 'else.1']), ('if.1', ['loop.bound']), ('else.1', ['loop.bound']), ('loop.bound', ['program.end', 'update.val']), ('update.val', ['if.2', 'else.2']), ('if.2', ['cmp.val']), ('else.2', ['cmp.val']), ('program.end', [])])
 Number of functions: 1
-Number of basic blocks: 9
-Number of edges: 10
+Function: main, Number of basic blocks: 9, Number of edges in CFG: 11
+CFG: OrderedDict([('b0', ['b0']), ('cmp.val', ['if.1', 'else.1']), ('if.1', ['loop.bound']), ('else.1', ['loop.bound']), ('loop.bound', ['program.end', 'update.val']), ('update.val', ['if.2', 'else.2']), ('if.2', ['cmp.val']), ('else.2', ['cmp.val']), ('program.end', [])])
 Number of add instructions: 0

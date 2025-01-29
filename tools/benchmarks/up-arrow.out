@@ -1,7 +1,7 @@
-Error: b1, [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['num'], 'dest': 'ans', 'op': 'id', 'type': 'int'}, {'dest': 'i', 'op': 'const', 'type': 'int', 'value': 1}, {'label': 'loopstart'}]
-Error: arrowsgreaterthan1, [{'args': ['arrows', 'one'], 'dest': 'new_arrows', 'op': 'sub', 'type': 'int'}, {'args': ['num', 'new_arrows', 'ans'], 'dest': 'ans', 'funcs': ['up_arrow'], 'op': 'call', 'type': 'int'}, {'label': 'finally'}]
-OrderedDict([('b0', [[{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['num'], 'dest': 'ans', 'op': 'id', 'type': 'int'}, {'dest': 'i', 'op': 'const', 'type': 'int', 'value': 1}, {'label': 'loopstart'}]]), ('b2', ['loopbody', 'endloop']), ('loopbody', ['base', 'arrowsgreaterthan1']), ('base', ['finally']), ('b6', ['loopstart']), ('endloop', [])])
 Number of functions: 2
-Number of basic blocks: 8
-Number of edges: 7
+Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
+Number of add instructions: 0
+Function: up_arrow, Number of basic blocks: 7, Number of edges in CFG: 9
+CFG: OrderedDict([('b0', ['b0']), ('b1', ['b1']), ('loopstart', ['loopbody', 'endloop']), ('loopbody', ['base', 'arrowsgreaterthan1']), ('base', ['finally']), ('arrowsgreaterthan1', ['arrowsgreaterthan1']), ('finally', ['loopstart']), ('endloop', [])])
 Number of add instructions: 1

@@ -1,8 +1,4 @@
-Error: b0, [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['n', 'n'], 'dest': 'n_sq', 'op': 'mul', 'type': 'int'}, {'args': ['one'], 'dest': 'a', 'op': 'id', 'type': 'int'}, {'label': 'outer_loop'}]
-Error: b1, [{'args': ['one'], 'dest': 'b', 'op': 'id', 'type': 'int'}, {'label': 'inner_loop'}]
-Error: found, [{'args': ['b', 'a'], 'op': 'print'}, {'label': 'inner_continue'}]
-OrderedDict([('b2', ['found', 'inner_continue']), ('b4', ['outer_continue', 'inner_loop']), ('outer_continue', ['finish', 'outer_loop'])])
 Number of functions: 1
-Number of basic blocks: 7
-Number of edges: 6
+Function: main, Number of basic blocks: 7, Number of edges in CFG: 9
+CFG: OrderedDict([('b0', ['b0']), ('outer_loop', ['outer_loop']), ('inner_loop', ['found', 'inner_continue']), ('found', ['found']), ('inner_continue', ['outer_continue', 'inner_loop']), ('outer_continue', ['finish', 'outer_loop'])])
 Number of add instructions: 3

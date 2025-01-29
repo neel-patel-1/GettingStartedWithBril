@@ -7,30 +7,27 @@ num_bbs = 0
 num_edges = 0
 num_functions = 0
 
-def form_bbs(data):
-  global num_bbs, num_functions
-  functions = data['functions']
+def form_bbs(function):
+  num_bbs = 0
   bbs = []
-  for function in functions:
-    instrs = function['instrs']
-    bb = []
-    for instr in instrs:
-      bb.append(instr)
-      if 'op' in instr:
-        if instr['op'] in TERMINATORS:
-          bbs.append(bb)
-          bb = []
-          num_bbs += 1
-      if 'label' in instr and len(bb) > 1:
-        bb = bb[:-1]
+  instrs = function['instrs']
+  bb = []
+  for instr in instrs:
+    bb.append(instr)
+    if 'op' in instr:
+      if instr['op'] in TERMINATORS:
         bbs.append(bb)
-        bb = [instr]
+        bb = []
         num_bbs += 1
-    if bb:
+    if 'label' in instr and len(bb) > 1:
+      bb = bb[:-1]
       bbs.append(bb)
+      bb = [instr]
       num_bbs += 1
-    num_functions += 1
-  return bbs
+  if bb:
+    bbs.append(bb)
+    num_bbs += 1
+  return (bbs, num_bbs)
 
 # to form edges, it may be useful to have a mapping from labels to blocks
 block_map = OrderedDict()
@@ -66,24 +63,22 @@ def form_cfg():
         cfg[label] = [next_block]
     except:
       print(f"Error: {label}, {block}")
-  print(cfg)
 
-def count_add_instructions(data):
+def count_add_instructions(function):
   count = 0
-  for function in data['functions']:
-    for instr in function['instrs']:
-      if 'op' in instr:
-        if instr['op'] == 'add':
-          count += 1
+  for instr in function['instrs']:
+    if 'op' in instr:
+      if instr['op'] == 'add':
+        count += 1
   return count
 
 data = json.load(sys.stdin)
-bbs = form_bbs(data)
-form_bb_map(bbs)
-form_cfg()
-add_instrs = count_add_instructions(data)
-
-print(f"Number of functions: {num_functions}")
-print(f"Number of basic blocks: {num_bbs}")
-print(f"Number of edges: {num_edges}")
-print(f"Number of add instructions: {add_instrs}")
+print(f"Number of functions: {len(data['functions'])}")
+for function in data['functions']:
+  bbinfo = form_bbs(function)
+  form_bb_map(bbinfo[0])
+  form_cfg()
+  print(f"Function: {function['name']}, Number of basic blocks: {bbinfo[1]}, Number of edges in CFG: {num_edges}")
+  print(f"CFG: {cfg}")
+  add_instrs = count_add_instructions(function)
+  print(f"Number of add instructions: {add_instrs}")

@@ -1,9 +1,7 @@
-Error: false, [{'args': ['a'], 'dest': 't2', 'op': 'id', 'type': 'int'}, {'label': 'for.outer.cond'}]
-Error: for.outer.body, [{'dest': 't4', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['t4', 't4'], 'dest': 't5', 'op': 'eq', 'type': 'bool'}, {'label': 'for.inner.init'}]
-Error: b5, [{'dest': 't6', 'op': 'const', 'type': 'int', 'value': 2}, {'dest': 't7', 'op': 'const', 'type': 'int', 'value': 2}, {'label': 'for.inner.cond'}]
-Error: if.outer.body, [{'args': ['t2'], 'op': 'print'}, {'label': 'if.outer.end'}]
-OrderedDict([('for.outer.init', ['true', 'false']), ('true', ['for.outer.cond']), ('b3', ['for.outer.body', 'for.outer.end']), ('b6', ['for.inner.body', 'for.inner.end']), ('for.inner.body', ['if.inner.body', 'if.inner.end']), ('if.inner.body', ['for.inner.end']), ('if.inner.end', ['for.inner.cond']), ('for.inner.end', ['if.outer.body', 'if.outer.end']), ('b12', ['for.outer.cond']), ('b13', [])])
 Number of functions: 2
-Number of basic blocks: 15
-Number of edges: 14
+Function: main, Number of basic blocks: 14, Number of edges in CFG: 18
+CFG: OrderedDict([('for.outer.init', ['true', 'false']), ('true', ['for.outer.cond']), ('false', ['false']), ('for.outer.cond', ['for.outer.body', 'for.outer.end']), ('for.outer.body', ['for.outer.body']), ('for.inner.init', ['for.inner.init']), ('for.inner.cond', ['for.inner.body', 'for.inner.end']), ('for.inner.body', ['if.inner.body', 'if.inner.end']), ('if.inner.body', ['for.inner.end']), ('if.inner.end', ['for.inner.cond']), ('for.inner.end', ['if.outer.body', 'if.outer.end']), ('if.outer.body', ['if.outer.body']), ('if.outer.end', ['for.outer.cond'])])
 Number of add instructions: 3
+Function: mod, Number of basic blocks: 1, Number of edges in CFG: 36
+CFG: OrderedDict([('for.outer.init', ['true', 'false']), ('true', ['for.outer.cond']), ('false', ['false']), ('for.outer.cond', ['for.outer.body', 'for.outer.end']), ('for.outer.body', ['for.outer.body']), ('for.inner.init', ['for.inner.init']), ('for.inner.cond', ['for.inner.body', 'for.inner.end']), ('for.inner.body', ['if.inner.body', 'if.inner.end']), ('if.inner.body', ['for.inner.end']), ('if.inner.end', ['for.inner.cond']), ('for.inner.end', ['if.outer.body', 'if.outer.end']), ('if.outer.body', ['if.outer.body']), ('if.outer.end', ['for.outer.cond']), ('b13', [])])
+Number of add instructions: 0

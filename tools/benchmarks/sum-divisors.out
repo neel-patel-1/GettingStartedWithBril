@@ -1,6 +1,7 @@
-Error: neg, [{'args': ['n', 'non'], 'dest': 'n', 'op': 'mul', 'type': 'int'}, {'label': 'begin'}]
-OrderedDict([('b0', ['neg', 'begin']), ('b2', ['end', 'check']), ('check', ['body', 'begin']), ('body', ['begin', 'then']), ('then', ['begin']), ('end', [[{'args': ['dividend', 'divisor'], 'dest': 'quot', 'op': 'div', 'type': 'int'}, {'args': ['divisor', 'quot'], 'dest': 'prod', 'op': 'mul', 'type': 'int'}, {'args': ['dividend', 'prod'], 'dest': 'diff', 'op': 'sub', 'type': 'int'}, {'args': ['diff'], 'op': 'ret'}]]), ('b7', [])])
 Number of functions: 2
-Number of basic blocks: 8
-Number of edges: 10
+Function: main, Number of basic blocks: 7, Number of edges in CFG: 10
+CFG: OrderedDict([('b0', ['neg', 'begin']), ('neg', ['neg']), ('begin', ['end', 'check']), ('check', ['body', 'begin']), ('body', ['begin', 'then']), ('then', ['begin']), ('end', [])])
 Number of add instructions: 3
+Function: mod, Number of basic blocks: 1, Number of edges in CFG: 21
+CFG: OrderedDict([('b0', ['neg', 'begin']), ('neg', ['neg']), ('begin', ['end', 'check']), ('check', ['body', 'begin']), ('body', ['begin', 'then']), ('then', ['begin']), ('end', ['end']), ('b7', [])])
+Number of add instructions: 0

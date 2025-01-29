@@ -1,6 +1,7 @@
-Error: then, [{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['disks', 'one'], 'dest': 'above', 'op': 'sub', 'type': 'int'}, {'args': ['above', 'src', 'spare', 'dst'], 'funcs': ['hanoi'], 'op': 'call'}, {'args': ['src', 'dst'], 'op': 'print'}, {'args': ['above', 'spare', 'dst', 'src'], 'funcs': ['hanoi'], 'op': 'call'}, {'label': 'else'}]
-OrderedDict([('b0', ['then', 'else']), ('b2', [[{'dest': 'src', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'dst', 'op': 'const', 'type': 'int', 'value': 2}, {'dest': 'spare', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['disks', 'src', 'dst', 'spare'], 'funcs': ['hanoi'], 'op': 'call'}]]), ('b3', [])])
 Number of functions: 2
-Number of basic blocks: 4
-Number of edges: 3
+Function: hanoi, Number of basic blocks: 3, Number of edges in CFG: 3
+CFG: OrderedDict([('b0', ['then', 'else']), ('then', ['then']), ('else', [])])
+Number of add instructions: 0
+Function: main, Number of basic blocks: 1, Number of edges in CFG: 7
+CFG: OrderedDict([('b0', ['then', 'else']), ('then', ['then']), ('else', ['else']), ('b3', [])])
 Number of add instructions: 0
