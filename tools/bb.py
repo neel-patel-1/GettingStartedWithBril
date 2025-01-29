@@ -5,13 +5,14 @@ import sys
 TERMINATORS = 'br', 'jmp', 'ret'
 num_bbs = 0
 num_edges = 0
+num_functions = 0
 
 def form_bbs(data):
-  global num_bbs
+  global num_bbs, num_functions
   functions = data['functions']
+  bbs = []
   for function in functions:
     instrs = function['instrs']
-    bbs = []
     bb = []
     for instr in instrs:
       bb.append(instr)
@@ -23,7 +24,8 @@ def form_bbs(data):
     if bb:
       bbs.append(bb)
       num_bbs += 1
-    return bbs
+    num_functions += 1
+  return bbs
 
 # to form edges, it may be useful to have a mapping from labels to blocks
 block_map = OrderedDict()
@@ -68,18 +70,13 @@ def count_add_instructions(data):
           count += 1
   return count
 
-if len(sys.argv) != 2:
-  print("Usage: python bb.py <file_path>")
-  sys.exit(1)
+data = json.load(sys.stdin)
+bbs = form_bbs(data)
+form_bb_map(bbs)
+form_cfg()
+add_instrs = count_add_instructions(data)
 
-file_path = sys.argv[1]
-with open(file_path, 'r') as file:
-  data = json.load(file)
-  bbs = form_bbs(data)
-  form_bb_map(bbs)
-  form_cfg()
-  add_instrs = count_add_instructions(data)
-
+print(f"Number of functions: {num_functions}")
 print(f"Number of basic blocks: {num_bbs}")
 print(f"Number of edges: {num_edges}")
 print(f"Number of add instructions: {add_instrs}")
