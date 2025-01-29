@@ -37,7 +37,8 @@ def form_bb_map(bbs):
     else:
       name = 'b' + str(len(block_map))
       block = bb
-    block_map[name] = block
+    if(len(block) > 0):
+      block_map[name] = block
     # print(f"Name: {name}, Block: {block}")
 
 cfg = OrderedDict()
@@ -45,20 +46,23 @@ def form_cfg():
   global num_edges, cfg
   for label, block in block_map.items():
     # print(f"Label: {label}, Block: {block}")
-    if block[-1]['op'] in ('jmp', 'br'):
-      succ = block[-1]['labels']
-      successors = []
-      for slbl in succ:
+    try:
+      if block[-1]['op'] in ('jmp', 'br'):
+        succ = block[-1]['labels']
+        successors = []
+        for slbl in succ:
+          num_edges += 1
+          successors.append(slbl)
+        cfg[label] = successors
+      elif (label, block) == list(block_map.items())[-1]:
+        cfg[label] = []
+      else:
         num_edges += 1
-        successors.append(slbl)
-      cfg[label] = successors
-    elif (label, block) == list(block_map.items())[-1]:
-      cfg[label] = []
-    else:
-      num_edges += 1
-      # print(f"Block map: {block_map}")
-      next_block = list(block_map.values())[list(block_map.keys()).index(label) + 1]
-      cfg[label] = [next_block]
+        # print(f"Block map: {block_map}")
+        next_block = list(block_map.values())[list(block_map.keys()).index(label) + 1]
+        cfg[label] = [next_block]
+    except:
+      print(f"Error: {label}, {block}")
   print(cfg)
 
 def count_add_instructions(data):
