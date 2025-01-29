@@ -1,5 +1,6 @@
-OrderedDict([('b0', ['for.body.3', 'for.end.3']), ('for.body.3', ['if.body', 'for.incre']), ('if.body', ['for.cond.3']), ('for.incre', ['for.cond.3']), ('for.end.3', [])])
+Error: b0, [{'args': ['input'], 'dest': 'n', 'op': 'id', 'type': 'int'}, {'dest': 'v0', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'v1', 'op': 'const', 'type': 'int', 'value': 10}, {'args': ['v0'], 'dest': 'result', 'op': 'id', 'type': 'int'}, {'dest': 'v2', 'op': 'const', 'type': 'bool', 'value': True}, {'args': ['v2'], 'dest': 'notdone', 'op': 'id', 'type': 'bool'}, {'label': 'for.cond.3'}]
+OrderedDict([('b1', ['for.body.3', 'for.end.3']), ('for.body.3', ['if.body', 'for.incre']), ('if.body', ['for.cond.3']), ('for.incre', ['for.cond.3']), ('for.end.3', [])])
 Number of functions: 1
-Number of basic blocks: 5
+Number of basic blocks: 6
 Number of edges: 6
 Number of add instructions: 1

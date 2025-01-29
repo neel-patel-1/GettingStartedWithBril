@@ -1,5 +1,6 @@
-OrderedDict([('b0', [[{'dest': 'v0', 'op': 'const', 'type': 'float', 'value': 1}, {'args': ['v0'], 'dest': 'prob', 'op': 'id', 'type': 'float'}, {'dest': 'v2', 'op': 'const', 'type': 'float', 'value': 1}, {'args': ['v2'], 'dest': 'i', 'op': 'id', 'type': 'float'}, {'label': 'for.cond.1'}, {'args': ['i'], 'dest': 'v3', 'op': 'id', 'type': 'float'}, {'args': ['n'], 'dest': 'v4', 'op': 'id', 'type': 'float'}, {'args': ['v3', 'v4'], 'dest': 'v5', 'op': 'flt', 'type': 'bool'}, {'args': ['v5'], 'labels': ['for.body.1', 'for.end.1'], 'op': 'br'}]]), ('b1', ['for.body.1', 'for.end.1']), ('for.body.1', ['for.cond.1']), ('for.end.1', [])])
+Error: b1, [{'dest': 'v0', 'op': 'const', 'type': 'float', 'value': 1}, {'args': ['v0'], 'dest': 'prob', 'op': 'id', 'type': 'float'}, {'dest': 'v2', 'op': 'const', 'type': 'float', 'value': 1}, {'args': ['v2'], 'dest': 'i', 'op': 'id', 'type': 'float'}, {'label': 'for.cond.1'}]
+OrderedDict([('b0', [[{'dest': 'v0', 'op': 'const', 'type': 'float', 'value': 1}, {'args': ['v0'], 'dest': 'prob', 'op': 'id', 'type': 'float'}, {'dest': 'v2', 'op': 'const', 'type': 'float', 'value': 1}, {'args': ['v2'], 'dest': 'i', 'op': 'id', 'type': 'float'}, {'label': 'for.cond.1'}]]), ('b2', ['for.body.1', 'for.end.1']), ('for.body.1', ['for.cond.1']), ('for.end.1', [])])
 Number of functions: 2
-Number of basic blocks: 4
+Number of basic blocks: 5
 Number of edges: 4
 Number of add instructions: 0

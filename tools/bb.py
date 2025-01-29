@@ -21,6 +21,10 @@ def form_bbs(data):
           bbs.append(bb)
           bb = []
           num_bbs += 1
+      if 'label' in instr and len(bb) > 1:
+        bbs.append(bb)
+        bb = []
+        num_bbs += 1
     if bb:
       bbs.append(bb)
       num_bbs += 1

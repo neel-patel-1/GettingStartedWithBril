@@ -1,5 +1,6 @@
-OrderedDict([('b0', ['neg', 'begin']), ('neg', ['end', 'check']), ('check', ['body', 'begin']), ('body', ['begin', 'then']), ('then', ['begin']), ('end', [[{'args': ['dividend', 'divisor'], 'dest': 'quot', 'op': 'div', 'type': 'int'}, {'args': ['divisor', 'quot'], 'dest': 'prod', 'op': 'mul', 'type': 'int'}, {'args': ['dividend', 'prod'], 'dest': 'diff', 'op': 'sub', 'type': 'int'}, {'args': ['diff'], 'op': 'ret'}]]), ('b6', [])])
+Error: neg, [{'args': ['n', 'non'], 'dest': 'n', 'op': 'mul', 'type': 'int'}, {'label': 'begin'}]
+OrderedDict([('b0', ['neg', 'begin']), ('b2', ['end', 'check']), ('check', ['body', 'begin']), ('body', ['begin', 'then']), ('then', ['begin']), ('end', [[{'args': ['dividend', 'divisor'], 'dest': 'quot', 'op': 'div', 'type': 'int'}, {'args': ['divisor', 'quot'], 'dest': 'prod', 'op': 'mul', 'type': 'int'}, {'args': ['dividend', 'prod'], 'dest': 'diff', 'op': 'sub', 'type': 'int'}, {'args': ['diff'], 'op': 'ret'}]]), ('b7', [])])
 Number of functions: 2
-Number of basic blocks: 7
+Number of basic blocks: 8
 Number of edges: 10
 Number of add instructions: 3

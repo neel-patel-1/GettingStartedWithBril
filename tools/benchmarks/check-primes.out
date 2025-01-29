@@ -1,5 +1,10 @@
-OrderedDict([('b0', ['for.body.1', 'for.end.1']), ('for.body.1', ['then.7', 'else.7']), ('then.7', ['endif.7']), ('else.7', ['for.cond.1']), ('b4', ['then.0', 'else.0']), ('then.0', [[{'label': 'endif.0'}, {'dest': 'v6', 'op': 'const', 'type': 'int', 'value': 2}, {'args': ['v6'], 'dest': 'i', 'op': 'id', 'type': 'int'}, {'label': 'for.cond.5'}, {'args': ['i'], 'dest': 'v7', 'op': 'id', 'type': 'int'}, {'args': ['x'], 'dest': 'v8', 'op': 'id', 'type': 'int'}, {'args': ['v7', 'v8'], 'dest': 'v9', 'op': 'lt', 'type': 'bool'}, {'args': ['v9'], 'labels': ['for.body.5', 'for.end.5'], 'op': 'br'}]]), ('else.0', ['for.body.5', 'for.end.5']), ('for.body.5', ['then.18', 'else.18']), ('then.18', [[{'label': 'endif.18'}, {'args': ['i'], 'dest': 'v21', 'op': 'id', 'type': 'int'}, {'dest': 'v22', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['v21', 'v22'], 'dest': 'v23', 'op': 'add', 'type': 'int'}, {'args': ['v23'], 'dest': 'i', 'op': 'id', 'type': 'int'}, {'labels': ['for.cond.5'], 'op': 'jmp'}]]), ('else.18', ['for.cond.5']), ('for.end.5', [])])
+Error: b0, [{'dest': 'v2', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['v2'], 'dest': 'i', 'op': 'id', 'type': 'int'}, {'label': 'for.cond.1'}]
+Error: else.7, [{'dest': 'v11', 'op': 'const', 'type': 'int', 'value': 0}, {'args': ['v11'], 'op': 'print'}, {'dest': 'v12', 'op': 'const', 'type': 'int', 'value': 0}, {'label': 'endif.7'}]
+Error: else.0, [{'label': 'endif.0'}]
+Error: b9, [{'dest': 'v6', 'op': 'const', 'type': 'int', 'value': 2}, {'args': ['v6'], 'dest': 'i', 'op': 'id', 'type': 'int'}, {'label': 'for.cond.5'}]
+Error: else.18, [{'label': 'endif.18'}]
+OrderedDict([('b1', ['for.body.1', 'for.end.1']), ('for.body.1', ['then.7', 'else.7']), ('then.7', ['endif.7']), ('b5', ['for.cond.1']), ('b6', ['then.0', 'else.0']), ('then.0', [[{'label': 'endif.0'}]]), ('b10', ['for.body.5', 'for.end.5']), ('for.body.5', ['then.18', 'else.18']), ('then.18', [[{'label': 'endif.18'}]]), ('b14', ['for.cond.5']), ('for.end.5', [])])
 Number of functions: 2
-Number of basic blocks: 12
+Number of basic blocks: 17
 Number of edges: 15
 Number of add instructions: 2

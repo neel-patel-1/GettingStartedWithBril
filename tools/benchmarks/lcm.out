@@ -1,5 +1,6 @@
-OrderedDict([('b0', ['then.1', 'else.1']), ('then.1', ['endif.1']), ('else.1', ['then.2', 'else.2']), ('then.2', ['loopend']), ('else.2', ['foreverloop']), ('b5', [])])
+Error: else.1, [{'label': 'endif.1'}]
+OrderedDict([('b0', ['then.1', 'else.1']), ('then.1', ['endif.1']), ('foreverloop', ['then.2', 'else.2']), ('then.2', ['loopend']), ('else.2', ['foreverloop']), ('b6', [])])
 Number of functions: 2
-Number of basic blocks: 7
+Number of basic blocks: 8
 Number of edges: 7
 Number of add instructions: 1
