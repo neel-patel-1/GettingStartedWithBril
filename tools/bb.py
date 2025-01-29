@@ -1,8 +1,8 @@
 import json
 from collections import OrderedDict
+import sys
 
 TERMINATORS = 'br', 'jmp', 'ret'
-file_path = 'bril/test/parse/positions.json'
 num_bbs = 0
 num_edges = 0
 
@@ -68,6 +68,11 @@ def count_add_instructions(data):
           count += 1
   return count
 
+if len(sys.argv) != 2:
+  print("Usage: python bb.py <file_path>")
+  sys.exit(1)
+
+file_path = sys.argv[1]
 with open(file_path, 'r') as file:
   data = json.load(file)
   bbs = form_bbs(data)
