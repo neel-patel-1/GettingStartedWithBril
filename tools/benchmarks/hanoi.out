@@ -1,0 +1,5 @@
+OrderedDict([('b0', ['then', 'else']), ('then', [[{'dest': 'src', 'op': 'const', 'type': 'int', 'value': 0}, {'dest': 'dst', 'op': 'const', 'type': 'int', 'value': 2}, {'dest': 'spare', 'op': 'const', 'type': 'int', 'value': 1}, {'args': ['disks', 'src', 'dst', 'spare'], 'funcs': ['hanoi'], 'op': 'call'}]]), ('b2', [])])
+Number of functions: 2
+Number of basic blocks: 3
+Number of edges: 3
+Number of add instructions: 0

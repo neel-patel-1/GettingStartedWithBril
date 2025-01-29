@@ -1,0 +1,5 @@
+OrderedDict([('b0', ['for.body.6', 'for.end.6']), ('for.body.6', ['then.11', 'else.11']), ('then.11', ['endif.11']), ('else.11', ['for.cond.6']), ('for.end.6', [[{'args': ['n'], 'dest': 'v0', 'op': 'id', 'type': 'int'}, {'args': ['n'], 'dest': 'v1', 'op': 'id', 'type': 'int'}, {'args': ['p'], 'dest': 'v2', 'op': 'id', 'type': 'int'}, {'args': ['v1', 'v2'], 'dest': 'v3', 'op': 'div', 'type': 'int'}, {'args': ['p'], 'dest': 'v4', 'op': 'id', 'type': 'int'}, {'args': ['v3', 'v4'], 'dest': 'v5', 'op': 'mul', 'type': 'int'}, {'args': ['v0', 'v5'], 'dest': 'v6', 'op': 'sub', 'type': 'int'}, {'args': ['v6'], 'op': 'ret'}]]), ('b5', [])])
+Number of functions: 2
+Number of basic blocks: 6
+Number of edges: 7
+Number of add instructions: 0

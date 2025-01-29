@@ -1,0 +1,5 @@
+OrderedDict([('b0', [[{'dest': 'one', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'zero', 'op': 'const', 'type': 'int', 'value': 0}, {'args': ['n', 'zero'], 'dest': 'guard0', 'op': 'eq', 'type': 'bool'}, {'args': ['guard0'], 'labels': ['if', 'else'], 'op': 'br'}]]), ('b1', ['if', 'else']), ('if', [[{'args': ['zero'], 'dest': 'sum', 'op': 'id', 'type': 'int'}, {'args': ['zero'], 'dest': 'idx', 'op': 'id', 'type': 'int'}, {'args': ['n', 'one'], 'dest': 'n', 'op': 'sub', 'type': 'int'}, {'label': 'while'}, {'args': ['idx', 'n'], 'dest': 'guard1', 'op': 'le', 'type': 'bool'}, {'args': ['guard1'], 'labels': ['while.body', 'while.end'], 'op': 'br'}]]), ('else', ['while.body', 'while.end']), ('while.body', ['while']), ('while.end', [])])
+Number of functions: 2
+Number of basic blocks: 6
+Number of edges: 7
+Number of add instructions: 2

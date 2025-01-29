@@ -1,0 +1,5 @@
+OrderedDict([('b0', ['check_done', 'process_result']), ('process_result', ['check_result']), ('check_done', ['done', 'begin']), ('done', [[{'dest': 'ten', 'op': 'const', 'type': 'int', 'value': 10}, {'dest': 'zero', 'op': 'const', 'type': 'int', 'value': 0}, {'args': ['input', 'ten'], 'dest': 'divided', 'op': 'div', 'type': 'int'}, {'args': ['divided', 'ten'], 'dest': 'mul_by_ten', 'op': 'mul', 'type': 'int'}, {'args': ['mul_by_ten', 'zero'], 'dest': 'result', 'op': 'eq', 'type': 'bool'}, {'args': ['result'], 'op': 'ret'}]]), ('b4', [[{'dest': 'ten', 'op': 'const', 'type': 'int', 'value': 10}, {'args': ['input', 'ten'], 'dest': 'div_by_ten', 'op': 'div', 'type': 'int'}, {'args': ['div_by_ten', 'ten'], 'dest': 'mul_by_ten', 'op': 'mul', 'type': 'int'}, {'args': ['input', 'mul_by_ten'], 'dest': 'last_digit', 'op': 'sub', 'type': 'int'}, {'args': ['last_digit'], 'op': 'ret'}]]), ('b5', [])])
+Number of functions: 3
+Number of basic blocks: 6
+Number of edges: 7
+Number of add instructions: 2

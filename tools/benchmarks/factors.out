@@ -1,0 +1,5 @@
+OrderedDict([('b0', ['loopbody', 'loopend']), ('loopbody', ['ifyes', 'ifno']), ('ifyes', ['loopcheck']), ('ifno', ['loopcheck'])])
+Number of functions: 1
+Number of basic blocks: 5
+Number of edges: 6
+Number of add instructions: 1

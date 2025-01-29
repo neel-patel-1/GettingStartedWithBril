@@ -1,0 +1,5 @@
+OrderedDict([('b0', [[{'args': ['w1', 'w2'], 'dest': 'width_check', 'op': 'le', 'type': 'bool'}, {'args': ['h1', 'h2'], 'dest': 'height_check', 'op': 'le', 'type': 'bool'}, {'args': ['width_check', 'height_check'], 'dest': 'first_check', 'op': 'and', 'type': 'bool'}, {'args': ['w1', 'h2'], 'dest': 'widthheight_check', 'op': 'le', 'type': 'bool'}, {'args': ['h1', 'w2'], 'dest': 'heightwidth_check', 'op': 'le', 'type': 'bool'}, {'args': ['widthheight_check', 'heightwidth_check'], 'dest': 'second_check', 'op': 'and', 'type': 'bool'}, {'args': ['first_check', 'second_check'], 'dest': 'ret_val', 'op': 'or', 'type': 'bool'}, {'args': ['ret_val'], 'op': 'ret'}]]), ('b1', [])])
+Number of functions: 2
+Number of basic blocks: 2
+Number of edges: 1
+Number of add instructions: 0

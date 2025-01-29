@@ -1,0 +1,5 @@
+OrderedDict([('b0', ['print']), ('cond', ['end', 'loop']), ('loop', ['even', 'odd']), ('even', ['print']), ('odd', ['cond']), ('end', [])])
+Number of functions: 1
+Number of basic blocks: 6
+Number of edges: 7
+Number of add instructions: 1

@@ -1,0 +1,5 @@
+OrderedDict([('b0', ['end', 'flip']), ('flip', [[{'args': ['x', 'y'], 'dest': 'area', 'op': 'mul', 'type': 'int'}, {'args': ['area'], 'op': 'print'}, {'args': ['area'], 'op': 'ret'}]]), ('b2', [])])
+Number of functions: 2
+Number of basic blocks: 3
+Number of edges: 3
+Number of add instructions: 0

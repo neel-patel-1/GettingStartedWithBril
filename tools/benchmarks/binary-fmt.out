@@ -1,0 +1,6 @@
+Error: rec, [{'dest': 'two', 'op': 'const', 'type': 'int', 'value': 2}, {'args': ['n', 'two'], 'dest': 'v0', 'funcs': ['mod'], 'op': 'call', 'type': 'int'}, {'args': ['n', 'two'], 'dest': 'v1', 'op': 'div', 'type': 'int'}, {'args': ['v1'], 'funcs': ['printBinary'], 'op': 'call'}, {'args': ['v0'], 'op': 'print'}, {'label': 'end'}]
+OrderedDict([('b0', [[{'dest': 'zero', 'op': 'const', 'type': 'int', 'value': 0}, {'args': ['n', 'zero'], 'dest': 'cond', 'op': 'eq', 'type': 'bool'}, {'args': ['cond'], 'labels': ['end', 'rec'], 'op': 'br'}]]), ('b1', ['end', 'rec']), ('b3', [])])
+Number of functions: 3
+Number of basic blocks: 4
+Number of edges: 3
+Number of add instructions: 0

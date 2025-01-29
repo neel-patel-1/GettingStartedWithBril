@@ -1,0 +1,5 @@
+OrderedDict([('b0', ['for.body.2', 'for.end.2']), ('for.body.2', ['for.cond.2']), ('for.end.2', [])])
+Number of functions: 1
+Number of basic blocks: 3
+Number of edges: 3
+Number of add instructions: 0
