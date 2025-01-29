@@ -12,14 +12,8 @@ cat fnv1_hash.bril |  bril2json  | brili
 turnt --save fnv1_hash.bril
 ```
 
-## Bril Program Analysis
+## Bril Basic Block Generation, CFG Generation, and Program Analysis
 ```sh
-# Run python script that counts the number of branch instructions
-
-# Use turnt to test the analysis
-```
-
-## Basic Block && CFG Generation Algorithm
-```sh
-# Run python script that generates the basic blocks and CFG of a bril program and prints the result
+# Run python script that generates the basic blocks and CFG of a bril program and counts the number of add instructions
+python3 tools/bb.py
 ```
