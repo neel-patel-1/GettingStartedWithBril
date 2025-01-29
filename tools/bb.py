@@ -3,11 +3,11 @@ from collections import OrderedDict
 
 TERMINATORS = 'br', 'jmp', 'ret'
 file_path = 'bril/test/parse/positions.json'
-
-
-# {'functions': [{'instrs': [{'dest': 'v0', 'op': 'const', 'type': 'int', 'value': 1}, {'dest': 'v1', 'op': 'const', 'type': 'int', 'value': 2}, {'args': ['v0', 'v1'], 'dest': 'v2', 'op': 'add', 'type': 'int'}, {'args': ['v2'], 'op': 'print'}], 'name': 'main'}]}
+num_bbs = 0
+num_edges = 0
 
 def form_bbs(data):
+  global num_bbs
   functions = data['functions']
   for function in functions:
     instrs = function['instrs']
@@ -19,30 +19,51 @@ def form_bbs(data):
         if instr['op'] in TERMINATORS:
           bbs.append(bb)
           bb = []
+          num_bbs += 1
     if bb:
       bbs.append(bb)
+      num_bbs += 1
     return bbs
 
+# to form edges, it may be useful to have a mapping from labels to blocks
+block_map = OrderedDict()
 def form_bb_map(bbs):
   for bb in bbs:
-    print(bb)
+    if 'label' in bb[0]:
+      name = bb[0]['label']
+      block = bb[1:]
+    else:
+      name = 'b' + str(len(block_map))
+      block = bb
+    block_map[name] = block
+    # print(f"Name: {name}, Block: {block}")
 
-# to form edges, it may be useful to have a mapping from labels to blocks
-# if the last instruction is a jump, get the
-# pretty print the CFG: print it so that the labels are matched with successors
-def form_cfg(bbs):
-  cfg = {}
-  for bb in bbs:
-    last_inst = bb[-1]
-    if(bbs.index(bb) + 1 == len(bbs)):
-      cfg[bb] = []
-    elif last_inst[op] == 'br':
-      cfg[bb] = [bbs[bbs.index(bb) + 1], bbs[bb['args'][0]]]
-    elif last_inst[op] == 'jmp':
-      cfg[bb] = [bbs[bb['args'][0]]]
-  return cfg
+cfg = OrderedDict()
+def form_cfg():
+  global num_edges, cfg
+  for label, block in block_map.items():
+    # print(f"Label: {label}, Block: {block}")
+    if block[-1]['op'] in ('jmp', 'br'):
+      succ = block[-1]['labels']
+      successors = []
+      for slbl in succ:
+        num_edges += 1
+        successors.append(slbl)
+      cfg[label] = successors
+    elif (label, block) == list(block_map.items())[-1]:
+      cfg[label] = []
+    else:
+      num_edges += 1
+      # print(f"Block map: {block_map}")
+      next_block = list(block_map.values())[list(block_map.keys()).index(label) + 1]
+      cfg[label] = [next_block]
+  print(cfg)
 
 with open(file_path, 'r') as file:
   data = json.load(file)
   bbs = form_bbs(data)
   form_bb_map(bbs)
+  form_cfg()
+
+print(f"Number of basic blocks: {num_bbs}")
+print(f"Number of edges: {num_edges}")
