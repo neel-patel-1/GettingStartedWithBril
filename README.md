@@ -14,6 +14,6 @@ turnt --save fnv1_hash.bril
 
 ## Bril Basic Block Generation, CFG Generation, and Program Analysis
 ```sh
-# Run python script that generates the basic blocks and CFG of a bril program and counts the number of add instructions
+# Use turnt to verify the outputs of the basic block, cfg generation, and add instruction counting tool
 python3 tools/bb.py
 ```
