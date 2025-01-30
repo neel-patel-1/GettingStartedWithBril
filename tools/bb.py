@@ -56,7 +56,7 @@ def form_cfg(block_map):
         cfg[label] = []
       else:
         num_edges += 1
-        next_block = label
+        next_block = list(block_map.keys())[list(block_map.keys()).index(label) + 1]
         cfg[label] = [next_block]
     except:
       print(f"Error: {label}, {block}")

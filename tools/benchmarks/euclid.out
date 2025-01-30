@@ -6,5 +6,5 @@ Function: mod, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
 Function: gcd, Number of basic blocks: 4, Number of edges in CFG: 4
-CFG: OrderedDict([('b0', ['b0']), ('for.cond.5', ['for.body.5', 'for.end.5']), ('for.body.5', ['for.cond.5']), ('for.end.5', [])])
+CFG: OrderedDict([('b0', ['for.cond.5']), ('for.cond.5', ['for.body.5', 'for.end.5']), ('for.body.5', ['for.cond.5']), ('for.end.5', [])])
 Number of add instructions: 0

@@ -3,7 +3,7 @@ Function: mod2, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
 Function: loop_subroutine, Number of basic blocks: 8, Number of edges in CFG: 10
-CFG: OrderedDict([('b0', ['b0']), ('loop', ['here', 'end']), ('here', ['doOr', 'stay']), ('doOr', ['doOr']), ('stay', ['add', 'end_loop']), ('add', ['add']), ('end_loop', ['loop']), ('end', [])])
+CFG: OrderedDict([('b0', ['loop']), ('loop', ['here', 'end']), ('here', ['doOr', 'stay']), ('doOr', ['stay']), ('stay', ['add', 'end_loop']), ('add', ['end_loop']), ('end_loop', ['loop']), ('end', [])])
 Number of add instructions: 2
 Function: OR, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
@@ -15,5 +15,5 @@ Function: XOR, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
 Function: main, Number of basic blocks: 6, Number of edges in CFG: 7
-CFG: OrderedDict([('b0', ['and_op', 'useless_lbl']), ('useless_lbl', ['or_op', 'xor_op']), ('and_op', ['end']), ('or_op', ['end']), ('xor_op', ['xor_op']), ('end', [])])
+CFG: OrderedDict([('b0', ['and_op', 'useless_lbl']), ('useless_lbl', ['or_op', 'xor_op']), ('and_op', ['end']), ('or_op', ['end']), ('xor_op', ['end']), ('end', [])])
 Number of add instructions: 0

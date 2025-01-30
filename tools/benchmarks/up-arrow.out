@@ -3,5 +3,5 @@ Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
 Function: up_arrow, Number of basic blocks: 7, Number of edges in CFG: 8
-CFG: OrderedDict([('b0', ['b0']), ('loopstart', ['loopbody', 'endloop']), ('loopbody', ['base', 'arrowsgreaterthan1']), ('base', ['finally']), ('arrowsgreaterthan1', ['arrowsgreaterthan1']), ('finally', ['loopstart']), ('endloop', [])])
+CFG: OrderedDict([('b0', ['loopstart']), ('loopstart', ['loopbody', 'endloop']), ('loopbody', ['base', 'arrowsgreaterthan1']), ('base', ['finally']), ('arrowsgreaterthan1', ['finally']), ('finally', ['loopstart']), ('endloop', [])])
 Number of add instructions: 1

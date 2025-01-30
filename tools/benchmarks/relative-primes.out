@@ -6,8 +6,8 @@ Function: mod, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
 Function: gcd, Number of basic blocks: 12, Number of edges in CFG: 11
-CFG: OrderedDict([('b0', ['then.0', 'else.0']), ('then.0', ['endif.0']), ('endif.0', ['then.7', 'else.7']), ('then.7', ['then.7']), ('b4', ['endif.7']), ('else.7', ['then.12', 'else.12']), ('then.12', ['then.12']), ('b7', ['endif.12']), ('endif.7', [])])
+CFG: OrderedDict([('b0', ['then.0', 'else.0']), ('then.0', ['endif.0']), ('endif.0', ['then.7', 'else.7']), ('then.7', ['b4']), ('b4', ['endif.7']), ('else.7', ['then.12', 'else.12']), ('then.12', ['b7']), ('b7', ['endif.12']), ('endif.7', [])])
 Number of add instructions: 0
 Function: relative_primes, Number of basic blocks: 7, Number of edges in CFG: 7
-CFG: OrderedDict([('b0', ['b0']), ('for.cond.0', ['for.body.0', 'for.end.0']), ('for.body.0', ['then.7', 'else.7']), ('then.7', ['endif.7']), ('endif.7', ['for.cond.0'])])
+CFG: OrderedDict([('b0', ['for.cond.0']), ('for.cond.0', ['for.body.0', 'for.end.0']), ('for.body.0', ['then.7', 'else.7']), ('then.7', ['endif.7']), ('endif.7', ['for.cond.0'])])
 Number of add instructions: 0

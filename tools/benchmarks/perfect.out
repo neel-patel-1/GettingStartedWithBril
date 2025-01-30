@@ -1,4 +1,4 @@
 Number of functions: 1
 Function: main, Number of basic blocks: 8, Number of edges in CFG: 10
-CFG: OrderedDict([('b0', ['b0']), ('for.cond.1', ['for.end', 'for.body']), ('for.body', ['if.body', 'for.incre']), ('if.body', ['if.body']), ('for.incre', ['for.cond.1']), ('for.end', ['if.success', 'if.failure.end']), ('if.success', ['if.success']), ('if.failure.end', [])])
+CFG: OrderedDict([('b0', ['for.cond.1']), ('for.cond.1', ['for.end', 'for.body']), ('for.body', ['if.body', 'for.incre']), ('if.body', ['for.incre']), ('for.incre', ['for.cond.1']), ('for.end', ['if.success', 'if.failure.end']), ('if.success', ['if.failure.end']), ('if.failure.end', [])])
 Number of add instructions: 3

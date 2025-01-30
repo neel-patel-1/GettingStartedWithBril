@@ -1,4 +1,4 @@
 Number of functions: 1
 Function: main, Number of basic blocks: 7, Number of edges in CFG: 9
-CFG: OrderedDict([('b0', ['b0']), ('outer_loop', ['outer_loop']), ('inner_loop', ['found', 'inner_continue']), ('found', ['found']), ('inner_continue', ['outer_continue', 'inner_loop']), ('outer_continue', ['finish', 'outer_loop'])])
+CFG: OrderedDict([('b0', ['outer_loop']), ('outer_loop', ['inner_loop']), ('inner_loop', ['found', 'inner_continue']), ('found', ['inner_continue']), ('inner_continue', ['outer_continue', 'inner_loop']), ('outer_continue', ['finish', 'outer_loop'])])
 Number of add instructions: 3
