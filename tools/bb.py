@@ -52,6 +52,8 @@ def form_cfg(block_map):
           num_edges += 1
           successors.append(slbl)
         cfg[label] = successors
+      elif block[-1]['op'] == 'ret':
+        cfg[label] = []
       elif (label, block) == list(block_map.items())[-1]:
         cfg[label] = []
       else:

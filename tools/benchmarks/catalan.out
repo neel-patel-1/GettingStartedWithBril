@@ -2,6 +2,6 @@ Number of functions: 2
 Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
-Function: catalan, Number of basic blocks: 6, Number of edges in CFG: 7
-CFG: OrderedDict([('b0', ['if', 'else']), ('if', ['else']), ('else', ['while']), ('while', ['while.body', 'while.end']), ('while.body', ['while']), ('while.end', [])])
+Function: catalan, Number of basic blocks: 6, Number of edges in CFG: 6
+CFG: OrderedDict([('b0', ['if', 'else']), ('if', []), ('else', ['while']), ('while', ['while.body', 'while.end']), ('while.body', ['while']), ('while.end', [])])
 Number of add instructions: 2

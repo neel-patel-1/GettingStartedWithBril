@@ -1,6 +1,6 @@
 Number of functions: 5
-Function: pow, Number of basic blocks: 6, Number of edges in CFG: 7
-CFG: OrderedDict([('b0', ['then.0', 'else.0']), ('then.0', ['else.0']), ('else.0', ['then.12', 'else.12']), ('then.12', ['endif.12']), ('else.12', ['endif.12']), ('endif.12', [])])
+Function: pow, Number of basic blocks: 6, Number of edges in CFG: 6
+CFG: OrderedDict([('b0', ['then.0', 'else.0']), ('then.0', []), ('else.0', ['then.12', 'else.12']), ('then.12', ['endif.12']), ('else.12', ['endif.12']), ('endif.12', [])])
 Number of add instructions: 0
 Function: mod, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])

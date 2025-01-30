@@ -2,8 +2,8 @@ Number of functions: 3
 Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
-Function: sqrt, Number of basic blocks: 7, Number of edges in CFG: 7
-CFG: OrderedDict([('b0', ['for.cond.0']), ('for.cond.0', ['for.body.0', 'for.end.0']), ('for.body.0', ['then.7', 'else.7']), ('then.7', ['endif.7']), ('endif.7', ['for.cond.0']), ('for.end.0', [])])
+Function: sqrt, Number of basic blocks: 7, Number of edges in CFG: 6
+CFG: OrderedDict([('b0', ['for.cond.0']), ('for.cond.0', ['for.body.0', 'for.end.0']), ('for.body.0', ['then.7', 'else.7']), ('then.7', []), ('endif.7', ['for.cond.0']), ('for.end.0', [])])
 Number of add instructions: 1
 Function: quadratic, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])

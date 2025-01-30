@@ -2,8 +2,8 @@ Number of functions: 3
 Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
-Function: is_decreasing, Number of basic blocks: 8, Number of edges in CFG: 9
-CFG: OrderedDict([('b0', ['label4']), ('label4', ['label5', 'label6']), ('label5', ['label11', 'label12']), ('label11', ['b4']), ('b4', ['label13']), ('label12', ['label13']), ('label13', ['label4']), ('label6', [])])
+Function: is_decreasing, Number of basic blocks: 8, Number of edges in CFG: 8
+CFG: OrderedDict([('b0', ['label4']), ('label4', ['label5', 'label6']), ('label5', ['label11', 'label12']), ('label11', []), ('b4', ['label13']), ('label12', ['label13']), ('label13', ['label4']), ('label6', [])])
 Number of add instructions: 0
 Function: last_digit, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
