@@ -10,10 +10,13 @@ cat fnv1_hash.bril |  bril2json  | brili
 
 # Use turnt to create the expected benchmark output (the hash) in fnv1_hash.out
 turnt --save fnv1_hash.bril
+
+# Compare the generated output with the reference implementation
+
 ```
 
 ## Bril Basic Block Generation, CFG Generation, and Program Analysis
 ```sh
 # Use turnt to verify the outputs of the basic block, cfg generation, and add instruction counting tool
-python3 tools/bb.py
+turnt -e test --save benchmarks/*.bril
 ```
