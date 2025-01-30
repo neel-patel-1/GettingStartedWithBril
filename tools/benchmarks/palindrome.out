@@ -2,9 +2,9 @@ Number of functions: 3
 Function: main, Number of basic blocks: 6, Number of edges in CFG: 7
 CFG: OrderedDict([('b0', ['b0']), ('for.cond', ['for.body', 'for.end']), ('for.body', ['if.true', 'if.false']), ('if.true', ['for.cond']), ('if.false', ['for.cond']), ('for.end', [])])
 Number of add instructions: 1
-Function: pow, Number of basic blocks: 6, Number of edges in CFG: 22
-CFG: OrderedDict([('b0', ['b0']), ('for.cond', ['for.body', 'for.end']), ('for.body', ['if.true', 'if.false']), ('if.true', ['for.cond']), ('if.false', ['for.cond']), ('for.end', ['for.end']), ('b6', ['b6']), ('for.cond.pow', ['for.body.pow', 'for.end.pow']), ('for.body.pow', ['if.true.pow', 'if.false.pow']), ('if.true.pow', ['for.cond.pow']), ('if.false.pow', ['for.cond.pow']), ('for.end.pow', [])])
+Function: pow, Number of basic blocks: 6, Number of edges in CFG: 7
+CFG: OrderedDict([('b0', ['b0']), ('for.cond.pow', ['for.body.pow', 'for.end.pow']), ('for.body.pow', ['if.true.pow', 'if.false.pow']), ('if.true.pow', ['for.cond.pow']), ('if.false.pow', ['for.cond.pow']), ('for.end.pow', [])])
 Number of add instructions: 0
-Function: palindrome, Number of basic blocks: 6, Number of edges in CFG: 45
-CFG: OrderedDict([('b0', ['b0']), ('for.cond', ['for.body', 'for.end']), ('for.body', ['if.true', 'if.false']), ('if.true', ['for.cond']), ('if.false', ['for.cond']), ('for.end', ['for.end']), ('b6', ['b6']), ('for.cond.pow', ['for.body.pow', 'for.end.pow']), ('for.body.pow', ['if.true.pow', 'if.false.pow']), ('if.true.pow', ['for.cond.pow']), ('if.false.pow', ['for.cond.pow']), ('for.end.pow', ['for.end.pow']), ('b12', ['if.true.palindrome', 'if.false.palindrome']), ('if.true.palindrome', ['if.end.palindrome']), ('if.false.palindrome', ['if.true.mirror', 'if.false.mirror']), ('if.true.mirror', ['if.end.palindrome']), ('if.false.mirror', ['if.end.palindrome']), ('if.end.palindrome', [])])
+Function: palindrome, Number of basic blocks: 6, Number of edges in CFG: 7
+CFG: OrderedDict([('b0', ['if.true.palindrome', 'if.false.palindrome']), ('if.true.palindrome', ['if.end.palindrome']), ('if.false.palindrome', ['if.true.mirror', 'if.false.mirror']), ('if.true.mirror', ['if.end.palindrome']), ('if.false.mirror', ['if.end.palindrome']), ('if.end.palindrome', [])])
 Number of add instructions: 0

@@ -2,9 +2,9 @@ Number of functions: 3
 Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
-Function: printBinary, Number of basic blocks: 3, Number of edges in CFG: 3
-CFG: OrderedDict([('b0', ['b0']), ('b1', ['end', 'rec']), ('rec', [])])
+Function: printBinary, Number of basic blocks: 3, Number of edges in CFG: 2
+CFG: OrderedDict([('b0', ['end', 'rec']), ('rec', [])])
 Number of add instructions: 0
-Function: mod, Number of basic blocks: 1, Number of edges in CFG: 7
-CFG: OrderedDict([('b0', ['b0']), ('b1', ['end', 'rec']), ('rec', ['rec']), ('b3', [])])
+Function: mod, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0

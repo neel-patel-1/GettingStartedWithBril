@@ -2,9 +2,9 @@ Number of functions: 3
 Function: sumOfSquares, Number of basic blocks: 4, Number of edges in CFG: 4
 CFG: OrderedDict([('b0', ['b0']), ('for.cond.1', ['for.body.1', 'for.end.1']), ('for.body.1', ['for.cond.1']), ('for.end.1', [])])
 Number of add instructions: 2
-Function: squareOfSum, Number of basic blocks: 4, Number of edges in CFG: 9
-CFG: OrderedDict([('b0', ['b0']), ('for.cond.1', ['for.body.1', 'for.end.1']), ('for.body.1', ['for.cond.1']), ('for.end.1', ['for.end.1']), ('b4', [])])
+Function: squareOfSum, Number of basic blocks: 4, Number of edges in CFG: 4
+CFG: OrderedDict([('b0', ['b0']), ('for.cond.1', ['for.body.1', 'for.end.1']), ('for.body.1', ['for.cond.1']), ('for.end.1', [])])
 Number of add instructions: 2
-Function: main, Number of basic blocks: 1, Number of edges in CFG: 15
-CFG: OrderedDict([('b0', ['b0']), ('for.cond.1', ['for.body.1', 'for.end.1']), ('for.body.1', ['for.cond.1']), ('for.end.1', ['for.end.1']), ('b4', ['b4']), ('b5', [])])
+Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0

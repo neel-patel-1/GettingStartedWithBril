@@ -2,15 +2,15 @@ Number of functions: 5
 Function: pow, Number of basic blocks: 6, Number of edges in CFG: 7
 CFG: OrderedDict([('b0', ['then.0', 'else.0']), ('then.0', ['then.0']), ('else.0', ['then.12', 'else.12']), ('then.12', ['endif.12']), ('else.12', ['else.12']), ('endif.12', [])])
 Number of add instructions: 0
-Function: mod, Number of basic blocks: 1, Number of edges in CFG: 15
-CFG: OrderedDict([('b0', ['then.0', 'else.0']), ('then.0', ['then.0']), ('else.0', ['then.12', 'else.12']), ('then.12', ['endif.12']), ('else.12', ['else.12']), ('endif.12', ['endif.12']), ('b6', [])])
+Function: mod, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
-Function: LEFTSHIFT, Number of basic blocks: 1, Number of edges in CFG: 24
-CFG: OrderedDict([('b0', ['then.0', 'else.0']), ('then.0', ['then.0']), ('else.0', ['then.12', 'else.12']), ('then.12', ['endif.12']), ('else.12', ['else.12']), ('endif.12', ['endif.12']), ('b6', ['b6']), ('b7', [])])
+Function: LEFTSHIFT, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
-Function: RIGHTSHIFT, Number of basic blocks: 1, Number of edges in CFG: 34
-CFG: OrderedDict([('b0', ['then.0', 'else.0']), ('then.0', ['then.0']), ('else.0', ['then.12', 'else.12']), ('then.12', ['endif.12']), ('else.12', ['else.12']), ('endif.12', ['endif.12']), ('b6', ['b6']), ('b7', ['b7']), ('b8', [])])
+Function: RIGHTSHIFT, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
-Function: main, Number of basic blocks: 1, Number of edges in CFG: 45
-CFG: OrderedDict([('b0', ['then.0', 'else.0']), ('then.0', ['then.0']), ('else.0', ['then.12', 'else.12']), ('then.12', ['endif.12']), ('else.12', ['else.12']), ('endif.12', ['endif.12']), ('b6', ['b6']), ('b7', ['b7']), ('b8', ['b8']), ('b9', [])])
+Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0

@@ -2,9 +2,9 @@ Number of functions: 3
 Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
-Function: sum_by_loop, Number of basic blocks: 4, Number of edges in CFG: 5
-CFG: OrderedDict([('b0', ['b0']), ('b1', ['b1']), ('for_start', ['for', 'end']), ('for', ['for_start']), ('end', [])])
+Function: sum_by_loop, Number of basic blocks: 4, Number of edges in CFG: 4
+CFG: OrderedDict([('b0', ['b0']), ('for_start', ['for', 'end']), ('for', ['for_start']), ('end', [])])
 Number of add instructions: 2
-Function: sum_by_formula, Number of basic blocks: 1, Number of edges in CFG: 11
-CFG: OrderedDict([('b0', ['b0']), ('b1', ['b1']), ('for_start', ['for', 'end']), ('for', ['for_start']), ('end', ['end']), ('b5', [])])
+Function: sum_by_formula, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 1

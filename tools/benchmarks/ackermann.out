@@ -2,6 +2,6 @@ Number of functions: 2
 Function: ack, Number of basic blocks: 5, Number of edges in CFG: 6
 CFG: OrderedDict([('b0', ['m_zero', 'm_nonzero']), ('m_zero', ['m_zero']), ('m_nonzero', ['n_zero', 'n_nonzero']), ('n_zero', ['n_zero']), ('n_nonzero', [])])
 Number of add instructions: 1
-Function: main, Number of basic blocks: 1, Number of edges in CFG: 13
-CFG: OrderedDict([('b0', ['m_zero', 'm_nonzero']), ('m_zero', ['m_zero']), ('m_nonzero', ['n_zero', 'n_nonzero']), ('n_zero', ['n_zero']), ('n_nonzero', ['n_nonzero']), ('b5', [])])
+Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0

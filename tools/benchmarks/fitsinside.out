@@ -2,6 +2,6 @@ Number of functions: 2
 Function: main, Number of basic blocks: 1, Number of edges in CFG: 0
 CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0
-Function: fitsInside, Number of basic blocks: 1, Number of edges in CFG: 1
-CFG: OrderedDict([('b0', ['b0']), ('b1', [])])
+Function: fitsInside, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0

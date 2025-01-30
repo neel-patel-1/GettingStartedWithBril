@@ -2,6 +2,6 @@ Number of functions: 2
 Function: main, Number of basic blocks: 8, Number of edges in CFG: 7
 CFG: OrderedDict([('b0', ['then.1', 'else.1']), ('then.1', ['endif.1']), ('foreverloop', ['then.2', 'else.2']), ('then.2', ['loopend']), ('else.2', ['foreverloop'])])
 Number of add instructions: 1
-Function: getMod, Number of basic blocks: 1, Number of edges in CFG: 14
-CFG: OrderedDict([('b0', ['then.1', 'else.1']), ('then.1', ['endif.1']), ('foreverloop', ['then.2', 'else.2']), ('then.2', ['loopend']), ('else.2', ['foreverloop']), ('b5', [])])
+Function: getMod, Number of basic blocks: 1, Number of edges in CFG: 0
+CFG: OrderedDict([('b0', [])])
 Number of add instructions: 0

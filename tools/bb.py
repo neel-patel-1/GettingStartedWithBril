@@ -3,9 +3,6 @@ from collections import OrderedDict
 import sys
 
 TERMINATORS = 'br', 'jmp', 'ret'
-num_bbs = 0
-num_edges = 0
-num_functions = 0
 
 def form_bbs(function):
   num_bbs = 0
@@ -30,8 +27,8 @@ def form_bbs(function):
   return (bbs, num_bbs)
 
 # to form edges, it may be useful to have a mapping from labels to blocks
-block_map = OrderedDict()
 def form_bb_map(bbs):
+  block_map = OrderedDict()
   for bb in bbs:
     if 'label' in bb[0]:
       name = bb[0]['label']
@@ -41,11 +38,11 @@ def form_bb_map(bbs):
       block = bb
     if(len(block) > 0):
       block_map[name] = block
-    # print(f"Name: {name}, Block: {block}")
+  return block_map
 
-cfg = OrderedDict()
-def form_cfg():
-  global num_edges, cfg
+def form_cfg(block_map):
+  num_edges = 0
+  cfg = OrderedDict()
   for label, block in block_map.items():
     try:
       if block[-1]['op'] in ('jmp', 'br'):
@@ -63,6 +60,7 @@ def form_cfg():
         cfg[label] = [next_block]
     except:
       print(f"Error: {label}, {block}")
+  return (cfg, num_edges)
 
 def count_add_instructions(function):
   count = 0
@@ -76,8 +74,8 @@ data = json.load(sys.stdin)
 print(f"Number of functions: {len(data['functions'])}")
 for function in data['functions']:
   bbinfo = form_bbs(function)
-  form_bb_map(bbinfo[0])
-  form_cfg()
+  block_map = form_bb_map(bbinfo[0])
+  (cfg, num_edges) = form_cfg(block_map)
   print(f"Function: {function['name']}, Number of basic blocks: {bbinfo[1]}, Number of edges in CFG: {num_edges}")
   print(f"CFG: {cfg}")
   add_instrs = count_add_instructions(function)
