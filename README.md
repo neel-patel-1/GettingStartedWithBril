@@ -11,8 +11,6 @@ cat fnv1_hash.bril |  bril2json  | brili
 # Use turnt to create the expected benchmark output (the hash) in fnv1_hash.out
 turnt --save fnv1_hash.bril
 
-# Compare the generated output with the reference implementation
-
 ```
 
 ## Bril Basic Block Generation, CFG Generation, and Program Analysis
