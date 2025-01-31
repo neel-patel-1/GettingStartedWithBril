@@ -2,5 +2,6 @@
 
 * globally unused instructions
 ```sh
-cat tools/benchmarks/ackermann.bril | bril2json | tee ackermann.json | python3 first-optimizations/globally_unused_insts.py
+# test globally unused instructions on simple.bril
+bril2json < test_cases/simple.bril | python3 globally_unused_insts.py | bril2txt
 ```
