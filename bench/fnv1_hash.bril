@@ -8,20 +8,20 @@
 }
 
 # FNV-1a hash function
-@fnv1a_hash(data: ptr<char>, size: int): int {
+@fnv1a_hash(data: ptr<int>, size: int): int {
   FNV_prime: int = const 16777619;
   FNV_offset_basis: int = const 2166136261;
   hash: int = id FNV_offset_basis;
   one: int = const 1;
   i: int = const 0;
-  loc: ptr<char> = id data;
+  loc: ptr<int> = id data;
   continue: bool = lt i size;
   br continue .loop .exit;
 .loop:
-  byte: char = load loc;
+  byte: int = load loc;
   hash: int = call @XOR hash byte;
   hash: int = mul hash FNV_prime;
-  loc: ptr<char> = ptradd loc one;
+  loc: ptr<int> = ptradd loc one;
   i: int = add i one;
   continue: bool = lt i size;
   br continue .loop .exit;
