@@ -31,6 +31,8 @@ def pass1(prog):
     passed_func.append(inst)
 
 prog = json.load(sys.stdin)
+
+# globally unused
 for func in prog['functions']:
   deleted = True
   while deleted:
@@ -41,5 +43,33 @@ for func in prog['functions']:
     passed_func = []
     used.clear()
 
+TERMINATORS = 'br', 'jmp', 'ret'
+
+def form_bbs(function):
+  num_bbs = 0
+  bbs = []
+  instrs = function['instrs']
+  bb = []
+  for instr in instrs:
+    bb.append(instr)
+    if 'op' in instr:
+      if instr['op'] in TERMINATORS:
+        bbs.append(bb)
+        bb = []
+        num_bbs += 1
+    if 'label' in instr and len(bb) > 1:
+      bb = bb[:-1]
+      bbs.append(bb)
+      bb = [instr]
+      num_bbs += 1
+  if bb:
+    bbs.append(bb)
+    num_bbs += 1
+  return (bbs, num_bbs)
+
+# locally killed
+for function in prog['functions']:
+  bbinfo = form_bbs(function)
+  bbs = bbinfo[0]
 
 print(json.dumps(prog, indent=2))
