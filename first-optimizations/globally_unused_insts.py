@@ -67,9 +67,45 @@ def form_bbs(function):
     num_bbs += 1
   return (bbs, num_bbs)
 
+marked = []
+found_killed = True
+def mark_locally_killed(bb):
+  candidates = {}
+  instr_index = 0
+  for instr in bb:
+    if 'dest' in instr:
+      if instr['dest'] in candidates:
+        marked.append(candidates[instr['dest']])
+        print(f"Marked {instr['dest']} at {candidates[instr['dest']]}")
+      candidates[instr['dest']] = instr_index
+    instr_index += 1
+
+def remove_locally_killed(bb):
+  global found_killed, marked
+  passed_bb = []
+  instr_index = 0
+  for instr in bb:
+    if instr_index not in marked:
+      passed_bb.append(instr)
+    else:
+      found_killed = True
+      print(f"Removed {instr['dest']} at {instr_index}")
+    instr_index += 1
+  return passed_bb
+
 # locally killed
 for function in prog['functions']:
-  bbinfo = form_bbs(function)
+  bbinfo = form_bbs(function) # get the bbs
   bbs = bbinfo[0]
+  function['instrs'] = [] # clear the instrs
+  for bb in bbs:
+    passed_bb = bb
+    while found_killed:
+      found_killed = False
+      mark_locally_killed(passed_bb)
+      passed_bb = remove_locally_killed(passed_bb)
+      marked = []
+    found_killed = True
+    function['instrs'].extend(passed_bb)
 
 print(json.dumps(prog, indent=2))
