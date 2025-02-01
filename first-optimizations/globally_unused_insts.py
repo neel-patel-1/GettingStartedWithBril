@@ -33,15 +33,15 @@ def pass1(prog):
 prog = json.load(sys.stdin)
 
 # globally unused
-for func in prog['functions']:
-  deleted = True
-  while deleted:
-    deleted = False # if deleted gets set to False before the condition is checked, then the pass can only run once
-    pass0(func['instrs']) # after each pass, we need to update the func
-    pass1(func['instrs'])
-    func['instrs'] = passed_func
-    passed_func = []
-    used.clear()
+# for func in prog['functions']:
+#   deleted = True
+#   while deleted:
+#     deleted = False # if deleted gets set to False before the condition is checked, then the pass can only run once
+#     pass0(func['instrs']) # after each pass, we need to update the func
+#     pass1(func['instrs'])
+#     func['instrs'] = passed_func
+#     passed_func = []
+#     used.clear()
 
 TERMINATORS = 'br', 'jmp', 'ret'
 
