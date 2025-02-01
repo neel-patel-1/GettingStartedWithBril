@@ -73,11 +73,19 @@ def mark_locally_killed(bb):
   candidates = {}
   instr_index = 0
   for instr in bb:
+    if 'args' in instr:
+      for arg in instr['args']:
+        if arg in candidates:
+          # print(f"Removed Candidate {arg} at {candidates[arg]}")
+          del candidates[arg]
     if 'dest' in instr:
       if instr['dest'] in candidates:
         marked.append(candidates[instr['dest']])
-        print(f"Marked {instr['dest']} at {candidates[instr['dest']]}")
-      candidates[instr['dest']] = instr_index
+        # print(f"Marked {instr['dest']} at {candidates[instr['dest']]}")
+      if not instr['op'] == 'call' and not instr['op'] == 'print':
+        candidates[instr['dest']] = instr_index
+        # print(f"Added Candidate {instr['dest']} at {instr_index}")
+
     instr_index += 1
 
 def remove_locally_killed(bb):
@@ -89,7 +97,7 @@ def remove_locally_killed(bb):
       passed_bb.append(instr)
     else:
       found_killed = True
-      print(f"Removed {instr['dest']} at {instr_index}")
+      # print(f"Deleted {instr['dest']} at {instr_index}")
     instr_index += 1
   return passed_bb
 
