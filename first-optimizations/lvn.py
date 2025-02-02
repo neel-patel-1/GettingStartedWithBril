@@ -28,21 +28,48 @@ def form_bbs(function):
 expr_num_map = {}
 
 def get_table_repr(expr):
+  # Const
+  if type(expr) == int or type(expr) == bool:
+    if expr in expr_num_map:
+      return expr_num_map[expr] # Literal we've seen
+    else:
+      return (expr) # New literal
+
+  # Varname
+  if type(expr) == str:
+    if expr in expr_num_map:
+      return expr_num_map[expr]
+    else:
+      return (expr)
+
+  # Inst
   if 'op' in expr:
-    print(f"op: {expr['op']}")
-  elif 'label' in expr:
-    print(f"label: {expr['label']}")
-  else:
-    print(f"{expr}")
+    if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
+      return (expr['op'], get_table_repr(expr['args'][0]), get_table_repr(expr['args'][0]))
+    if expr['op'] in ('id'):
+      return (expr['op'], get_table_repr(expr['args'][0]))
+    if expr['op'] in ('const'):
+      return (expr['dest'], (expr['op'],get_table_repr(expr['value'])))
+    if expr['op'] in ('jmp'):
+      return (expr['op'], expr)
+    if expr['op'] in ('print'):
+      return (expr['op'], expr)
+    # TODO handle other ops
+
+  # Label
+  if 'label' in expr:
+    return (expr['label'], expr)
 
 
 prog = json.load(sys.stdin)
 for function in prog['functions']:
-  bbinfo = form_bbs(function) # get the bbs
+  bbinfo = form_bbs(function)
   bbs = bbinfo[0]
-  function['instrs'] = [] # clear the instrs
   for bb in bbs:
+    expr_num_map.clear()
     for instr in bb:
-      get_table_repr(instr)
+      print(f'Instr: {instr}')
+      repr_info = get_table_repr(instr)
+      print(f'Expr: {repr_info}')
 
 # print(json.dumps(prog, indent=2))
