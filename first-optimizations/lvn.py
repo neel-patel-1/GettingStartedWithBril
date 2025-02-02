@@ -26,27 +26,16 @@ def form_bbs(function):
   return (bbs, num_bbs)
 
 expr_num_map = {}
-val_name_map = []
 env_name_map = {}
-
-def gen_instr_repr(repr):
-  # for everything after the op (the format is ('op', #op1, #op2, ...) ), we replace the value with the canonical name in the table
-  global val_name_map
-
-  subst_repr = (repr[0])
-  for val in repr[1:]:
-    if type(val) == int:
-      subst_repr += (val_name_map[val])
-    else:
-      return repr # If we can't find the value in the table, we return the original representation
-  return subst_repr
+val_num = 0
+val_ctr = 0
 
 def get_env_mapping(varname):
   global env_name_map
   if varname in env_name_map:
     return env_name_map[varname]
   else:
-    return varname
+    return None
 
 def get_table_repr(expr):
   global expr_num_map
@@ -70,7 +59,17 @@ def get_table_repr(expr):
       return (expr['op'], get_table_repr(expr['args'][0]), get_table_repr(expr['args'][0]))
     if expr['op'] in ('id'):
       val_num = get_env_mapping(expr['args'][0])
-      return (expr['op'], val_num)
+      if val_num is None:
+        global val_ctr
+        # create a new "value" that maps to a new number
+        expr_num_map[(expr['op'], expr['args'][0])] = val_ctr
+        # add an env mapping for this variable
+        env_name_map[expr['dest']] = val_ctr
+        val_ctr += 1
+        return (expr['op'], (expr['op'], expr['args'][0]))
+      else:
+        env_name_map[expr['dest']] = val_num
+        return (expr['op'], val_num)
     if expr['op'] in ('const'):
       return (expr['dest'], (expr['op'],get_table_repr(expr['value'])))
     if expr['op'] in ('jmp'):
@@ -94,7 +93,5 @@ for function in prog['functions']:
       print(f'Instr: {instr}')
       repr_info = get_table_repr(instr)
       print(f'Expr: {repr_info}')
-      new_instr = gen_instr_repr(repr_info)
-      print(f'New Instr: {new_instr}')
 
 # print(json.dumps(prog, indent=2))
