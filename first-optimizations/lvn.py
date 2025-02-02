@@ -26,8 +26,22 @@ def form_bbs(function):
   return (bbs, num_bbs)
 
 expr_num_map = {}
+val_name_map = []
+
+def gen_instr_repr(repr):
+  # for everything after the op (the format is ('op', #op1, #op2, ...) ), we replace the value with the canonical name in the table
+  global val_name_map
+
+  subst_repr = (repr[0])
+  for val in repr[1:]:
+    if type(val) == int:
+      subst_repr += (val_name_map[val],)
+    else:
+      return repr # If we can't find the value in the table, we return the original representation
+  return subst_repr
 
 def get_table_repr(expr):
+  global expr_num_map
   # Const
   if type(expr) == int or type(expr) == bool:
     if expr in expr_num_map:
@@ -71,5 +85,7 @@ for function in prog['functions']:
       print(f'Instr: {instr}')
       repr_info = get_table_repr(instr)
       print(f'Expr: {repr_info}')
+      new_instr = gen_instr_repr(repr_info)
+      print(f'New Instr: {new_instr}')
 
 # print(json.dumps(prog, indent=2))
