@@ -38,7 +38,7 @@ def get_env_mapping(varname):
     return None
 
 def get_table_repr(expr):
-  global expr_num_map
+  global expr_num_map, val_ctr
   # Const
   if type(expr) == int or type(expr) == bool:
     if expr in expr_num_map:
@@ -71,7 +71,21 @@ def get_table_repr(expr):
         env_name_map[expr['dest']] = val_num
         return (expr['op'], val_num)
     if expr['op'] in ('const'):
-      return (expr['dest'], (expr['op'],get_table_repr(expr['value'])))
+      # does anyone have this literal already?
+      if (expr['op'], expr['value']) in expr_num_map:
+        # if so, we have the val_num, so we can just return that
+        val_num = expr_num_map[(expr['op'], expr['value'])]
+        # add an env mapping for this variable
+        env_name_map[expr['dest']] = val_num
+        return (expr['op'], val_num)
+      else:
+        # if not, we need to create a new value
+        expr_num_map[(expr['op'], expr['value'])] = val_ctr
+        # add an env mapping for this variable
+        env_name_map[expr['dest']] = val_ctr
+        val_ctr += 1
+        return (expr['op'], val_ctr)
+
     if expr['op'] in ('jmp'):
       return (expr['op'], expr)
     if expr['op'] in ('print'):
