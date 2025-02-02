@@ -27,6 +27,7 @@ def form_bbs(function):
 
 expr_num_map = {}
 val_name_map = []
+env_name_map = {}
 
 def gen_instr_repr(repr):
   # for everything after the op (the format is ('op', #op1, #op2, ...) ), we replace the value with the canonical name in the table
@@ -35,10 +36,17 @@ def gen_instr_repr(repr):
   subst_repr = (repr[0])
   for val in repr[1:]:
     if type(val) == int:
-      subst_repr += (val_name_map[val],)
+      subst_repr += (val_name_map[val])
     else:
       return repr # If we can't find the value in the table, we return the original representation
   return subst_repr
+
+def get_env_mapping(varname):
+  global env_name_map
+  if varname in env_name_map:
+    return env_name_map[varname]
+  else:
+    return varname
 
 def get_table_repr(expr):
   global expr_num_map
@@ -61,7 +69,8 @@ def get_table_repr(expr):
     if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
       return (expr['op'], get_table_repr(expr['args'][0]), get_table_repr(expr['args'][0]))
     if expr['op'] in ('id'):
-      return (expr['op'], get_table_repr(expr['args'][0]))
+      val_num = get_env_mapping(expr['args'][0])
+      return (expr['op'], val_num)
     if expr['op'] in ('const'):
       return (expr['dest'], (expr['op'],get_table_repr(expr['value'])))
     if expr['op'] in ('jmp'):
