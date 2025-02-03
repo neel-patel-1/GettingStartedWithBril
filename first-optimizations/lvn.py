@@ -93,14 +93,15 @@ prog = json.load(sys.stdin)
 for function in prog['functions']:
   bbinfo = form_bbs(function)
   bbs = bbinfo[0]
+  function['instrs'] = []
   for bb in bbs:
     expr_num_map.clear()
     var2num.clear()
     new_bb = []
     for instr in bb:
-      print(f'Instr: {instr}')
+      print(f'Instr: {instr}', file=sys.stderr)
       subst_expr = get_table_repr(instr)
-      print(f'Expr: {subst_expr}')
+      print(f'Expr: {subst_expr}', file=sys.stderr)
       if subst_expr[0] == True:
           new_source = list(expr_num_map.items())[subst_expr[1]][1]
           new_instr = {
@@ -109,7 +110,7 @@ for function in prog['functions']:
             'op': 'id',
             'type': instr['type']
           }
-      else: # ebture value wasn't found, but we still need to lookup args
+      else:
         new_instr = instr.copy()
         if 'op' in instr:
           if 'args' in instr:
@@ -122,7 +123,10 @@ for function in prog['functions']:
               else:
                 new_args.append(arg)
             new_instr['args'] = new_args
-        # new_instr = instr.copy()
-      print(f'New Instr: {new_instr}')
+      print(f'New Instr: {new_instr}', file=sys.stderr)
+      new_bb.append(new_instr)
+    function['instrs'].extend(new_bb)
+print(json.dumps(prog, indent=2))
+
 
 # print(json.dumps(prog, indent=2))

@@ -8,5 +8,6 @@ brench dce.toml > results.csv
 
 * lvn
 ```sh
-cat test_cases/idchain-nonlocal.bril | bril2json | tee idchain-nonlocal.json | python3 lvn.py |& less
+cat test_cases/idchain-nonlocal.bril | bril2json | tee idchain-nonlocal.json |  python3 lvn.py | bril2txt | tee idchain-opt.bril | bril2json | brili
+cat test_cases/redundant-dce.bril | bril2json | tee idchain-nonlocal.json | python3 lvn.py | brili
 ```
