@@ -1,5 +1,6 @@
 import json
 import sys
+from collections import OrderedDict
 
 TERMINATORS = 'br', 'jmp', 'ret'
 
@@ -25,66 +26,33 @@ def form_bbs(function):
     num_bbs += 1
   return (bbs, num_bbs)
 
-expr_num_map = {}
-env_name_map = {}
-val_num = 0
-val_ctr = 0
-
-def get_env_mapping(varname):
-  global env_name_map
-  if varname in env_name_map:
-    return env_name_map[varname]
-  else:
-    return None
+expr_num_map = OrderedDict()
 
 def get_table_repr(expr):
   global expr_num_map, val_ctr
   # Const
-  if type(expr) == int or type(expr) == bool:
+  if type(expr) == int or type(expr) == bool or type(expr) == str:
     if expr in expr_num_map:
-      return expr_num_map[expr] # Literal we've seen
+      return (True, list(expr_num_map.keys()).index(expr)) # Literal we've seen
     else:
-      return (expr) # New literal
-
-  # Varname
-  if type(expr) == str:
-    if expr in expr_num_map:
-      return expr_num_map[expr]
-    else:
-      return (expr)
+      return (False, (expr)) # New literal
 
   # Inst
   if 'op' in expr:
     if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
       return (expr['op'], get_table_repr(expr['args'][0]), get_table_repr(expr['args'][0]))
     if expr['op'] in ('id'):
-      val_num = get_env_mapping(expr['args'][0])
-      if val_num is None:
-        global val_ctr
-        # create a new "value" that maps to a new number
-        expr_num_map[(expr['op'], expr['args'][0])] = val_ctr
-        # add an env mapping for this variable
-        env_name_map[expr['dest']] = val_ctr
-        val_ctr += 1
-        return (expr['op'], (expr['op'], expr['args'][0]))
+      if (expr['op'], expr['args'][0]) in expr_num_map:
+        return (True, list(expr_num_map.keys()).index(expr))
       else:
-        env_name_map[expr['dest']] = val_num
-        return (expr['op'], val_num)
+        expr_num_map[(expr['op'], expr['args'][0])] = expr['dest']
+        return (False, (expr['op'], expr['args'][0]))
     if expr['op'] in ('const'):
-      # does anyone have this literal already?
-      if (expr['op'], expr['value']) in expr_num_map:
-        # if so, we have the val_num, so we can just return that
-        val_num = expr_num_map[(expr['op'], expr['value'])]
-        # add an env mapping for this variable
-        env_name_map[expr['dest']] = val_num
-        return (expr['op'], val_num)
+      if (expr['op'], expr['type'], expr['value']) in expr_num_map:
+        return (True, list(expr_num_map.keys()).index(expr))
       else:
-        # if not, we need to create a new value
-        expr_num_map[(expr['op'], expr['value'])] = val_ctr
-        # add an env mapping for this variable
-        env_name_map[expr['dest']] = val_ctr
-        val_ctr += 1
-        return (expr['op'], val_ctr)
+        expr_num_map[(expr['op'], expr['type'], expr['value'])] = expr['dest']
+        return (False, (expr['op'], expr['type'], expr['value']))
 
     if expr['op'] in ('jmp'):
       return (expr['op'], expr)
@@ -96,6 +64,11 @@ def get_table_repr(expr):
   if 'label' in expr:
     return (expr['label'], expr)
 
+def new_instr(expr):
+  if(expr[0] == 'id'):
+    source = expr_num_map[expr[1]]
+    return {'args': []}
+
 
 prog = json.load(sys.stdin)
 for function in prog['functions']:
@@ -105,7 +78,7 @@ for function in prog['functions']:
     expr_num_map.clear()
     for instr in bb:
       print(f'Instr: {instr}')
-      repr_info = get_table_repr(instr)
-      print(f'Expr: {repr_info}')
+      subst_expr = get_table_repr(instr)
+      print(f'Expr: {subst_expr}')
 
 # print(json.dumps(prog, indent=2))
