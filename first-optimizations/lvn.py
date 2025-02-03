@@ -109,8 +109,20 @@ for function in prog['functions']:
             'op': 'id',
             'type': instr['type']
           }
-      else:
+      else: # ebture value wasn't found, but we still need to lookup args
         new_instr = instr.copy()
+        if 'op' in instr:
+          if 'args' in instr:
+            new_args = []
+            for arg in instr['args']:
+              if arg in var2num:
+                argnum = var2num[arg]
+                argname = list(expr_num_map.items())[argnum][1]
+                new_args.append(argname)
+              else:
+                new_args.append(arg)
+            new_instr['args'] = new_args
+        # new_instr = instr.copy()
       print(f'New Instr: {new_instr}')
 
 # print(json.dumps(prog, indent=2))
