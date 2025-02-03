@@ -50,6 +50,16 @@ def get_table_repr(expr):
         expr_num_map[(expr['op'], expr['args'][0])] = expr['args'][0]
 
         return (False, (expr['op'], expr['args'][0]))
+    if expr['op'] in ('const'):
+        key = (expr['op'], expr['type'], expr['value'])
+        dest = expr['dest']
+        if key in expr_num_map:
+          var2num[dest] = list(expr_num_map.keys()).index(key)
+          return (True, list(expr_num_map.keys()).index(key))
+        else:
+          var2num[dest] = len(expr_num_map)
+          expr_num_map[key] = dest
+          return (False, key)
     if expr['op'] in ('jmp'):
       return (expr['op'], expr)
     if expr['op'] in ('print'):
