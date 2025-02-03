@@ -87,10 +87,23 @@ for function in prog['functions']:
   bbs = bbinfo[0]
   for bb in bbs:
     expr_num_map.clear()
+    var2num.clear()
     new_bb = []
     for instr in bb:
       print(f'Instr: {instr}')
       subst_expr = get_table_repr(instr)
       print(f'Expr: {subst_expr}')
+      if subst_expr[0] == True:
+        if instr['op'] == 'id':
+          new_source = list(expr_num_map.keys())[subst_expr[1]][1]
+          new_instr = {
+            'args': [list(expr_num_map.keys())[subst_expr[1]][1]],
+            'dest': instr['dest'],
+            'op': 'id',
+            'type': instr['type']
+          }
+      else:
+        new_instr = instr.copy()
+      print(f'New Instr: {new_instr}')
 
 # print(json.dumps(prog, indent=2))
