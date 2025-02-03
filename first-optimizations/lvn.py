@@ -40,7 +40,15 @@ def get_table_repr(expr):
   # Inst
   if 'op' in expr:
     if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
-      return (expr['op'], get_table_repr(expr['args'][0]), get_table_repr(expr['args'][0]))
+      arg1num = var2num[expr['args'][0]]
+      arg2num = var2num[expr['args'][1]]
+      if (expr['op'], arg1num, arg2num) in expr_num_map:
+        var2num[expr['dest']] = list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num))
+        return (True, list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num)))
+      else:
+        var2num[expr['dest']] = len(expr_num_map)
+        expr_num_map[(expr['op'], arg1num, arg2num)] = expr['dest']
+        return (False, (expr['op'], arg1num, arg2num))
     if expr['op'] in ('id'):
       if expr['args'][0] in var2num:
         var2num[expr['dest']] = var2num[expr['args'][0]]
@@ -61,9 +69,9 @@ def get_table_repr(expr):
           expr_num_map[key] = dest
           return (False, key)
     if expr['op'] in ('jmp'):
-      return (expr['op'], expr)
+      return (False, expr['op'], expr)
     if expr['op'] in ('print'):
-      return (expr['op'], expr)
+      return (False, expr['op'], expr)
     # TODO handle other ops
 
   # Label
@@ -94,10 +102,9 @@ for function in prog['functions']:
       subst_expr = get_table_repr(instr)
       print(f'Expr: {subst_expr}')
       if subst_expr[0] == True:
-        if instr['op'] == 'id':
-          new_source = list(expr_num_map.keys())[subst_expr[1]][1]
+          new_source = list(expr_num_map.items())[subst_expr[1]][1]
           new_instr = {
-            'args': [list(expr_num_map.keys())[subst_expr[1]][1]],
+            'args': [new_source],
             'dest': instr['dest'],
             'op': 'id',
             'type': instr['type']
