@@ -26,10 +26,17 @@ def form_bbs(function):
     num_bbs += 1
   return (bbs, num_bbs)
 
+counter = 0
+def get_fresh_name():
+  global counter
+  counter += 1
+  return f'v{counter}'
+
 expr_num_map = OrderedDict()
 var2num = {}
+alias_table = {}
 def get_table_repr(expr):
-  global expr_num_map, val_ctr
+  global expr_num_map, alias_table, var2num
   # Const
   if type(expr) == int or type(expr) == bool or type(expr) == str:
     if expr in expr_num_map:
@@ -99,6 +106,12 @@ for function in prog['functions']:
     var2num.clear()
     new_bb = []
     for instr in bb:
+      # Check if we are re-assigning (hopefully noone uses these fresh names)
+      if 'dest' in instr:
+        if instr['dest'] in var2num:
+          new_name = get_fresh_name()
+          alias_table[instr['dest']] = new_name
+          instr['dest'] = new_name
       print(f'Instr: {instr}', file=sys.stderr)
       subst_expr = get_table_repr(instr)
       print(f'Expr: {subst_expr}', file=sys.stderr)
@@ -117,6 +130,8 @@ for function in prog['functions']:
             new_args = []
             for arg in instr['args']:
               if arg in var2num:
+                if arg in alias_table:
+                  arg = alias_table[arg]
                 argnum = var2num[arg]
                 argname = list(expr_num_map.items())[argnum][1]
                 new_args.append(argname)

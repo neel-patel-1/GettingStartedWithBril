@@ -1,0 +1,9 @@
+# ARGS: -p
+@main {
+  x: int = const 4;
+  y: int = const 5;
+  z: int = mul x y;
+  z: int = const 9;
+  f: int = mul x y;
+  print f;
+}
