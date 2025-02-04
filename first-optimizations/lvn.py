@@ -49,6 +49,8 @@ def get_table_repr(expr):
     if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
       arg1num = var2num[expr['args'][0]]
       arg2num = var2num[expr['args'][1]]
+      if expr['op'] in ('add', 'mul', 'and', 'or', 'eq'):
+        arg1num, arg2num = min(arg1num, arg2num), max(arg1num, arg2num)
       if (expr['op'], arg1num, arg2num) in expr_num_map:
         var2num[expr['dest']] = list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num))
         return (True, list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num)))
@@ -142,6 +144,3 @@ for function in prog['functions']:
       new_bb.append(new_instr)
     function['instrs'].extend(new_bb)
 print(json.dumps(prog, indent=2))
-
-
-# print(json.dumps(prog, indent=2))
