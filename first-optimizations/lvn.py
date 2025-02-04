@@ -27,10 +27,21 @@ def form_bbs(function):
   return (bbs, num_bbs)
 
 counter = 0
+seen_varse  = set()
 def get_fresh_name():
   global counter
   counter += 1
-  return f'v{counter}'
+  new_name = f'v{counter}'
+  while new_name in seen_varse:
+    counter += 1
+    new_name = f'v{counter}'
+  return new_name
+
+def update_var_names(instr):
+  if 'args' in instr:
+    for arg in instr['args']:
+      if arg not in seen_varse:
+        seen_varse.add(arg)
 
 expr_num_map = OrderedDict()
 var2num = {}
@@ -157,6 +168,7 @@ for function in prog['functions']:
     new_bb = []
     for instr in bb:
       # Check if we are re-assigning (hopefully noone uses these fresh names)
+      update_var_names(instr)
       if 'dest' in instr:
         if instr['dest'] in var2num:
           new_name = get_fresh_name()
