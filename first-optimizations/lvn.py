@@ -60,14 +60,12 @@ def get_table_repr(expr):
     if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
 
       # arguments not in the table, make a placeholder entry
-      if expr['args'][0] in var2num:
+      if expr['args'][0] not in var2num:
         var2num[expr['args'][0]] = len(expr_num_map)
         expr_num_map[expr['args'][0]] = expr['args'][0]
-      if expr['args'][1] in var2num:
+      if expr['args'][1] not in var2num:
         var2num[expr['args'][1]] = len(expr_num_map)
         expr_num_map[expr['args'][1]] = expr['args'][1]
-      if expr['args'][0] not in var2num or expr['args'][1] not in var2num:
-        return (False, (expr['op'], None, None))
 
       arg1num = var2num[expr['args'][0]]
       arg2num = var2num[expr['args'][1]]
@@ -167,13 +165,20 @@ for function in prog['functions']:
     var2num.clear()
     new_bb = []
     for instr in bb:
-      # Check if we are re-assigning (hopefully noone uses these fresh names)
+      # Check if we are re-assigning
       update_var_names(instr)
       if 'dest' in instr:
         if instr['dest'] in var2num:
-          new_name = get_fresh_name()
-          alias_table[instr['dest']] = new_name
-          instr['dest'] = new_name
+          self_ref = False
+          if 'args' in instr:
+            for arg in instr['args']:
+              if instr['dest'] == arg:
+                self_ref = True
+          if not self_ref:
+            renamed = True
+            new_name = get_fresh_name()
+            alias_table[instr['dest']] = new_name
+            instr['dest'] = new_name
       print(f'Instr: {instr}', file=sys.stderr)
       subst_expr = get_table_repr(instr)
       print(f'Expr: {subst_expr}', file=sys.stderr)
