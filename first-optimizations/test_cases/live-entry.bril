@@ -1,0 +1,9 @@
+# ARGS: -p
+@main {
+  x: int = const 4;
+  jmp .label;
+.label:
+  sum: int = add x x;
+  sum2: int = add x x;
+  print sum2;
+}

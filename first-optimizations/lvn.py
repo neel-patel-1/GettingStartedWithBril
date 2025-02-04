@@ -47,12 +47,26 @@ def get_table_repr(expr):
   # Inst
   if 'op' in expr:
     if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
+
+      # arguments not in the table, make a placeholder entry
+      if expr['args'][0] in var2num:
+        var2num[expr['args'][0]] = len(expr_num_map)
+        expr_num_map[expr['args'][0]] = expr['args'][0]
+      if expr['args'][1] in var2num:
+        var2num[expr['args'][1]] = len(expr_num_map)
+        expr_num_map[expr['args'][1]] = expr['args'][1]
+      if expr['args'][0] not in var2num or expr['args'][1] not in var2num:
+        return (False, (expr['op'], None, None))
+
       arg1num = var2num[expr['args'][0]]
       arg2num = var2num[expr['args'][1]]
+
+      # commutativity
       if expr['op'] in ('add', 'mul', 'and', 'or', 'eq'):
         arg1num, arg2num = min(arg1num, arg2num), max(arg1num, arg2num)
+
+      # constant fold
       arg1expr = list(expr_num_map.keys())[arg1num]
-      print(f'Arg1: {arg1expr}', file=sys.stderr)
       arg2expr = list(expr_num_map.keys())[arg2num]
       if (arg1expr[0] == 'const' and arg2expr[0] == 'const'):
         if expr['op'] in ('add'):
@@ -84,13 +98,15 @@ def get_table_repr(expr):
           var2num[expr['dest']] = len(expr_num_map)
           expr_num_map[key] = expr['dest']
           return (False, key)
-      if (expr['op'], arg1num, arg2num) in expr_num_map:
+
+      if (expr['op'], arg1num, arg2num) in expr_num_map: #already in the table
         var2num[expr['dest']] = list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num))
         return (True, list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num)))
-      else:
+      else: # not in the table
         var2num[expr['dest']] = len(expr_num_map)
         expr_num_map[(expr['op'], arg1num, arg2num)] = expr['dest']
         return (False, (expr['op'], arg1num, arg2num))
+
     if expr['op'] in ('id'):
       if expr['args'][0] in var2num:
         var2num[expr['dest']] = var2num[expr['args'][0]]
