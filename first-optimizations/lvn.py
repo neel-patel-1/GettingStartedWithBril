@@ -133,8 +133,7 @@ def get_table_repr(expr):
     # TODO handle other ops
 
   # Label
-  if 'label' in expr:
-    return (expr['label'], expr)
+  return (False, ['label', expr])
 
 def new_instr(old_inst, expr):
   if(expr[0] == False):
