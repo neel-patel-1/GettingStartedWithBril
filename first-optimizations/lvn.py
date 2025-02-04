@@ -51,6 +51,39 @@ def get_table_repr(expr):
       arg2num = var2num[expr['args'][1]]
       if expr['op'] in ('add', 'mul', 'and', 'or', 'eq'):
         arg1num, arg2num = min(arg1num, arg2num), max(arg1num, arg2num)
+      arg1expr = list(expr_num_map.keys())[arg1num]
+      print(f'Arg1: {arg1expr}', file=sys.stderr)
+      arg2expr = list(expr_num_map.keys())[arg2num]
+      if (arg1expr[0] == 'const' and arg2expr[0] == 'const'):
+        if expr['op'] in ('add'):
+          key = ('const', 'int', arg1expr[2] + arg2expr[2])
+        if expr['op'] in ('sub'):
+          key = ('const', 'int', arg1expr[2] - arg2expr[2])
+        if expr['op'] in ('mul'):
+          key = ('const', 'int', arg1expr[2] * arg2expr[2])
+        if expr['op'] in ('div'):
+          key = ('const', 'int', arg1expr[2] // arg2expr[2])
+        if expr['op'] in ('lt'):
+          key = ('const', 'bool', arg1expr[2] < arg2expr[2])
+        if expr['op'] in ('eq'):
+          key = ('const', 'bool', arg1expr[2] == arg2expr[2])
+        if expr['op'] in ('gt'):
+          key = ('const', 'bool', arg1expr[2] > arg2expr[2])
+        if expr['op'] in ('ge'):
+          key = ('const', 'bool', arg1expr[2] >= arg2expr[2])
+        if expr['op'] in ('le'):
+          key = ('const', 'bool', arg1expr[2] <= arg2expr[2])
+        if expr['op'] in ('and'):
+          key = ('const', 'bool', arg1expr[2] and arg2expr[2])
+        if expr['op'] in ('or'):
+          key = ('const', 'bool', arg1expr[2] or arg2expr[2])
+        if key in expr_num_map:
+          var2num[expr['dest']] = list(expr_num_map.keys()).index(key)
+          return (True, list(expr_num_map.keys()).index(key))
+        else:
+          var2num[expr['dest']] = len(expr_num_map)
+          expr_num_map[key] = expr['dest']
+          return (False, key)
       if (expr['op'], arg1num, arg2num) in expr_num_map:
         var2num[expr['dest']] = list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num))
         return (True, list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num)))
@@ -125,6 +158,13 @@ for function in prog['functions']:
             'op': 'id',
             'type': instr['type']
           }
+      elif subst_expr[1][0] == 'const':
+        new_instr = {
+          'dest': instr['dest'],
+          'op': 'const',
+          'type': instr['type'],
+          'value': subst_expr[1][2]
+        }
       else:
         new_instr = instr.copy()
         if 'op' in instr:
