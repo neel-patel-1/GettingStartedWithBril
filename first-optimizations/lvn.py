@@ -120,6 +120,9 @@ def get_table_repr(expr):
       if expr['args'][0] in var2num:
         var2num[expr['dest']] = var2num[expr['args'][0]]
         return (True, var2num[expr['args'][0]])
+      elif ('id', expr['args'][0]) in expr_num_map:
+        var2num[expr['dest']] = list(expr_num_map.keys()).index(('id', expr['args'][0]))
+        return (True, list(expr_num_map.keys()).index(('id', expr['args'][0])))
       else:
         var2num[expr['dest']] = len(expr_num_map)
         expr_num_map[(expr['op'], expr['args'][0])] = expr['args'][0]
@@ -163,6 +166,7 @@ for function in prog['functions']:
   for bb in bbs:
     expr_num_map.clear()
     var2num.clear()
+    alias_table.clear()
     new_bb = []
     for instr in bb:
       # Check if we are re-assigning
