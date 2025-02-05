@@ -55,6 +55,16 @@ def get_table_repr(expr):
     else:
       return (False, (expr)) # New literal
 
+  # Check if any aliases exist for this variable name already
+  if 'args' in expr:
+    new_args = []
+    for arg in expr['args']:
+      if arg in alias_table:
+        new_args.append(alias_table[arg])
+      else:
+        new_args.append(arg)
+    expr['args'] = new_args
+
   # Inst
   if 'op' in expr:
     if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
@@ -183,6 +193,7 @@ for function in prog['functions']:
             new_name = get_fresh_name()
             alias_table[instr['dest']] = new_name
             instr['dest'] = new_name
+
       print(f'Instr: {instr}', file=sys.stderr)
       subst_expr = get_table_repr(instr)
       print(f'Expr: {subst_expr}', file=sys.stderr)
