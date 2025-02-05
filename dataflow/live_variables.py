@@ -1,8 +1,8 @@
 import json
 import sys
 import queue
-from worklist import worklist
-
+from worklist import worklist, insets
+from bb import succ_map
 
 def transfer(bb, outset):
   inset = set(outset)
@@ -39,4 +39,20 @@ def create_outset(index):
           outset.add(var)
   return outset
 
-worklist()
+prog = json.load(sys.stdin)
+for function in prog['functions']:
+  bbs = worklist(create_outset, transfer, function)
+  new_bbs = []
+  for index, bb in enumerate(bbs):
+    outset = create_outset(index)
+    print(f'bb: {bb[1]} outset: {outset} inset: {insets[bb[1]]}', file=sys.stderr)
+    print(f'{bb[0]}', file=sys.stderr)
+    new_bb = remove_dead(bb, outset)
+    new_bbs.append(new_bb)
+
+  function['instrs'] = []
+  for bb in new_bbs:
+    function['instrs'] += bb[0]
+
+print(json.dumps(prog))
+
