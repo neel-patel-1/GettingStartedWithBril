@@ -65,10 +65,8 @@ def get_table_repr(expr):
         new_args.append(arg)
     expr['args'] = new_args
 
-  # Inst
   if 'op' in expr:
     if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
-
       # arguments not in the table, make a placeholder entry
       if expr['args'][0] not in var2num:
         var2num[expr['args'][0]] = len(expr_num_map)
@@ -127,10 +125,10 @@ def get_table_repr(expr):
         return (False, (expr['op'], arg1num, arg2num))
 
     if expr['op'] in ('id'):
-      if expr['args'][0] in var2num:
+      if expr['args'][0] in var2num: # the arg is in the current environment with a assigned table entry
         var2num[expr['dest']] = var2num[expr['args'][0]]
         return (True, var2num[expr['args'][0]])
-      elif ('id', expr['args'][0]) in expr_num_map:
+      elif ('id', expr['args'][0]) in expr_num_map: # the arg not in the environment (live on entry), but someone else has already assigned to it
         var2num[expr['dest']] = list(expr_num_map.keys()).index(('id', expr['args'][0]))
         return (True, list(expr_num_map.keys()).index(('id', expr['args'][0])))
       else:
@@ -138,6 +136,7 @@ def get_table_repr(expr):
         expr_num_map[(expr['op'], expr['args'][0])] = expr['args'][0]
 
         return (False, (expr['op'], expr['args'][0]))
+
     if expr['op'] in ('const'):
         key = (expr['op'], expr['type'], expr['value'])
         dest = expr['dest']
@@ -148,10 +147,22 @@ def get_table_repr(expr):
           var2num[dest] = len(expr_num_map)
           expr_num_map[key] = dest
           return (False, key)
+
+    if expr['op'] in ('call'):
+      key = (expr['op'], expr['funcs'][0], ''.join(expr['args']))
+      if key in expr_num_map:
+        var2num[expr['dest']] = list(expr_num_map.keys()).index(key)
+        return (True, list(expr_num_map.keys()).index(key))
+      else:
+        var2num[expr['dest']] = len(expr_num_map)
+        expr_num_map[key] = expr['dest']
+        return (False, key)
+
     if expr['op'] in ('jmp'):
       return (False, expr['op'], expr)
     if expr['op'] in ('print'):
       return (False, expr['op'], expr)
+
     # TODO handle other ops
 
   # Label
