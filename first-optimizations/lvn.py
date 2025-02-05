@@ -174,6 +174,7 @@ for function in prog['functions']:
   bbs = bbinfo[0]
   function['instrs'] = []
   for bb in bbs:
+    print(f'BB: {bb}', file=sys.stderr)
     expr_num_map.clear()
     var2num.clear()
     alias_table.clear()
@@ -183,16 +184,21 @@ for function in prog['functions']:
       update_var_names(instr)
       if 'dest' in instr:
         if instr['dest'] in var2num:
-          self_ref = False
-          if 'args' in instr:
-            for arg in instr['args']:
-              if instr['dest'] == arg:
-                self_ref = True
-          if not self_ref:
-            renamed = True
-            new_name = get_fresh_name()
-            alias_table[instr['dest']] = new_name
-            instr['dest'] = new_name
+          if instr['dest'] not in expr_num_map: # not a placeholder, then we have a re-assignment
+            self_ref = False
+            if 'args' in instr:
+              for arg in instr['args']:
+                if instr['dest'] == arg:
+                  self_ref = True
+            if not self_ref:
+              renamed = True
+              new_name = get_fresh_name()
+              alias_table[instr['dest']] = new_name
+              print(f'Var2Num: {var2num}', file=sys.stderr)
+              instr['dest'] = new_name
+            else: # remove the placeholder entry
+              del var2num[instr['dest']]
+
 
       print(f'Instr: {instr}', file=sys.stderr)
       subst_expr = get_table_repr(instr)
