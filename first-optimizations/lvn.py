@@ -133,7 +133,10 @@ def get_table_repr(expr):
         return (True, list(expr_num_map.keys()).index(('id', expr['args'][0])))
       else:
         var2num[expr['dest']] = len(expr_num_map)
-        expr_num_map[(expr['op'], expr['args'][0])] = expr['args'][0]
+        if expr['args'][0] in var2num: # the variable has been assigned in this bb
+          expr_num_map[(expr['op'], expr['args'][0])] = expr['args'][0]
+        else: # the variable is live on entry and we are responsible for supplying the value now
+          expr_num_map[(expr['op'], expr['args'][0])] = expr['dest']
 
         return (False, (expr['op'], expr['args'][0]))
 
@@ -147,16 +150,6 @@ def get_table_repr(expr):
           var2num[dest] = len(expr_num_map)
           expr_num_map[key] = dest
           return (False, key)
-
-    if expr['op'] in ('call'):
-      key = (expr['op'], expr['funcs'][0], ''.join(expr['args']))
-      if key in expr_num_map:
-        var2num[expr['dest']] = list(expr_num_map.keys()).index(key)
-        return (True, list(expr_num_map.keys()).index(key))
-      else:
-        var2num[expr['dest']] = len(expr_num_map)
-        expr_num_map[key] = expr['dest']
-        return (False, key)
 
     if expr['op'] in ('jmp'):
       return (False, expr['op'], expr)
