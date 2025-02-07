@@ -21,7 +21,14 @@ cd ../../first-optimizations/
 brench dce.toml > results.csv
 ```
 
-* lvn
+* lvn plot
+```sh
+brench dce.toml > results.csv
+python3 plot.py < results.csv
+
+```
+
+* lvn test cases
 ```sh
 # copy propagation
 cat test_cases/idchain-nonlocal.bril | bril2json | tee idchain-nonlocal.json |  python3 lvn.py | python3 dce.py | bril2txt | tee idchain-nonlocal-opt.bril | bril2json | brili
