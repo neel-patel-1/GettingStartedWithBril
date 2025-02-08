@@ -58,10 +58,16 @@ def form_predecessor_map(bbs):
           pred_map[bbs[index + 1][1]] = [index]
   return pred_map
 
+def get_repr(index,bb):
+  bb_instnum = bb[1] + str(index)
+  return bb_instnum
+
 def transfer(bb, inset):
   insts = bb[0]
   outset = set(inset)
-  # for inst in inst:
+  for index, inst in enumerate(insts):
+    if 'args' in inst:
+      print(get_repr(index,bb))
   return outset
 
 
