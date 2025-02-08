@@ -16,7 +16,7 @@ def form_bbs(function):
   bbs = []
   instrs = function['instrs']
   bb = []
-  bb_label = None
+  bb_label = 'Entry'
   for instr in instrs:
     bb.append(instr)
     if 'op' in instr:
