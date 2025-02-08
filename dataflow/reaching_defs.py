@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 TERMINATORS = 'br', 'jmp', 'ret'
 use_defs = {}
+outsets = {}
 
 counter = 0
 def get_fresh_bb_name():
@@ -73,7 +74,14 @@ def transfer(bb, inset):
       outset[inst['dest']] = get_repr(index,bb)
   return outset
 
-outsets = {}
+def create_inset(bb):
+  inset = dict()
+  if bb[1] in pred_map:
+    for pred in pred_map[bb[1]]:
+      inset = {**inset, **outsets[pred]}
+  return inset
+
+
 prog = json.load(sys.stdin)
 for function in prog['functions']:
   outsets.clear()
@@ -81,5 +89,6 @@ for function in prog['functions']:
   bbs = form_bbs(function)
   pred_map = form_predecessor_map(bbs)
 
-inset = transfer(bbs[0], dict())
-print(inset)
+inset = create_inset(bbs[0])
+outset = transfer(bbs[0], inset)
+print(outset)
