@@ -1,6 +1,6 @@
 import json
 import sys
-from collections import OrderedDict
+import queue
 
 TERMINATORS = 'br', 'jmp', 'ret'
 use_defs = {}
@@ -89,6 +89,15 @@ for function in prog['functions']:
   bbs = form_bbs(function)
   pred_map = form_predecessor_map(bbs)
 
+bbq = queue.Queue()
+bb = bbs[0]
 inset = create_inset(bbs[0])
-outset = transfer(bbs[0], inset)
-print(outset)
+if bb[1] in outsets:
+  outset = outsets[bb[1]]
+else:
+  outset = dict()
+new_outset = transfer(bbs[0], inset)
+if new_outset != outset:
+  outsets[bb[1]] = new_outset
+  bbq.put(bb[1])
+  print(new_outset)
