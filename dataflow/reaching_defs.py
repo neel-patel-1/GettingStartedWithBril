@@ -3,6 +3,7 @@ import sys
 from collections import OrderedDict
 
 TERMINATORS = 'br', 'jmp', 'ret'
+use_defs = {}
 
 counter = 0
 def get_fresh_bb_name():
@@ -64,22 +65,21 @@ def get_repr(index,bb):
 
 def transfer(bb, inset):
   insts = bb[0]
-  outset = set(inset)
+  outset = dict(inset)
   for index, inst in enumerate(insts):
     if 'args' in inst:
-      print(get_repr(index,bb))
+      use_defs[(get_repr(index,bb))] = outset
+    if 'dest' in inst:
+      outset[inst['dest']] = get_repr(index,bb)
   return outset
 
-
+outsets = {}
 prog = json.load(sys.stdin)
 for function in prog['functions']:
+  outsets.clear()
+  use_defs.clear()
   bbs = form_bbs(function)
   pred_map = form_predecessor_map(bbs)
 
-inset = set()
-# inset.add(pred_map.keys())
-for key in pred_map.keys():
-  inset.add(key)
-print(transfer(bbs[0], inset))
-
-# print(pred_map )
+inset = transfer(bbs[0], dict())
+print(inset)
