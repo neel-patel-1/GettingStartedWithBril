@@ -58,9 +58,22 @@ def form_predecessor_map(bbs):
           pred_map[bbs[index + 1][1]] = [index]
   return pred_map
 
+def transfer(bb, inset):
+  insts = bb[0]
+  outset = set(inset)
+  # for inst in inst:
+  return outset
+
+
 prog = json.load(sys.stdin)
 for function in prog['functions']:
   bbs = form_bbs(function)
   pred_map = form_predecessor_map(bbs)
 
-print(pred_map )
+inset = set()
+# inset.add(pred_map.keys())
+for key in pred_map.keys():
+  inset.add(key)
+print(transfer(bbs[0], inset))
+
+# print(pred_map )
