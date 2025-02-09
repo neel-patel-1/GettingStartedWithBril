@@ -93,7 +93,7 @@ def transfer(bb, inset):
     if 'args' in inst:
       use_defs[(get_repr(index,bb))] = outset
     if 'dest' in inst:
-      outset[inst['dest']] = get_repr(index,bb)
+      outset[inst['dest']] = [get_repr(index,bb)]
   return outset
 
 def create_inset(bb,bb_list):
@@ -103,7 +103,10 @@ def create_inset(bb,bb_list):
     for pred in pred_map[bb[1]]:
       if bb_list[pred][1] in outsets:
         for key in outsets[bb_list[pred][1]]:
-          inset[key] = outsets[bb_list[pred][1]][key]
+          if key in inset:
+            inset[key] = inset[key] + outsets[bb_list[pred][1]][key]
+          else:
+            inset[key] = outsets[bb_list[pred][1]][key]
     print(f'bb: {bb[1]} inset: {inset}')
   return inset
 
