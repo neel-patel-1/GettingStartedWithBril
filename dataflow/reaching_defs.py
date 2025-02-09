@@ -62,7 +62,7 @@ def form_predecessor_map(bbs):
           pred_map[bbs[index + 1][1]].append(index)
         else:
           pred_map[bbs[index + 1][1]] = [index]
-  print(f'pred_map: {pred_map}')
+  # print(f'pred_map: {pred_map}')
 
 
 def form_successor_map(bbs):
@@ -107,7 +107,7 @@ def create_inset(bb,bb_list):
             inset[key] = inset[key] + outsets[bb_list[pred][1]][key]
           else:
             inset[key] = outsets[bb_list[pred][1]][key]
-    print(f'bb: {bb[1]} inset: {inset}')
+    # print(f'bb: {bb[1]} inset: {inset}')
   return inset
 
 
@@ -118,32 +118,37 @@ for function in prog['functions']:
   pred_map.clear()
   succ_map.clear()
   bbs = form_bbs(function)
-  function_args = function['args']
+  if 'args' in function:
+    function_args = function['args']
+  else:
+    function_args = None
   form_predecessor_map(bbs)
   form_successor_map(bbs)
 
-bbq = queue.Queue()
-for bb in bbs:
-  bbq.put(bb)
+  bbq = queue.Queue()
+  for bb in bbs:
+    bbq.put(bb)
 
-while not bbq.empty():
-  bb = bbq.get()
-  inset = create_inset(bb,bbs)
-  if bb[1] == 'Entry' and function_args:
-    for arg in function_args:
-      inset[arg['name']] = 'Entry_Args'
-      print(f'bb: {bb[1]} inset: {inset}')
-  if bb[1] in outsets:
-    outset = outsets[bb[1]]
-  else:
-    outset = dict()
-  new_outset = transfer(bb, inset)
-  if new_outset != outset:
-    outsets[bb[1]] = new_outset
-    if bb[1] in succ_map:
-      for succ in succ_map[bb[1]]:
-        bbq.put(bbs[succ])
-    print(f'bb: {bb[1]} outset: {new_outset}')
+  while not bbq.empty():
+    bb = bbq.get()
+    inset = create_inset(bb,bbs)
+    if bb[1] == 'Entry' and function_args:
+      for arg in function_args:
+        inset[arg['name']] = 'Entry_Args'
+        # print(f'bb: {bb[1]} inset: {inset}')
+    if bb[1] in outsets:
+      outset = outsets[bb[1]]
+    else:
+      outset = dict()
+    new_outset = transfer(bb, inset)
+    if new_outset != outset:
+      outsets[bb[1]] = new_outset
+      if bb[1] in succ_map:
+        for succ in succ_map[bb[1]]:
+          bbq.put(bbs[succ])
+      # print(f'bb: {bb[1]} outset: {new_outset}')
 
-for use in use_defs:
-  print(f"{use}: {use_defs[use]}")
+  print(f"Function: {function['name']}")
+  print(f"Use: Defs")
+  for use in use_defs:
+    print(f"{use}: {use_defs[use]}")
