@@ -90,14 +90,18 @@ for function in prog['functions']:
   pred_map = form_predecessor_map(bbs)
 
 bbq = queue.Queue()
-bb = bbs[0]
-inset = create_inset(bbs[0])
-if bb[1] in outsets:
-  outset = outsets[bb[1]]
-else:
-  outset = dict()
-new_outset = transfer(bbs[0], inset)
-if new_outset != outset:
-  outsets[bb[1]] = new_outset
-  bbq.put(bb[1])
-  print(new_outset)
+for bb in bbs:
+  bbq.put(bb)
+
+while not bbq.empty():
+  bb = bbq.get()
+  inset = create_inset(bb)
+  if bb[1] in outsets:
+    outset = outsets[bb[1]]
+  else:
+    outset = dict()
+  new_outset = transfer(bb, inset)
+  if new_outset != outset:
+    outsets[bb[1]] = new_outset
+    bbq.put(bb[1])
+    print(new_outset)
