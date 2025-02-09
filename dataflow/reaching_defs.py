@@ -115,6 +115,7 @@ for function in prog['functions']:
   pred_map.clear()
   succ_map.clear()
   bbs = form_bbs(function)
+  function_args = function['args']
   form_predecessor_map(bbs)
   form_successor_map(bbs)
 
@@ -125,6 +126,10 @@ for bb in bbs:
 while not bbq.empty():
   bb = bbq.get()
   inset = create_inset(bb,bbs)
+  if bb[1] == 'Entry' and function_args:
+    for arg in function_args:
+      inset[arg['name']] = 'Entry_Args'
+      print(f'bb: {bb[1]} inset: {inset}')
   if bb[1] in outsets:
     outset = outsets[bb[1]]
   else:
