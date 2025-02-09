@@ -38,6 +38,7 @@ def form_bbs(function):
         bb_label = get_fresh_bb_name()
       bb = bb[:-1]
       bbs.append((bb, bb_label,None,None))
+      bb = []
       bb_label = instr['label']
       num_bbs += 1
   if bb:
