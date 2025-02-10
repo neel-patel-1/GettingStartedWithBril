@@ -80,11 +80,12 @@ def form_predecessor_map(bbs):
   for index, bb in enumerate(bbs):
     if 'op' in bb[0][-1]:
       if bb[0][-1]['op'] in TERMINATORS:
-        for label in bb[0][-1]['labels']:
-          if label in pred_map:
-            pred_map[label].append(index)
-          else:
-            pred_map[label] = [index]
+        if 'labels' in bb[0][-1]:
+          for label in bb[0][-1]['labels']:
+            if label in pred_map:
+              pred_map[label].append(index)
+            else:
+              pred_map[label] = [index]
       elif index < len(bbs) - 1:
         if bbs[index + 1][1] in pred_map:
           pred_map[bbs[index + 1][1]].append(index)
