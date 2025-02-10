@@ -27,6 +27,21 @@ def transfer(bb, outset):
           inset.add(arg)
   return inset
 
+def remove_dead(bb, outset):
+  p_a = outset
+  new_bb_r = []
+  for i in reversed(bb[0]):
+    if 'dest' in i and 'op' != 'call' and i['dest'] not in p_a:
+      continue
+    else:
+      new_bb_r.append(i)
+      if 'args' in i:
+        for arg in i['args']:
+          p_a.add(arg)
+  new_bb = list(reversed(new_bb_r))
+  return new_bb
+
+
 def form_bbs(function):
   num_bbs = 0
   bbs = []
@@ -82,15 +97,15 @@ def form_successor_map(bbs):
     if 'op' in bb[0][-1]:
       if bb[0][-1]['op'] in TERMINATORS:
         for label in bb[0][-1]['labels']:
-          if index in succ_map:
-            succ_map[index].append(label)
+          if label in succ_map:
+            succ_map[label].append(index)
           else:
-            succ_map[index] = [label]
-      elif index < len(bbs) - 1:
-        if index in succ_map:
-          succ_map[index].append(bbs[index + 1][1])
+            succ_map[label] = [index]
+      elif index > 0:
+        if label in succ_map:
+          succ_map[label].append(index - 1)
         else:
-          succ_map[index] = [bbs[index + 1][1]]
+          succ_map[index] = [index - 1]
 
 def create_outset(bb, bb_list):
   global succ_map
@@ -121,19 +136,27 @@ for function in prog['functions']:
   while not bbq.empty():
     bb = bbq.get()
     outset = create_outset(bb,bbs)
-    # print(f'bb: {bb[1]} outset: {outset}')
-    # print(f'bb: {bb[0]}')
     if bb[1] in insets:
       inset = insets[bb[1]]
     else:
       inset = set()
     new_inset = transfer(bb, outset)
-    # print(f'bb: {bb[1]} new_inset: {new_inset}')
     if new_inset != inset or bb[1] not in insets:
       insets[bb[1]] = new_inset
       if bb[1] in pred_map:
         for pred in pred_map[bb[1]]:
           bbq.put(bbs[pred])
 
-for bb in bbs:
-  print(f'bb: {bb[1]} inset: {insets[bb[1]]}')
+  new_bbs = []
+  for bb in bbs:
+    outset = create_outset(bb,bbs)
+    print(f'bb: {bb[1]} outset: {outset}', file=sys.stderr)
+    new_bb = remove_dead(bb, outset)
+    new_bbs.append((new_bb, bb[1], None, None))
+
+  function['instrs'] = []
+  for bb in new_bbs:
+    function['instrs'] += bb[0]
+
+print(json.dumps(prog))
+
