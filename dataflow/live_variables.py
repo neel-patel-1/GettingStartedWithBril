@@ -38,7 +38,7 @@ def remove_dead(bb, outset):
       if 'args' in i:
         for arg in i['args']:
           p_a.add(arg)
-  new_bb = list(reversed(new_bb_r))
+  new_bb = (list(reversed(new_bb_r)), bb[1], bb[2], bb[3])
   return new_bb
 
 
@@ -97,27 +97,29 @@ def form_successor_map(bbs):
     if 'op' in bb[0][-1]:
       if bb[0][-1]['op'] in TERMINATORS:
         for label in bb[0][-1]['labels']:
-          if label in succ_map:
-            succ_map[label].append(index)
+          if index in succ_map:
+            succ_map[index].append(label)
           else:
-            succ_map[label] = [index]
-      elif index > 0:
-        if label in succ_map:
-          succ_map[label].append(index - 1)
+            succ_map[index] = [label]
+      elif index < len(bbs) - 1:
+        if index in succ_map:
+          succ_map[index].append(bbs[index + 1][1])
         else:
-          succ_map[index] = [index - 1]
+          succ_map[index] = [bbs[index + 1][1]]
 
-def create_outset(bb, bb_list):
+def create_outset(index):
   global succ_map
   outset = set()
-  if bb[1] in succ_map:
-    for succ in succ_map[bb[1]]:
-      if bb_list[succ][1] in insets:
-        for var in insets[bb_list[succ][1]]:
+  if index in succ_map:
+    for succ in succ_map[index]:
+      print(f'succ: {succ}', file=sys.stderr)
+      if succ in insets:
+        for var in insets[succ]:
+          print(f'var: {var}', file=sys.stderr)
           outset.add(var)
   return outset
 
-
+name2id = {}
 
 prog = json.load(sys.stdin)
 for function in prog['functions']:
@@ -128,31 +130,38 @@ for function in prog['functions']:
   bbs = form_bbs(function)
   form_predecessor_map(bbs)
   form_successor_map(bbs)
+  print(f'succ_map: {succ_map}', file=sys.stderr)
+  print(f'pred_map: {pred_map}', file=sys.stderr)
 
   bbq = queue.Queue()
-  for bb in bbs:
-    bbq.put(bb)
+  for index, bb in enumerate(bbs):
+    bbq.put(index)
+    name2id[bb[1]] = index
 
+  print(f'name2id: {name2id}', file=sys.stderr)
   while not bbq.empty():
-    bb = bbq.get()
-    outset = create_outset(bb,bbs)
+    bbid = bbq.get()
+    bb = bbs[bbid]
+    outset = create_outset(bbid)
     if bb[1] in insets:
       inset = insets[bb[1]]
     else:
       inset = set()
+    print('bb:', bb[1], 'inset:', inset, 'outset:', outset, file=sys.stderr)
     new_inset = transfer(bb, outset)
     if new_inset != inset or bb[1] not in insets:
       insets[bb[1]] = new_inset
       if bb[1] in pred_map:
         for pred in pred_map[bb[1]]:
-          bbq.put(bbs[pred])
+          bbq.put(pred)
 
   new_bbs = []
-  for bb in bbs:
-    outset = create_outset(bb,bbs)
-    print(f'bb: {bb[1]} outset: {outset}', file=sys.stderr)
+  for index, bb in enumerate(bbs):
+    outset = create_outset(index)
+    print(f'bb: {bb[1]}, {bb[0]}, outset: {outset}', file=sys.stderr)
     new_bb = remove_dead(bb, outset)
-    new_bbs.append((new_bb, bb[1], None, None))
+    print(f'new_bb: {new_bb}', file=sys.stderr)
+    new_bbs.append(new_bb)
 
   function['instrs'] = []
   for bb in new_bbs:
