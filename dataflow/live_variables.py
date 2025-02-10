@@ -129,38 +129,41 @@ for function in prog['functions']:
   succ_map.clear()
   bbs = form_bbs(function)
   form_predecessor_map(bbs)
+  print(f'Predecessor map: {pred_map}', file=sys.stderr)
   form_successor_map(bbs)
-  print(f'succ_map: {succ_map}', file=sys.stderr)
-  print(f'pred_map: {pred_map}', file=sys.stderr)
 
   bbq = queue.Queue()
+  in_queue = set()  # Set to keep track of entries in the queue
   for index, bb in enumerate(bbs):
     bbq.put(index)
+    in_queue.add(index)
     name2id[bb[1]] = index
 
-  print(f'name2id: {name2id}', file=sys.stderr)
   while not bbq.empty():
     bbid = bbq.get()
+    in_queue.remove(bbid)  # Remove from in_queue when dequeued
     bb = bbs[bbid]
     outset = create_outset(bbid)
     if bb[1] in insets:
       inset = insets[bb[1]]
     else:
       inset = set()
-    print('bb:', bb[1], 'inset:', inset, 'outset:', outset, file=sys.stderr)
     new_inset = transfer(bb, outset)
     if new_inset != inset or bb[1] not in insets:
+      print(f'Updating inset for {bb[1]} from {inset} to {new_inset}', file=sys.stderr)
       insets[bb[1]] = new_inset
       if bb[1] in pred_map:
         for pred in pred_map[bb[1]]:
-          bbq.put(pred)
+          if pred not in in_queue:  # Add to queue only if not already in there
+            print(f'Readding {bbs[pred][1]} due to {bb[1]} who\'s inset is now {new_inset}', file=sys.stderr)
+            bbq.put(pred)
+            in_queue.add(pred)
 
   new_bbs = []
   for index, bb in enumerate(bbs):
     outset = create_outset(index)
-    print(f'bb: {bb[1]}, {bb[0]}, outset: {outset}', file=sys.stderr)
+    print(f'bb: {bb[1]} outset: {outset} inset: {insets[bb[1]]}', file=sys.stderr)
     new_bb = remove_dead(bb, outset)
-    print(f'new_bb: {new_bb}', file=sys.stderr)
     new_bbs.append(new_bb)
 
   function['instrs'] = []
