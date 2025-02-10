@@ -78,6 +78,7 @@ def form_bbs(function):
 def form_predecessor_map(bbs):
   global pred_map
   for index, bb in enumerate(bbs):
+    print(f'bb: {bb[1]}', file=sys.stderr)
     if 'op' in bb[0][-1]:
       if bb[0][-1]['op'] in TERMINATORS:
         if 'labels' in bb[0][-1]:
@@ -87,6 +88,12 @@ def form_predecessor_map(bbs):
             else:
               pred_map[label] = [index]
       elif index < len(bbs) - 1:
+        if bbs[index + 1][1] in pred_map:
+          pred_map[bbs[index + 1][1]].append(index)
+        else:
+          pred_map[bbs[index + 1][1]] = [index]
+    else: # empty bb
+      if index < len(bbs) - 1:
         if bbs[index + 1][1] in pred_map:
           pred_map[bbs[index + 1][1]].append(index)
         else:
@@ -108,6 +115,12 @@ def form_successor_map(bbs):
           succ_map[index].append(bbs[index + 1][1])
         else:
           succ_map[index] = [bbs[index + 1][1]]
+    else: # empty bb
+      if index < len(bbs) - 1:
+        if index in succ_map:
+          succ_map[index].append(bbs[index + 1][1])
+        else:
+          succ_map[index] = [bbs[index + 1][1]]
 
 def create_outset(index):
   global succ_map
@@ -124,6 +137,7 @@ name2id = {}
 prog = json.load(sys.stdin)
 for function in prog['functions']:
   outsets.clear()
+  insets.clear()
   use_defs.clear()
   pred_map.clear()
   succ_map.clear()
@@ -131,6 +145,7 @@ for function in prog['functions']:
   form_predecessor_map(bbs)
   print(f'Predecessor map: {pred_map}', file=sys.stderr)
   form_successor_map(bbs)
+  print(f'Successor map: {succ_map}', file=sys.stderr)
 
   bbq = queue.Queue()
   in_queue = set()  # Set to keep track of entries in the queue
@@ -148,6 +163,7 @@ for function in prog['functions']:
       inset = insets[bb[1]]
     else:
       inset = set()
+    print(f'Running transfer on {bb[1]} with outset {outset}', file=sys.stderr)
     new_inset = transfer(bb, outset)
     if new_inset != inset or bb[1] not in insets:
       print(f'Updating inset for {bb[1]} from {inset} to {new_inset}', file=sys.stderr)
