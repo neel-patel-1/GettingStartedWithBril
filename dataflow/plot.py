@@ -23,8 +23,11 @@ width = 0.35  # the width of the bars
 fig, ax = plt.subplots(figsize=(15, 8))
 
 # Create bars for DCE and LVN improvements
-bars_dce = ax.bar(x - width/2, df_pivot['dce_improvement'], width, label='DCE Improvement')
-bars_lvn = ax.bar(x + width/2, df_pivot['lvn_improvement'], width, label='LVN Improvement')
+# bars_dce = ax.bar(x - width/2, df_pivot['dce_improvement'], width, label='DCE Improvement')
+# bars_lvn = ax.bar(x + width/2, df_pivot['lvn_improvement'], width, label='LVN Improvement')
+# bars_live = ax.bar(x + width, df_pivot['live_improvement'], width, label='Live Improvement')
+bars_dce = ax.bar(x - width, df_pivot['dce_improvement'], width, label='DCE Improvement')
+bars_lvn = ax.bar(x, df_pivot['lvn_improvement'], width, label='LVN Improvement')
 bars_live = ax.bar(x + width, df_pivot['live_improvement'], width, label='Live Improvement')
 
 # Add labels, title, and legend
@@ -36,14 +39,16 @@ ax.set_xticklabels(benchmarks, rotation=90, fontsize=10)
 ax.legend()
 
 # Add percentage values above bars
-for bar in bars_dce + bars_lvn:
+labeled_heights = set()
+for bar in bars_dce + bars_lvn + bars_live:
     height = bar.get_height()
-    if height != 0:  # Avoid zero bars
+    if height != 0 and height not in labeled_heights:  # Avoid zero bars and duplicate labels
         ax.annotate(f'{height:.1f}%',
                     xy=(bar.get_x() + bar.get_width() / 2, height),
                     xytext=(0, 3),  # Offset text by 3 points
                     textcoords="offset points",
                     ha='center', va='bottom')
+        labeled_heights.add(height)
 
 # Adjust layout
 plt.tight_layout()
