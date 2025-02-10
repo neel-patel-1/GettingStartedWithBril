@@ -97,11 +97,12 @@ def form_successor_map(bbs):
   for index, bb in enumerate(bbs):
     if 'op' in bb[0][-1]:
       if bb[0][-1]['op'] in TERMINATORS:
-        for label in bb[0][-1]['labels']:
-          if index in succ_map:
-            succ_map[index].append(label)
-          else:
-            succ_map[index] = [label]
+        if 'labels' in bb[0][-1]:
+          for label in bb[0][-1]['labels']:
+            if index in succ_map:
+              succ_map[index].append(label)
+            else:
+              succ_map[index] = [label]
       elif index < len(bbs) - 1:
         if index in succ_map:
           succ_map[index].append(bbs[index + 1][1])
@@ -113,10 +114,8 @@ def create_outset(index):
   outset = set()
   if index in succ_map:
     for succ in succ_map[index]:
-      print(f'succ: {succ}', file=sys.stderr)
       if succ in insets:
         for var in insets[succ]:
-          print(f'var: {var}', file=sys.stderr)
           outset.add(var)
   return outset
 
