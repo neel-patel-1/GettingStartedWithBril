@@ -65,7 +65,7 @@ def form_bbs(function):
         bb_label = get_fresh_bb_name()
       bb = bb[:-1]
       bbs.append((bb, bb_label,None,None))
-      bb = []
+      bb = [instr]
       bb_label = instr['label']
       num_bbs += 1
   if bb:
@@ -163,6 +163,7 @@ for function in prog['functions']:
   for index, bb in enumerate(bbs):
     outset = create_outset(index)
     print(f'bb: {bb[1]} outset: {outset} inset: {insets[bb[1]]}', file=sys.stderr)
+    print(f'{bb[0]}', file=sys.stderr)
     new_bb = remove_dead(bb, outset)
     new_bbs.append(new_bb)
 
