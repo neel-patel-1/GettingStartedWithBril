@@ -149,8 +149,29 @@ def transform_block(block, inset):
         if instr['dest'] in inset and inset[instr['dest']] != None:
           new_instr = {'op': 'const', 'dest': instr['dest'], 'value': inset[instr['dest']]}
           new_block.append(new_instr)
-        else:
-          new_block.append(instr)
+        elif instr['args'][0] in inset and instr['args'][1] in inset and inset[instr['args'][0]] != None and inset[instr['args'][1]] != None:
+          val1 = inset[instr['args'][0]]
+          val2 = inset[instr['args'][1]]
+          if instr['op'] == 'add':
+            result = val1 + val2
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_block.append(new_instr)
+          elif instr['op'] == 'mul':
+            result = val1 * val2
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_block.append(new_instr)
+          elif instr['op'] == 'and':
+            result = val1 and val2
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_block.append(new_instr)
+          elif instr['op'] == 'or':
+            result = val1 or val2
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_block.append(new_instr)
+          elif instr['op'] == 'eq':
+            result = val1 == val2
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_block.append(new_instr)
       else:
         new_block.append(instr)
     else:
@@ -203,10 +224,11 @@ for function in prog['functions']:
 # propogate the constants through the code
   new_bbs = []
   for index, bb in enumerate(bbs):
-    inset = create_inset(index, bbs)
+    inset = create_inset(bb[1], bbs)
     print(f'bb: {bb[1]} inset: {inset}', file=sys.stderr)
-    print(f'{bb[0]}', file=sys.stderr)
+    print(f'old_bb: {bb[0]}', file=sys.stderr)
     new_bb = transform_block(bb, inset)
+    print(f'new_bb: {new_bb}', file=sys.stderr)
     new_bbs.append(new_bb)
 
   function['instrs'] = []
