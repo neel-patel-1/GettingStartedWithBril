@@ -147,30 +147,30 @@ def transform_block(block, inset):
       if 'dest' in instr and 'args' in instr:
         print(f'inset: {inset}', file=sys.stderr)
         if instr['dest'] in inset and inset[instr['dest']] != None:
-          new_instr = {'op': 'const', 'dest': instr['dest'], 'value': inset[instr['dest']]}
+          new_instr = {'op': 'const', 'dest': instr['dest'], 'type': 'int', 'value': inset[instr['dest']]}
           new_block.append(new_instr)
         elif instr['args'][0] in inset and instr['args'][1] in inset and inset[instr['args'][0]] != None and inset[instr['args'][1]] != None:
           val1 = inset[instr['args'][0]]
           val2 = inset[instr['args'][1]]
           if instr['op'] == 'add':
             result = val1 + val2
-            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'type': 'int', 'value': result}
             new_block.append(new_instr)
           elif instr['op'] == 'mul':
             result = val1 * val2
-            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'type': 'int', 'value': result}
             new_block.append(new_instr)
           elif instr['op'] == 'and':
             result = val1 and val2
-            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'type': 'int', 'value': result}
             new_block.append(new_instr)
           elif instr['op'] == 'or':
             result = val1 or val2
-            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'type': 'int', 'value': result}
             new_block.append(new_instr)
           elif instr['op'] == 'eq':
             result = val1 == val2
-            new_instr = {'op': 'const', 'dest': instr['dest'], 'value': result}
+            new_instr = {'op': 'const', 'dest': instr['dest'], 'type': 'int', 'value': result}
             new_block.append(new_instr)
       else:
         new_block.append(instr)
