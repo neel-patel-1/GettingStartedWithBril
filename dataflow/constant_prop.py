@@ -100,6 +100,7 @@ def transfer(bb, inset):
   outset = inset.copy()
   for instr in bb[0]:
     if 'op' in instr:
+      print(f'instr: {instr}', file=sys.stderr)
       if instr['op'] in ('add', 'mul', 'and', 'or', 'eq'):
         if instr['args'][0] in inset and instr['args'][1] in inset and inset[instr['args'][0]] != None and inset[instr['args'][1]] != None:
           val1 = inset[instr['args'][0]]
@@ -115,24 +116,28 @@ def transfer(bb, inset):
           elif instr['op'] == 'eq':
             result = val1 == val2
           outset[instr['dest']] = result
-        if instr['op'] in 'const':
-          outset[instr['dest']] = instr['value']
-        if instr['op'] in 'id':
-          if instr['args'][0] in inset and inset[instr['args'][0]] != None:
-            outset[instr['dest']] = inset[instr['args'][0]]
+      if instr['op'] in 'const':
+        outset[instr['dest']] = instr['value']
+        print(f'outset: {outset}', file=sys.stderr)
+      if instr['op'] in 'id':
+        if instr['args'][0] in inset and inset[instr['args'][0]] != None:
+          outset[instr['dest']] = inset[instr['args'][0]]
   return outset
 
-def create_inset(name):
-  global succ_map
+def create_inset(name, bb_list):
+  global pred_map
   inset = {}
   if name in pred_map:
+    print(f'PredMap {pred_map}', file=sys.stderr)
     for pred in pred_map[name]:
-      if pred in outsets:
-        for cd in outsets[pred]:
-          if cd in inset:
-            inset[cd] = None
+      pred_id = bb_list[pred][1]
+      if pred_id in outsets:
+        print(f'outset: {outsets[pred_id]}', file=sys.stderr)
+        for key, value in outsets[pred_id].items():
+          if key in inset and inset[key] != value:
+            inset[key] = None
           else:
-            inset[cd] = outsets[pred][cd]
+            inset[key] = value
   return inset
 
 def transform_block(block, inset):
@@ -140,6 +145,7 @@ def transform_block(block, inset):
   for instr in block[0]:
     if 'op' in instr:
       if 'dest' in instr and 'args' in instr:
+        print(f'inset: {inset}', file=sys.stderr)
         if instr['dest'] in inset and inset[instr['dest']] != None:
           new_instr = {'op': 'const', 'dest': instr['dest'], 'value': inset[instr['dest']]}
           new_block.append(new_instr)
@@ -176,29 +182,29 @@ for function in prog['functions']:
     bbid = bbq.get()
     in_queue.remove(bbid)  # Remove from in_queue when dequeued
     bb = bbs[bbid]
-    outset = create_inset(bb[1])
-    if bb[1] in insets:
-      inset = insets[bb[1]]
+    inset = create_inset(bb[1], bbs)
+    if bb[1] in outsets:
+      outset = outsets[bb[1]]
     else:
-      inset = {}
-    print(f'Running transfer on {bb[1]} with outset {outset}', file=sys.stderr)
-    new_inset = transfer(bb, outset)
-    if new_inset != inset or bb[1] not in insets:
-      print(f'Updating inset for {bb[1]} from {inset} to {new_inset}', file=sys.stderr)
-      insets[bb[1]] = new_inset
-      if bb[1] in pred_map:
-        for pred in pred_map[bb[1]]:
-          if pred not in in_queue:  # Add to queue only if not already in there
-            print(f'Readding {bbs[pred][1]} due to {bb[1]} who\'s inset is now {new_inset}', file=sys.stderr)
-            bbq.put(pred)
-            in_queue.add(pred)
+      outset = {}
+    print(f'Running transfer on {bb[1]} with inset {inset}', file=sys.stderr)
+    new_outset = transfer(bb, inset)
+    if new_outset != outset or bb[1] not in insets:
+      print(f'Updating outset for {bb[1]} from {inset} to {new_outset}', file=sys.stderr)
+      outsets[bb[1]] = new_outset
+      if bb[1] in succ_map:
+        for succ in succ_map[bb[1]]:
+          if succ not in in_queue:  # Add to queue only if not already in there
+            print(f'Readding {bbs[succ][1]} due to {bb[1]} who\'s outset is now {new_outset}', file=sys.stderr)
+            bbq.put(succ)
+            in_queue.add(succ)
 
 
 # propogate the constants through the code
   new_bbs = []
   for index, bb in enumerate(bbs):
-    inset = create_inset(index)
-    print(f'bb: {bb[1]} inset: {inset} inset: {insets[bb[1]]}', file=sys.stderr)
+    inset = create_inset(index, bbs)
+    print(f'bb: {bb[1]} inset: {inset}', file=sys.stderr)
     print(f'{bb[0]}', file=sys.stderr)
     new_bb = transform_block(bb, inset)
     new_bbs.append(new_bb)
