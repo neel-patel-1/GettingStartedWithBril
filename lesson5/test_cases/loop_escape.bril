@@ -1,0 +1,18 @@
+@main {
+  i: int = const 0;
+  j: int = const 4;
+  one: int = const 1;
+
+.check:
+  cond: bool = lt i j;
+  br cond .loop .done;
+
+.loop:
+  print i;
+  i: int = add i one;
+  cond: bool = eq i j;
+  br cond .check .done;
+
+.done:
+  print i;
+}
