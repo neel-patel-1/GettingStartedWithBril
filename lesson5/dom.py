@@ -8,6 +8,9 @@ insets = {}
 outsets = {}
 pred_map = {}
 succ_map = {}
+dom_map = {}
+
+dom_map_changed = True
 
 counter = 0
 def get_fresh_bb_name():
@@ -96,6 +99,28 @@ def form_successor_map(bbs):
         else:
           succ_map[index] = [bbs[index + 1][1]]
 
+def initialize_bb_doms(bbs):
+  global dom_map
+  dom_map[bbs[0][1]] = set({bbs[0][1]})
+  for bb in bbs[1:]:
+    dom_map[bb[1]] = set(bb[1] for bb in bbs)
+
+def get_bb_doms(bb, bb_list):
+  global dom_map
+  global pred_map
+  print(f'Getting doms for {bb[1]}', file=sys.stderr)
+  print(f'pred_map: {pred_map}', file=sys.stderr)
+  if bb[1] in pred_map:
+    preds = pred_map[bb[1]]
+    doms = set(bb[1] for bb in bb_list)
+    for pred in preds:
+      if bb_list[pred][1] in dom_map:
+        print(f'Intersecting Pred Doms from {bb_list[pred][1]}: {dom_map[bb_list[pred][1]]}', file=sys.stderr)
+        doms.intersection_update(dom_map[bb_list[pred][1]])
+    doms.add(bb[1])
+    return doms
+  else:
+    return dom_map[bb[1]]
 
 prog = json.load(sys.stdin)
 for function in prog['functions']:
@@ -107,3 +132,15 @@ for function in prog['functions']:
   print(f'pred_map: {pred_map}', file=sys.stderr)
   print(f'succ_map: {succ_map}', file=sys.stderr)
 
+  initialize_bb_doms(bbs)
+  print(f'dom_map: {dom_map}', file=sys.stderr)
+  while dom_map_changed:
+    dom_map_changed = False
+    for bb in bbs:
+      new_doms = get_bb_doms(bb, bbs)
+      if new_doms != dom_map[bb[1]]:
+        dom_map[bb[1]] = new_doms
+        print(f'Updated doms for {bb[1]}: {dom_map[bb[1]]}', file=sys.stderr)
+        dom_map_changed = True
+
+print(f'dom_map: {dom_map}', file=sys.stderr)
