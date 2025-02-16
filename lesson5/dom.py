@@ -173,7 +173,24 @@ def gen_d_tree(bbs):
           dtree.add_node(b, bb[1])
   return dtree
 
-
+def dom_frontier(bb, tree):
+  global dom_map
+  global succ_map
+  dom_frontier = set()
+  # search down the tree in a breadth-first manner stopping threads that see the same node again -> {child_set}
+  child_set = set()
+  q = queue.Queue()
+  q.put(bb[1])
+  while not q.empty():
+    node = q.get()
+    for child in tree.find_node(tree.root, node).children:
+      if child.value not in child_set:
+        child_set.add(child.value)
+        q.put(child.value)
+  for child in child_set:
+    if bb[1] not in dom_map[child]:
+      dom_frontier.add(child)
+  return dom_frontier
 
 prog = json.load(sys.stdin)
 for function in prog['functions']:
@@ -197,4 +214,10 @@ for function in prog['functions']:
         dom_map_changed = True
 
   print(f'dom_map: {dom_map}', file=sys.stderr)
-  gen_d_tree(bbs).display()
+  tree = gen_d_tree(bbs)
+  tree.display()
+
+  for bb in bbs:
+    frontier = dom_frontier(bb, tree)
+    print(f'Dom Frontier for {bb[1]}: {frontier}', file=sys.stderr)
+
