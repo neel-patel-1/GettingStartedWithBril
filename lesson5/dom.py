@@ -12,6 +12,46 @@ dom_map = {}
 
 dom_map_changed = True
 
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.children = []
+
+    def add_child(self, child_node):
+        self.children.append(child_node)
+
+class Tree:
+    def __init__(self, root_value):
+        self.root = TreeNode(root_value)
+
+    def add_node(self, value, parent_value):
+        parent_node = self.find_node(self.root, parent_value)
+        if parent_node:
+            parent_node.add_child(TreeNode(value))
+
+    def find_node(self, current_node, value):
+        if current_node.value == value:
+            return current_node
+        for child in current_node.children:
+            found_node = self.find_node(child, value)
+            if found_node:
+                return found_node
+        return None
+
+    def traverse(self, node=None):
+        if node is None:
+            node = self.root
+        print(node.value)
+        for child in node.children:
+            self.traverse(child)
+
+    def display(self, node=None, level=0):
+        if node is None:
+            node = self.root
+        print(' ' * level + str(node.value))
+        for child in node.children:
+            self.display(child, level + 2)
+
 counter = 0
 def get_fresh_bb_name():
   global counter
@@ -122,6 +162,19 @@ def get_bb_doms(bb, bb_list):
   else:
     return dom_map[bb[1]]
 
+def gen_d_tree(bbs):
+  global dom_map
+  global succ_map
+  dtree = Tree(bbs[0][1])
+  for index, bb in enumerate(bbs):
+    if index in succ_map:
+      for b in succ_map[index]:
+        if bb[1] in dom_map[b]:
+          dtree.add_node(b, bb[1])
+  return dtree
+
+
+
 prog = json.load(sys.stdin)
 for function in prog['functions']:
   bbs = form_bbs(function)
@@ -143,4 +196,5 @@ for function in prog['functions']:
         print(f'Updated doms for {bb[1]}: {dom_map[bb[1]]}', file=sys.stderr)
         dom_map_changed = True
 
-print(f'dom_map: {dom_map}', file=sys.stderr)
+  print(f'dom_map: {dom_map}', file=sys.stderr)
+  gen_d_tree(bbs).display()
