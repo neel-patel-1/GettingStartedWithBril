@@ -173,6 +173,16 @@ def gen_d_tree(bbs):
           dtree.add_node(b, bb[1])
   return dtree
 
+def gen_cfg(bbs):
+  global pred_map
+  global succ_map
+  cfg = Tree(bbs[0][1])
+  for index, bb in enumerate(bbs):
+    if index in succ_map:
+      for b in succ_map[index]:
+        cfg.add_node(b, bb[1])
+  return cfg
+
 def dom_frontier(bb, tree):
   global dom_map
   global succ_map
@@ -187,6 +197,9 @@ def dom_frontier(bb, tree):
       if child.value not in child_set:
         child_set.add(child.value)
         q.put(child.value)
+
+  print(f'Child Set for {bb[1]}: {child_set}', file=sys.stderr)
+  # for each child in child_set, if bb is not in the dom_map of child, add child to dom_frontier
   for child in child_set:
     if bb[1] not in dom_map[child]:
       dom_frontier.add(child)
@@ -217,7 +230,8 @@ for function in prog['functions']:
   tree = gen_d_tree(bbs)
   tree.display()
 
+  cfg = gen_cfg(bbs)
   for bb in bbs:
-    frontier = dom_frontier(bb, tree)
+    frontier = dom_frontier(bb, cfg)
     print(f'Dom Frontier for {bb[1]}: {frontier}', file=sys.stderr)
 
