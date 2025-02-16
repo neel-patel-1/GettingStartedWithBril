@@ -8,6 +8,7 @@ insets = {}
 outsets = {}
 pred_map = {}
 succ_map = {}
+succ_map_2 = {}
 dom_map = {}
 
 dom_map_changed = True
@@ -183,6 +184,27 @@ def gen_cfg(bbs):
         cfg.add_node(b, bb[1])
   return cfg
 
+def get_all_paths(to):
+  global succ_map_2
+  paths = set()
+  start = 'Entry'
+  # collect every path from entry to 'to'
+  # a path is terminated once a repeat is hit
+  # or when 'to' is reached
+  # a path is only added if it ends in 'to
+  q = queue.Queue()
+  q.put([start])
+  while not q.empty():
+    path = q.get()
+    if path[-1] == to:
+      paths.add(tuple(path))
+    else:
+      if path[-1] in succ_map_2:
+        for succ in succ_map_2[path[-1]]:
+          if succ not in path:
+            q.put(path + [succ])
+  return paths
+
 def dom_frontier(bb, tree):
   global dom_map
   global succ_map
@@ -198,7 +220,6 @@ def dom_frontier(bb, tree):
         child_set.add(child.value)
         q.put(child.value)
 
-  print(f'Child Set for {bb[1]}: {child_set}', file=sys.stderr)
   # for each child in child_set, if bb is not in the dom_map of child, add child to dom_frontier
   for child in child_set:
     if bb[1] not in dom_map[child]:
@@ -235,3 +256,16 @@ for function in prog['functions']:
     frontier = dom_frontier(bb, cfg)
     print(f'Dom Frontier for {bb[1]}: {frontier}', file=sys.stderr)
 
+  for succ in succ_map:
+    succ_map_2[bbs[succ][1]] = succ_map[succ]
+  print(f'succ_map_2: {succ_map_2}', file=sys.stderr)
+  for bb in bbs:
+    paths = get_all_paths(bb[1])
+    print(f'Paths to {bb[1]}: {paths}', file=sys.stderr)
+    # validate dom_map
+    for dom in dom_map[bb[1]]:
+      # dom_in_all_paths = False
+      for path in paths:
+        if dom not in path:
+          print(f'Error: {dom} not in path {path}', file=sys.stderr)
+          sys.exit(1)
