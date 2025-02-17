@@ -280,11 +280,17 @@ for function in prog['functions']:
     paths = get_all_paths(bb[1])
     print(f'Paths to {bb[1]}: {paths}', file=sys.stderr)
     # validate dom_map
+    dom_set = set(bb[1] for bb in bbs)
     for dom in dom_map[bb[1]]:
       for path in paths:
+        dom_set.intersection_update(path)
         if dom not in path:
           print(f'Error: {dom} not in path {path}', file=sys.stderr)
           sys.exit(1)
+    dom_set.add(bb[1])
+    if dom_set != dom_map[bb[1]]:
+      print(f'Error: dom_set {dom_set} != dom_map[bb[1]] {dom_map[bb[1]]}', file=sys.stderr)
+      sys.exit(1)
     #validate dominance frontier
     all_paths_to_everyone = [get_all_paths(b[1]) for b in bbs]
     all_paths_to_everyone_that_im_not_in = [path for paths in all_paths_to_everyone for path in paths if bb[1] not in path]
