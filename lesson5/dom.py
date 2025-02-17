@@ -205,6 +205,17 @@ def get_all_paths(to):
             q.put(path + [succ])
   return paths
 
+def check_node(doms, node):
+  all_good = True
+  if dom_map[node] != doms:
+    all_good = False
+    return all_good
+  for child in tree.find_node(tree.root, node).children:
+    with_child = doms.copy()
+    with_child.add(child.value)
+    all_good = all_good and check_node(with_child, child.value)
+  return all_good
+
 def dom_frontier(bb, tree):
   global dom_map
   global succ_map
@@ -301,5 +312,9 @@ for function in prog['functions']:
           if node not in dom_frontier(bb, cfg):
             print(f'Error: {node} not in dom frontier {dom_frontier(bb, cfg)}', file=sys.stderr)
             sys.exit(1)
+
+# validate tree
+  if not check_node(dom_map[bbs[0][1]], bbs[0][1]):
+    sys.exit(1)
 
 print(json.dumps(prog, indent=2))
