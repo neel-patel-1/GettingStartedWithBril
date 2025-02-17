@@ -308,10 +308,13 @@ for function in prog['functions']:
     print(f'All paths to everyone that I am not in: {all_paths_to_everyone_that_im_not_in}', file=sys.stderr)
     for path in all_paths_to_everyone_that_im_not_in:
       for node in path:
-        if is_descendant(node, bb[1], cfg):
-          if node not in dom_frontier(bb, cfg):
-            print(f'Error: {node} not in dom frontier {dom_frontier(bb, cfg)}', file=sys.stderr)
-            sys.exit(1)
+        if bb[1] in succ_map_2:
+          if node in succ_map_2[bb[1]]:
+            if node not in dom_frontier(bb, cfg):
+              print(f'Error: {node} not in dom frontier {dom_frontier(bb, cfg)}', file=sys.stderr)
+              sys.exit(1)
+            else:
+              print(f'Success: {node} in dom frontier {dom_frontier(bb, cfg)}', file=sys.stderr)
 
 # validate tree
   if not check_node(dom_map[bbs[0][1]], bbs[0][1]):
