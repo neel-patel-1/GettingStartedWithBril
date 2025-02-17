@@ -226,6 +226,21 @@ def dom_frontier(bb, tree):
       dom_frontier.add(child)
   return dom_frontier
 
+def is_descendant(node, ancestor, tree):
+  # search down the cfg starting at ancestor and see if node is found
+  # track visited nodes to avoid cycles
+  visited = set()
+  q = queue.Queue()
+  q.put(ancestor)
+  while not q.empty():
+    n = q.get()
+    if n == node:
+      return True
+    if n not in visited:
+      visited.add(n)
+      for child in tree.find_node(tree.root, n).children:
+        q.put(child.value)
+
 prog = json.load(sys.stdin)
 for function in prog['functions']:
   bbs = form_bbs(function)
@@ -259,13 +274,24 @@ for function in prog['functions']:
   for succ in succ_map:
     succ_map_2[bbs[succ][1]] = succ_map[succ]
   print(f'succ_map_2: {succ_map_2}', file=sys.stderr)
+
+  # validate dom_map and dominance frontier
   for bb in bbs:
     paths = get_all_paths(bb[1])
     print(f'Paths to {bb[1]}: {paths}', file=sys.stderr)
     # validate dom_map
     for dom in dom_map[bb[1]]:
-      # dom_in_all_paths = False
       for path in paths:
         if dom not in path:
           print(f'Error: {dom} not in path {path}', file=sys.stderr)
           sys.exit(1)
+    #validate dominance frontier
+    all_paths_to_everyone = [get_all_paths(b[1]) for b in bbs]
+    all_paths_to_everyone_that_im_not_in = [path for paths in all_paths_to_everyone for path in paths if bb[1] not in path]
+    print(f'All paths to everyone that I am not in: {all_paths_to_everyone_that_im_not_in}', file=sys.stderr)
+    for path in all_paths_to_everyone_that_im_not_in:
+      for node in path:
+        if is_descendant(node, bb[1], cfg):
+          if node not in dom_frontier(bb, cfg):
+            print(f'Error: {node} not in dom frontier {dom_frontier(bb, cfg)}', file=sys.stderr)
+            sys.exit(1)

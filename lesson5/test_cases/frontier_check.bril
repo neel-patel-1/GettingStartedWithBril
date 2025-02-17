@@ -1,0 +1,10 @@
+@main{
+  i: int = const 0;
+  j: int = const 4;
+  cond: bool = lt i j;
+  br cond .a .b;
+.a:
+  print i;
+.b:
+  print j;
+}
