@@ -49,7 +49,7 @@ class Tree:
     def display(self, node=None, level=0):
         if node is None:
             node = self.root
-        print(' ' * level + str(node.value))
+        print(' ' * level + str(node.value), file=sys.stderr)
         for child in node.children:
             self.display(child, level + 2)
 
@@ -149,14 +149,14 @@ def initialize_bb_doms(bbs):
 def get_bb_doms(bb, bb_list):
   global dom_map
   global pred_map
-  print(f'Getting doms for {bb[1]}', file=sys.stderr)
-  print(f'pred_map: {pred_map}', file=sys.stderr)
+  # print(f'Getting doms for {bb[1]}', file=sys.stderr)
+  # print(f'pred_map: {pred_map}', file=sys.stderr)
   if bb[1] in pred_map:
     preds = pred_map[bb[1]]
     doms = set(bb[1] for bb in bb_list)
     for pred in preds:
       if bb_list[pred][1] in dom_map:
-        print(f'Intersecting Pred Doms from {bb_list[pred][1]}: {dom_map[bb_list[pred][1]]}', file=sys.stderr)
+        # print(f'Intersecting Pred Doms from {bb_list[pred][1]}: {dom_map[bb_list[pred][1]]}', file=sys.stderr)
         doms.intersection_update(dom_map[bb_list[pred][1]])
     doms.add(bb[1])
     return doms
@@ -295,3 +295,5 @@ for function in prog['functions']:
           if node not in dom_frontier(bb, cfg):
             print(f'Error: {node} not in dom frontier {dom_frontier(bb, cfg)}', file=sys.stderr)
             sys.exit(1)
+
+print(json.dumps(prog, indent=2))
