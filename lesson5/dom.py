@@ -1,6 +1,7 @@
 import json
 import sys
 import queue
+import traceback
 
 TERMINATORS = 'br', 'jmp', 'ret'
 use_defs = {}
@@ -73,6 +74,7 @@ def form_bbs(function):
     if 'op' in instr:
       if instr['op'] in TERMINATORS:
         if bb_label == None:
+          print(f'bb: {bb}', file=sys.stderr)
           bb_label = get_fresh_bb_name()
         bbs.append((bb, bb_label,None,None))
         bb = []
@@ -80,6 +82,7 @@ def form_bbs(function):
         bb_label = None
     if 'label' in instr and len(bb) > 1:
       if bb_label == None:
+        print(f'bb: {bb}', file=sys.stderr)
         bb_label = get_fresh_bb_name()
       bb = bb[:-1]
       bbs.append((bb, bb_label,None,None))
@@ -88,6 +91,7 @@ def form_bbs(function):
       num_bbs += 1
   if bb:
     if bb_label == None:
+      print(f'bb: {bb}', file=sys.stderr)
       bb_label = get_fresh_bb_name()
     bbs.append((bb, bb_label,None,None))
     num_bbs += 1
@@ -180,6 +184,7 @@ def gen_cfg(bbs):
   cfg = Tree(bbs[0][1])
   for index, bb in enumerate(bbs):
     if index in succ_map:
+      print(f'Adding {bb[1]} to cfg', file=sys.stderr)
       for b in succ_map[index]:
         cfg.add_node(b, bb[1])
   return cfg
@@ -225,6 +230,8 @@ def dom_frontier(bb, tree):
   q.put(bb[1])
   while not q.empty():
     node = q.get()
+    if tree.find_node(tree.root, node) == None:
+      continue
     for child in tree.find_node(tree.root, node).children:
       if child.value not in child_set:
         child_set.add(child.value)
@@ -250,7 +257,11 @@ for function in prog['functions']:
   form_successor_map(bbs)
   # print(f'bbs: {bbs}', file=sys.stderr)
   # print(f'pred_map: {pred_map}', file=sys.stderr)
-  # print(f'succ_map: {succ_map}', file=sys.stderr)
+  print(f'succ_map: {succ_map}', file=sys.stderr)
+
+  for succ in succ_map:
+    succ_map_2[bbs[succ][1]] = succ_map[succ]
+  print(f'succ_map_2: {succ_map_2}', file=sys.stderr)
 
   initialize_bb_doms(bbs)
   # print(f'dom_map: {dom_map}', file=sys.stderr)
@@ -269,16 +280,16 @@ for function in prog['functions']:
   tree.display()
 
   cfg = gen_cfg(bbs)
+  cfg.display()
   for bb in bbs:
     frontier = dom_frontier(bb, cfg)
     # print(f'Dom Frontier for {bb[1]}: {frontier}', file=sys.stderr)
 
-  for succ in succ_map:
-    succ_map_2[bbs[succ][1]] = succ_map[succ]
-  # print(f'succ_map_2: {succ_map_2}', file=sys.stderr)
 
   # validate dom_map and dominance frontier
   for bb in bbs:
+    if cfg.find_node(cfg.root, bb[1]) == None:
+      continue
     print(f'Validating {bb[1]}', file=sys.stderr)
     paths = get_all_paths(bb[1], bbs[0][1])
     print(f'Paths to {bb[1]}: {paths}', file=sys.stderr)
