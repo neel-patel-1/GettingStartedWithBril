@@ -257,7 +257,7 @@ for function in prog['functions']:
   while dom_map_changed:
     dom_map_changed = False
     print(f'dom_map: {dom_map}', file=sys.stderr)
-    for bb in bbs:
+    for bb in bbs[1:]:
       new_doms = get_bb_doms(bb, bbs)
       if new_doms != dom_map[bb[1]]:
         dom_map[bb[1]] = new_doms
