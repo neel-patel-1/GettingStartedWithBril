@@ -65,7 +65,7 @@ def form_bbs(function):
   bbs = []
   instrs = function['instrs']
   bb = []
-  bb_label = 'Entry'
+  bb_label = instrs[0]['label'] if 'label' in instrs[0] else 'Entry'
   for instr in instrs:
     bb.append(instr)
     if 'label' in instr and len(bb) == 1:
@@ -96,7 +96,7 @@ def form_bbs(function):
 def form_predecessor_map(bbs):
   global pred_map
   for index, bb in enumerate(bbs):
-    print(f'bb: {bb[1]}', file=sys.stderr)
+    # print(f'bb: {bb[1]}', file=sys.stderr)
     if 'op' in bb[0][-1]:
       if bb[0][-1]['op'] in TERMINATORS:
         if 'labels' in bb[0][-1]:
@@ -184,10 +184,9 @@ def gen_cfg(bbs):
         cfg.add_node(b, bb[1])
   return cfg
 
-def get_all_paths(to):
+def get_all_paths(to, start):
   global succ_map_2
   paths = set()
-  start = 'Entry'
   # collect every path from entry to 'to'
   # a path is terminated once a repeat is hit
   # or when 'to' is reached
@@ -237,35 +236,27 @@ def dom_frontier(bb, tree):
       dom_frontier.add(child)
   return dom_frontier
 
-def is_descendant(node, ancestor, tree):
-  # search down the cfg starting at ancestor and see if node is found
-  # track visited nodes to avoid cycles
-  visited = set()
-  q = queue.Queue()
-  q.put(ancestor)
-  while not q.empty():
-    n = q.get()
-    if n == node:
-      return True
-    if n not in visited:
-      visited.add(n)
-      for child in tree.find_node(tree.root, n).children:
-        q.put(child.value)
-
 prog = json.load(sys.stdin)
 for function in prog['functions']:
+  dom_map_changed = True
+  dom_map.clear()
+  pred_map.clear()
+  succ_map.clear()
+  succ_map_2.clear()
+  bbs = []
   bbs = form_bbs(function)
-  print(f'bbs: {bbs}', file=sys.stderr)
+  # print(f'bbs: {bbs}', file=sys.stderr)
   form_predecessor_map(bbs)
   form_successor_map(bbs)
-  print(f'bbs: {bbs}', file=sys.stderr)
-  print(f'pred_map: {pred_map}', file=sys.stderr)
-  print(f'succ_map: {succ_map}', file=sys.stderr)
+  # print(f'bbs: {bbs}', file=sys.stderr)
+  # print(f'pred_map: {pred_map}', file=sys.stderr)
+  # print(f'succ_map: {succ_map}', file=sys.stderr)
 
   initialize_bb_doms(bbs)
-  print(f'dom_map: {dom_map}', file=sys.stderr)
+  # print(f'dom_map: {dom_map}', file=sys.stderr)
   while dom_map_changed:
     dom_map_changed = False
+    print(f'dom_map: {dom_map}', file=sys.stderr)
     for bb in bbs:
       new_doms = get_bb_doms(bb, bbs)
       if new_doms != dom_map[bb[1]]:
@@ -273,22 +264,23 @@ for function in prog['functions']:
         print(f'Updated doms for {bb[1]}: {dom_map[bb[1]]}', file=sys.stderr)
         dom_map_changed = True
 
-  print(f'dom_map: {dom_map}', file=sys.stderr)
+  # print(f'dom_map: {dom_map}', file=sys.stderr)
   tree = gen_d_tree(bbs)
   tree.display()
 
   cfg = gen_cfg(bbs)
   for bb in bbs:
     frontier = dom_frontier(bb, cfg)
-    print(f'Dom Frontier for {bb[1]}: {frontier}', file=sys.stderr)
+    # print(f'Dom Frontier for {bb[1]}: {frontier}', file=sys.stderr)
 
   for succ in succ_map:
     succ_map_2[bbs[succ][1]] = succ_map[succ]
-  print(f'succ_map_2: {succ_map_2}', file=sys.stderr)
+  # print(f'succ_map_2: {succ_map_2}', file=sys.stderr)
 
   # validate dom_map and dominance frontier
   for bb in bbs:
-    paths = get_all_paths(bb[1])
+    print(f'Validating {bb[1]}', file=sys.stderr)
+    paths = get_all_paths(bb[1], bbs[0][1])
     print(f'Paths to {bb[1]}: {paths}', file=sys.stderr)
     # validate dom_map
     dom_set = set(bb[1] for bb in bbs)
@@ -297,15 +289,16 @@ for function in prog['functions']:
         dom_set.intersection_update(path)
         if dom not in path:
           print(f'Error: {dom} not in path {path}', file=sys.stderr)
+          print(f'dom_map: {dom_map}', file=sys.stderr)
           sys.exit(1)
     dom_set.add(bb[1])
     if dom_set != dom_map[bb[1]]:
       print(f'Error: dom_set {dom_set} != dom_map[bb[1]] {dom_map[bb[1]]}', file=sys.stderr)
       sys.exit(1)
     #validate dominance frontier
-    all_paths_to_everyone = [get_all_paths(b[1]) for b in bbs]
+    all_paths_to_everyone = [get_all_paths(b[1], bbs[0][1]) for b in bbs]
     all_paths_to_everyone_that_im_not_in = [path for paths in all_paths_to_everyone for path in paths if bb[1] not in path]
-    print(f'All paths to everyone that I am not in: {all_paths_to_everyone_that_im_not_in}', file=sys.stderr)
+    # print(f'All paths to everyone that I am not in: {all_paths_to_everyone_that_im_not_in}', file=sys.stderr)
     for path in all_paths_to_everyone_that_im_not_in:
       for node in path:
         if bb[1] in succ_map_2:
