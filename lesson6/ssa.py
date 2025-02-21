@@ -48,9 +48,14 @@ def form_bbs(function):
 prog = json.load(sys.stdin)
 for function in prog['functions']:
   vars = set()
+  defs = {}
   bbs = form_bbs(function)
   for bb in bbs:
     for inst in bb[0]:
       if 'dest' in inst:
         vars.add(inst['dest'])
+        if inst['dest'] not in defs:
+          defs[inst['dest']] = []
+        defs[inst['dest']].append(bb[1])
   print(f'vars: {vars}', file=sys.stderr)
+  print(f'defs: {defs}', file=sys.stderr)
