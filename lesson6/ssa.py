@@ -314,6 +314,16 @@ for function in prog['functions']:
         if bb[1] not in defs[d]:
           defs[d].append(bb[1])
 
+  # Set the var counter high enough to avoid name conflicts
+  highest_v = 0
+  for bb in bbs:
+    for inst in bb[0]:
+      if 'dest' in inst:
+        if inst['dest'][0] == 'v':
+          if int(inst['dest'][1:]) > highest_v:
+            highest_v = int(inst['dest'][1:])
+  n_ctr = highest_v
+
   # rename the variables
   d_tree = gen_d_tree(bbs)
   d_tree.display()
