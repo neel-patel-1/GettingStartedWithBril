@@ -220,18 +220,33 @@ def gen_name():
   n_ctr += 1
   return f'v{n_ctr}'
 
-def alias_name(name, var_renames):
+def push_alias(name, var_renames):
   if name not in var_renames:
-    var_renames[name] = gen_name()
-  return var_renames[name]
+    var_renames[name] = [gen_name()]
+  else:
+    var_renames[name].append(gen_name())
+  return var_renames[name][-1]
+
+def get_alias(name, var_renames):
+  if name in var_renames:
+    return var_renames[name][-1]
+  else:
+    print(f'Error: {name} not in var_renames', file=sys.stderr)
+    exit(1)
 
 def rename_vars(bb, bbs, d_tree, var_renames):
+  # rename the phi nodes destinations first since they may be consumed by subsequent instructions
+  new_phi_nodes = {}
+  for key, value in bb[3].items():
+    new_key = push_alias(key, var_renames)
+    new_phi_nodes[new_key] = [(var[0], var[1]) for var in value]
+  bb = (bb[0], bb[1], bb[2], new_phi_nodes)
   for inst in bb[0]:
     if 'dest' in inst:
       if 'args' in inst:
         for index,arg in enumerate(inst['args']):
-          inst['args'][index] = alias_name(arg, var_renames)
-      inst['dest'] = alias_name(inst['dest'], var_renames)
+          inst['args'][index] = get_alias(arg, var_renames)
+      inst['dest'] = push_alias(inst['dest'], var_renames)
   if bb_list_idx(bbs, bb[1]) in succ_map:
     for s in succ_map[bb_list_idx(bbs, bb[1])]: #if its a successor
       for var in bbs[bb_list_idx(bbs, s)][2]: # and it has a phi node for a variable
@@ -240,8 +255,8 @@ def rename_vars(bb, bbs, d_tree, var_renames):
           # whatever name we have that variable and our label
           if var not in bbs[bb_list_idx(bbs, s)][3]:
             bbs[bb_list_idx(bbs, s)][3][var] = []
-          bbs[bb_list_idx(bbs, s)][3][var].append((var_renames[var], bb[1]))
-
+          bbs[bb_list_idx(bbs, s)][3][var].append((var_renames[var][-1], bb[1]))
+  bbs[bb_list_idx(bbs, bb[1])] = bb
   new_bbs = bbs
   for bb in d_tree.find_node(d_tree.root, bb[1]).children:
     new_bbs = rename_vars(bbs[bb_list_idx(bbs, bb.value)], new_bbs, d_tree, var_renames)
@@ -293,6 +308,10 @@ for function in prog['functions']:
   d_tree = gen_d_tree(bbs)
   d_tree.display()
   var_renames = {}
+  if 'args' in function:
+    for arg in function['args']:
+      # print(f'arg: {arg}', file=sys.stderr)
+      var_renames[str(arg['name'])] = [str(arg['name'])]
   bbs = rename_vars(bbs[0], bbs, d_tree, var_renames)
 
   for bb in bbs:
