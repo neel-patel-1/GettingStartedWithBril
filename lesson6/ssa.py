@@ -252,13 +252,14 @@ for function in prog['functions']:
   for d in defs:
     # print(f'Defs of {d}: {defs[d]}', file=sys.stderr)
     for bb in defs[d]:
-      print(f'Checking {bb} in {d}', file=sys.stderr)
+      # print(f'Checking {bb} in {d}', file=sys.stderr)
       bb_idx = bb_list_idx(bbs, bb)
       frontier = dom_frontier(bbs[bb_idx], cfg)
       for bb in dom_frontier(bbs[bb_idx], cfg):
         if d not in bbs[bb_list_idx(bbs, bb)][2]:
-          bbs[bb_list_idx(bbs, bb)][2][d] = []
+          bbs[bb_list_idx(bbs, bb)][2][d] = set([bbs[bb_idx][1]])
         else:
-          bbs[bb_list_idx(bbs, bb)][2][d].append(bb[1])
+          bbs[bb_list_idx(bbs, bb)][2][d].add(bbs[bb_idx][1])
         defs[d].append(bb)
-        print(f'Adding {bb} to defs of {d}', file=sys.stderr)
+        # print(f'Adding {bb} to defs of {d}', file=sys.stderr)
+    print(f'{bbs[bb_list_idx(bbs, bb)][2]}', file=sys.stderr)
