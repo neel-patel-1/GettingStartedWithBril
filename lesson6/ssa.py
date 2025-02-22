@@ -215,6 +215,17 @@ def bb_list_idx(bbs, bb_name):
       return index
   return -1
 
+n_ctr = 0
+def gen_name():
+  global n_ctr
+  n_ctr += 1
+  return f'v{n_ctr}'
+
+def alias_name(name):
+  if name not in var_renames:
+    var_renames[name] = gen_name()
+  return var_renames[name]
+
 prog = json.load(sys.stdin)
 for function in prog['functions']:
   vars = set()
@@ -262,4 +273,23 @@ for function in prog['functions']:
           bbs[bb_list_idx(bbs, bb)][2][d].add(bbs[bb_idx][1])
         defs[d].append(bb)
         # print(f'Adding {bb} to defs of {d}', file=sys.stderr)
-    print(f'{bbs[bb_list_idx(bbs, bb)][2]}', file=sys.stderr)
+    # print(f'{bbs[bb_list_idx(bbs, bb)][2]}', file=sys.stderr)
+
+  var_renames = {}
+
+  # rename the variables
+  bb = bbs[0]
+  for inst in bb[0]:
+    if 'dest' in inst:
+      if 'args' in inst:
+        for index,arg in enumerate(inst['args']):
+          inst['args'][index] = alias_name(arg)
+      inst['dest'] = alias_name(inst['dest'])
+  if 0 in succ_map:
+    for s in succ_map[0]:
+      print(f'{bbs[bb_list_idx(bbs, s)][2]}', file=sys.stderr)
+      for d in bbs[bb_list_idx(bbs, s)][2]:
+        for b in bbs[bb_list_idx(bbs, s)][2][d]:
+          if bb[1] == b:
+            bbs[bb_list_idx(bbs, s)][2][d].remove(b)
+            bbs[bb_list_idx(bbs, s)][2][d].add(alias_name(d))
