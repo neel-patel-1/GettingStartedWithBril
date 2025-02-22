@@ -118,7 +118,7 @@ def form_bbs(function):
       if instr['op'] in TERMINATORS:
         if bb_label == None:
           bb_label = get_fresh_bb_name()
-        bbs.append((bb, bb_label,set(),{}))
+        bbs.append((bb, bb_label,{},{},False))
         bb = []
         num_bbs += 1
         bb_label = None
@@ -126,14 +126,14 @@ def form_bbs(function):
       if bb_label == None:
         bb_label = get_fresh_bb_name()
       bb = bb[:-1]
-      bbs.append((bb, bb_label,set(),{}))
+      bbs.append((bb, bb_label,{},{},False))
       bb = [instr]
       bb_label = instr['label']
       num_bbs += 1
   if bb:
     if bb_label == None:
       bb_label = get_fresh_bb_name()
-    bbs.append((bb, bb_label,set(),{}))
+    bbs.append((bb, bb_label,{},{},False))
     num_bbs += 1
   return (bbs)
 
@@ -240,7 +240,9 @@ def rename_vars(bb, bbs, d_tree, var_renames):
   for key, value in bb[3].items():
     new_key = push_alias(key, var_renames)
     new_phi_nodes[new_key] = [(var[0], var[1]) for var in value]
-  bb = (bb[0], bb[1], bb[2], new_phi_nodes)
+    print(f'bb key: {key}, new_key: {new_key}, phi_vals {value}', file=sys.stderr)
+    bb[2][key] = new_key
+  bb = (bb[0], bb[1], bb[2], new_phi_nodes, True) # mark that the phi node dest was renamed
   for inst in bb[0]:
     if 'dest' in inst:
       if 'args' in inst:
@@ -250,12 +252,11 @@ def rename_vars(bb, bbs, d_tree, var_renames):
   if bb_list_idx(bbs, bb[1]) in succ_map:
     for s in succ_map[bb_list_idx(bbs, bb[1])]: #if its a successor
       for var in bbs[bb_list_idx(bbs, s)][2]: # and it has a phi node for a variable
-        if var in var_renames: # and we wrote to that variable
-          # add to the set of phis that it needs to read from
-          # whatever name we have that variable and our label
-          if var not in bbs[bb_list_idx(bbs, s)][3]:
-            bbs[bb_list_idx(bbs, s)][3][var] = []
-          bbs[bb_list_idx(bbs, s)][3][var].append((var_renames[var][-1], bb[1]))
+        if var in var_renames: # some predecessor has updated the variable
+          succ_thinks_it_has_this_name = bbs[bb_list_idx(bbs, s)][2][var]
+          if succ_thinks_it_has_this_name not in bbs[bb_list_idx(bbs, s)][3]:
+            bbs[bb_list_idx(bbs, s)][3][succ_thinks_it_has_this_name] = []
+          bbs[bb_list_idx(bbs, s)][3][succ_thinks_it_has_this_name].append((get_alias(var, var_renames), bb[1]))
   bbs[bb_list_idx(bbs, bb[1])] = bb
   new_bbs = bbs
   for bb in d_tree.find_node(d_tree.root, bb[1]).children:
@@ -309,7 +310,7 @@ for function in prog['functions']:
       frontier = dom_frontier(bbs[bb_idx], cfg)
       for bb in dom_frontier(bbs[bb_idx], cfg):
         if d not in bbs[bb_list_idx(bbs, bb)][2]:
-          bbs[bb_list_idx(bbs, bb)][2].add(d)
+          bbs[bb_list_idx(bbs, bb)][2][d] = d
 
   # rename the variables
   d_tree = gen_d_tree(bbs)
