@@ -262,6 +262,13 @@ def rename_vars(bb, bbs, d_tree, var_renames):
     new_bbs = rename_vars(bbs[bb_list_idx(bbs, bb.value)], new_bbs, d_tree, var_renames)
   return new_bbs
 
+def sub_phis_for_insts(bbs):
+  for bb in bbs:
+    for key, value in bb[3].items():
+      phi_inst = {'op': 'phi', 'dest': key, 'args': [var[0] for var in value], 'labels': [var[1] for var in value]}
+      bb[0].insert(1, phi_inst)
+  return bbs
+
 prog = json.load(sys.stdin)
 for function in prog['functions']:
   vars = set()
@@ -315,5 +322,13 @@ for function in prog['functions']:
   bbs = rename_vars(bbs[0], bbs, d_tree, var_renames)
 
   for bb in bbs:
-    print(f'{bb[2]}', file=sys.stderr)
-    print(f'{bb[3]}', file=sys.stderr)
+    print(f'BB: {bb[1]}', file=sys.stderr)
+    print(f'Phi Nodes: {bb[3]}', file=sys.stderr)
+
+  bbs = sub_phis_for_insts(bbs)
+  function['instrs'] = []
+  for bb in bbs:
+    for inst in bb[0]:
+      function['instrs'].append(inst)
+
+print(json.dumps(prog))
