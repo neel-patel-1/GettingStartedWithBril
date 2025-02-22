@@ -118,7 +118,7 @@ def form_bbs(function):
       if instr['op'] in TERMINATORS:
         if bb_label == None:
           bb_label = get_fresh_bb_name()
-        bbs.append((bb, bb_label,None,None))
+        bbs.append((bb, bb_label,{},None))
         bb = []
         num_bbs += 1
         bb_label = None
@@ -127,14 +127,14 @@ def form_bbs(function):
         # print(f'bb: {bb}', file=sys.stderr)
         bb_label = get_fresh_bb_name()
       bb = bb[:-1]
-      bbs.append((bb, bb_label,None,None))
+      bbs.append((bb, bb_label,{},None))
       bb = [instr]
       bb_label = instr['label']
       num_bbs += 1
   if bb:
     if bb_label == None:
       bb_label = get_fresh_bb_name()
-    bbs.append((bb, bb_label,None,None))
+    bbs.append((bb, bb_label,{},None))
     num_bbs += 1
   return (bbs)
 
@@ -250,6 +250,15 @@ for function in prog['functions']:
 
   cfg = gen_cfg(bbs)
   for d in defs:
-    bb_idx = bb_list_idx(bbs, defs[d][0])
-    for bb in dom_frontier(bbs[bb_idx], cfg):
-      print(f'Dom Frontier of {d}: {bb}', file=sys.stderr)
+    # print(f'Defs of {d}: {defs[d]}', file=sys.stderr)
+    for bb in defs[d]:
+      print(f'Checking {bb} in {d}', file=sys.stderr)
+      bb_idx = bb_list_idx(bbs, bb)
+      frontier = dom_frontier(bbs[bb_idx], cfg)
+      for bb in dom_frontier(bbs[bb_idx], cfg):
+        if d not in bbs[bb_list_idx(bbs, bb)][2]:
+          bbs[bb_list_idx(bbs, bb)][2][d] = []
+        else:
+          bbs[bb_list_idx(bbs, bb)][2][d].append(bb[1])
+        defs[d].append(bb)
+        print(f'Adding {bb} to defs of {d}', file=sys.stderr)
