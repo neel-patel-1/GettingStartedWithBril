@@ -292,17 +292,17 @@ for function in prog['functions']:
   # print(f'vars: {vars}', file=sys.stderr)
   # print(f'defs: {defs}', file=sys.stderr)
 
+  #Initialize the dominator map
   initialize_bb_doms(bbs)
   while dom_map_changed:
     dom_map_changed = False
-    # print(f'dom_map: {dom_map}', file=sys.stderr)
     for bb in bbs[1:]:
       new_doms = get_bb_doms(bb, bbs)
       if new_doms != dom_map[bb[1]]:
         dom_map[bb[1]] = new_doms
-        # print(f'Updated doms for {bb[1]}: {dom_map[bb[1]]}', file=sys.stderr)
         dom_map_changed = True
 
+  # add phi nodes
   cfg = gen_cfg(bbs)
   for d in defs:
     for bb in defs[d]:
@@ -311,6 +311,8 @@ for function in prog['functions']:
       for bb in dom_frontier(bbs[bb_idx], cfg):
         if d not in bbs[bb_list_idx(bbs, bb)][2]:
           bbs[bb_list_idx(bbs, bb)][2][d] = d
+        if bb[1] not in defs[d]:
+          defs[d].append(bb[1])
 
   # rename the variables
   d_tree = gen_d_tree(bbs)
