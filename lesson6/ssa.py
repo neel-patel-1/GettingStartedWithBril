@@ -118,23 +118,22 @@ def form_bbs(function):
       if instr['op'] in TERMINATORS:
         if bb_label == None:
           bb_label = get_fresh_bb_name()
-        bbs.append((bb, bb_label,{},None))
+        bbs.append((bb, bb_label,set(),{}))
         bb = []
         num_bbs += 1
         bb_label = None
     if 'label' in instr and len(bb) > 1:
       if bb_label == None:
-        # print(f'bb: {bb}', file=sys.stderr)
         bb_label = get_fresh_bb_name()
       bb = bb[:-1]
-      bbs.append((bb, bb_label,{},None))
+      bbs.append((bb, bb_label,set(),{}))
       bb = [instr]
       bb_label = instr['label']
       num_bbs += 1
   if bb:
     if bb_label == None:
       bb_label = get_fresh_bb_name()
-    bbs.append((bb, bb_label,{},None))
+    bbs.append((bb, bb_label,set(),{}))
     num_bbs += 1
   return (bbs)
 
@@ -221,10 +220,32 @@ def gen_name():
   n_ctr += 1
   return f'v{n_ctr}'
 
-def alias_name(name):
+def alias_name(name, var_renames):
   if name not in var_renames:
     var_renames[name] = gen_name()
   return var_renames[name]
+
+def rename_vars(bb, bbs, d_tree, var_renames):
+  for inst in bb[0]:
+    if 'dest' in inst:
+      if 'args' in inst:
+        for index,arg in enumerate(inst['args']):
+          inst['args'][index] = alias_name(arg, var_renames)
+      inst['dest'] = alias_name(inst['dest'], var_renames)
+  if bb_list_idx(bbs, bb[1]) in succ_map:
+    for s in succ_map[bb_list_idx(bbs, bb[1])]: #if its a successor
+      for var in bbs[bb_list_idx(bbs, s)][2]: # and it has a phi node for a variable
+        if var in var_renames: # and we wrote to that variable
+          # add to the set of phis that it needs to read from
+          # whatever name we have that variable and our label
+          if var not in bbs[bb_list_idx(bbs, s)][3]:
+            bbs[bb_list_idx(bbs, s)][3][var] = []
+          bbs[bb_list_idx(bbs, s)][3][var].append((var_renames[var], bb[1]))
+
+  new_bbs = bbs
+  for bb in d_tree.find_node(d_tree.root, bb[1]).children:
+    new_bbs = rename_vars(bbs[bb_list_idx(bbs, bb.value)], new_bbs, d_tree, var_renames)
+  return new_bbs
 
 prog = json.load(sys.stdin)
 for function in prog['functions']:
@@ -261,35 +282,19 @@ for function in prog['functions']:
 
   cfg = gen_cfg(bbs)
   for d in defs:
-    # print(f'Defs of {d}: {defs[d]}', file=sys.stderr)
     for bb in defs[d]:
-      # print(f'Checking {bb} in {d}', file=sys.stderr)
       bb_idx = bb_list_idx(bbs, bb)
       frontier = dom_frontier(bbs[bb_idx], cfg)
       for bb in dom_frontier(bbs[bb_idx], cfg):
         if d not in bbs[bb_list_idx(bbs, bb)][2]:
-          bbs[bb_list_idx(bbs, bb)][2][d] = set([bbs[bb_idx][1]])
-        else:
-          bbs[bb_list_idx(bbs, bb)][2][d].add(bbs[bb_idx][1])
-        defs[d].append(bb)
-        # print(f'Adding {bb} to defs of {d}', file=sys.stderr)
-    # print(f'{bbs[bb_list_idx(bbs, bb)][2]}', file=sys.stderr)
-
-  var_renames = {}
+          bbs[bb_list_idx(bbs, bb)][2].add(d)
 
   # rename the variables
-  bb = bbs[0]
-  for inst in bb[0]:
-    if 'dest' in inst:
-      if 'args' in inst:
-        for index,arg in enumerate(inst['args']):
-          inst['args'][index] = alias_name(arg)
-      inst['dest'] = alias_name(inst['dest'])
-  if 0 in succ_map:
-    for s in succ_map[0]:
-      print(f'{bbs[bb_list_idx(bbs, s)][2]}', file=sys.stderr)
-      for d in bbs[bb_list_idx(bbs, s)][2]:
-        for b in bbs[bb_list_idx(bbs, s)][2][d]:
-          if bb[1] == b:
-            bbs[bb_list_idx(bbs, s)][2][d].remove(b)
-            bbs[bb_list_idx(bbs, s)][2][d].add(alias_name(d))
+  d_tree = gen_d_tree(bbs)
+  d_tree.display()
+  var_renames = {}
+  bbs = rename_vars(bbs[0], bbs, d_tree, var_renames)
+
+  for bb in bbs:
+    print(f'{bb[2]}', file=sys.stderr)
+    print(f'{bb[3]}', file=sys.stderr)
