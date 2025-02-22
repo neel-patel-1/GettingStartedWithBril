@@ -208,6 +208,13 @@ def gen_d_tree(bbs):
           dtree.add_node(b, bb[1])
   return dtree
 
+
+def bb_list_idx(bbs, bb_name):
+  for index, bb in enumerate(bbs):
+    if bb[1] == bb_name:
+      return index
+  return -1
+
 prog = json.load(sys.stdin)
 for function in prog['functions']:
   vars = set()
@@ -241,15 +248,8 @@ for function in prog['functions']:
         # print(f'Updated doms for {bb[1]}: {dom_map[bb[1]]}', file=sys.stderr)
         dom_map_changed = True
 
-  tree = gen_d_tree(bbs)
-  # tree.display()
-
   cfg = gen_cfg(bbs)
-  # cfg.display()
-  for bb in bbs:
-    frontier = dom_frontier(bb, cfg)
-    print(f'Dom Frontier for {bb[1]}: {frontier}', file=sys.stderr)
-
   for d in defs:
-    for bb in dom_frontier(d, cfg):
+    bb_idx = bb_list_idx(bbs, defs[d][0])
+    for bb in dom_frontier(bbs[bb_idx], cfg):
       print(f'Dom Frontier of {d}: {bb}', file=sys.stderr)
