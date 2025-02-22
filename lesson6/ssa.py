@@ -252,11 +252,11 @@ def rename_vars(bb, bbs, d_tree, var_renames):
   if bb_list_idx(bbs, bb[1]) in succ_map:
     for s in succ_map[bb_list_idx(bbs, bb[1])]: #if its a successor
       for var in bbs[bb_list_idx(bbs, s)][2]: # and it has a phi node for a variable
-        if var in var_renames: # some predecessor has updated the variable
-          succ_thinks_it_has_this_name = bbs[bb_list_idx(bbs, s)][2][var]
+        if var in var_renames: # and some predecessor has updated the variable
+          succ_thinks_it_has_this_name = bbs[bb_list_idx(bbs, s)][2][var] # use the name the successor is expecting
           if succ_thinks_it_has_this_name not in bbs[bb_list_idx(bbs, s)][3]:
             bbs[bb_list_idx(bbs, s)][3][succ_thinks_it_has_this_name] = []
-          bbs[bb_list_idx(bbs, s)][3][succ_thinks_it_has_this_name].append((get_alias(var, var_renames), bb[1]))
+          bbs[bb_list_idx(bbs, s)][3][succ_thinks_it_has_this_name].append((get_alias(var, var_renames), bb[1])) # add this block's name for the variable to the phi node
   bbs[bb_list_idx(bbs, bb[1])] = bb
   new_bbs = bbs
   for bb in d_tree.find_node(d_tree.root, bb[1]).children:
@@ -268,6 +268,21 @@ def sub_phis_for_insts(bbs):
     for key, value in bb[3].items():
       phi_inst = {'op': 'phi', 'dest': key, 'args': [var[0] for var in value], 'labels': [var[1] for var in value]}
       bb[0].insert(1, phi_inst)
+  return bbs
+
+def rename_phis(bbs):
+  for bb in bbs:
+    print(f'bb[1]: {bb[1]}', file=sys.stderr)
+    print(f'bb[2]: {bb[2]}', file=sys.stderr)
+    for var in bb[2]:
+      print(f'bb[2][var]: {bb[2][var]}', file=sys.stderr)
+      if bb[2][var] == var:
+        bb[2][var] = push_alias(var, var_renames)
+        if var in bb[3]:
+          bb[3][bb[2][var]] = bb[3][var]
+          del bb[3][var]
+        # bb[3][bb[2][var]] = bb[3][var]
+        # del bb[3][var]
   return bbs
 
 prog = json.load(sys.stdin)
@@ -334,10 +349,15 @@ for function in prog['functions']:
       var_renames[str(arg['name'])] = [str(arg['name'])]
   bbs = rename_vars(bbs[0], bbs, d_tree, var_renames)
 
+
   for bb in bbs:
     print(f'BB: {bb[1]}', file=sys.stderr)
     print(f'Phi Nodes: {bb[3]}', file=sys.stderr)
 
+  # rename the phi nodes
+  bbs = rename_phis(bbs)
+
+  # substitute the phi nodes for the instructions
   bbs = sub_phis_for_insts(bbs)
   function['instrs'] = []
   for bb in bbs:
