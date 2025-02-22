@@ -1,0 +1,2 @@
+command = "bril2json < {filename} | python3 ssa.py | python3 ../bril/examples/is_ssa.py"
+output.out = "-"
