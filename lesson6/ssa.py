@@ -27,6 +27,9 @@ class Tree:
         parent_node = self.find_node(self.root, parent_value)
         if parent_node:
             parent_node.add_child(TreeNode(value))
+            return True
+        else:
+            return False
 
     def find_node(self, current_node, value):
         if current_node.value == value:
@@ -40,7 +43,7 @@ class Tree:
     def traverse(self, node=None):
         if node is None:
             node = self.root
-        print(node.value)
+        print(node.value, file=sys.stderr)
         for child in node.children:
             self.traverse(child)
 
@@ -200,11 +203,28 @@ def gen_d_tree(bbs):
   global dom_map
   global succ_map
   dtree = Tree(bbs[0][1])
+  retry_queue = queue.Queue()
   for index, bb in enumerate(bbs):
-    if index in succ_map:
-      for b in succ_map[index]:
-        if bb[1] in dom_map[b]:
-          dtree.add_node(b, bb[1])
+    # for every other node except me
+    for i, b in enumerate(bbs):
+      if i != index:
+        # if i am in the node's dom map
+        if bb[1] in dom_map[b[1]]:
+          print(f'{bb[1]} dominates {b[1]}', file=sys.stderr)
+          # and I am not in the dom map of any of the other nodes in the dom map ( take index out of dom_map[b[1]] )
+          immediately_dominates = True
+          for od in dom_map[b[1]]:
+            if od != bb[1] and od != b[1]:
+              if bb[1] in dom_map[od]:
+                immediately_dominates = False
+          if immediately_dominates:
+            print(f'{bb[1]} immediately dominates {b[1]}', file=sys.stderr)
+            if dtree.add_node(bb[1], b[1]) == False:
+              retry_queue.put((b[1], bb[1]))
+
+  while not retry_queue.empty():
+    (b, bb) = retry_queue.get()
+    dtree.add_node(b, bb)
   return dtree
 
 
@@ -240,7 +260,6 @@ def rename_vars(bb, bbs, d_tree, var_renames):
   for key, value in bb[3].items():
     new_key = push_alias(key, var_renames)
     new_phi_nodes[new_key] = [(var[0], var[1]) for var in value]
-    print(f'bb key: {key}, new_key: {new_key}, phi_vals {value}', file=sys.stderr)
     bb[2][key] = new_key
   bb = (bb[0], bb[1], bb[2], new_phi_nodes, True) # mark that the phi node dest was renamed
   for inst in bb[0]:
@@ -272,17 +291,12 @@ def sub_phis_for_insts(bbs):
 
 def rename_phis(bbs):
   for bb in bbs:
-    print(f'bb[1]: {bb[1]}', file=sys.stderr)
-    print(f'bb[2]: {bb[2]}', file=sys.stderr)
     for var in bb[2]:
-      print(f'bb[2][var]: {bb[2][var]}', file=sys.stderr)
       if bb[2][var] == var:
         bb[2][var] = push_alias(var, var_renames)
         if var in bb[3]:
           bb[3][bb[2][var]] = bb[3][var]
           del bb[3][var]
-        # bb[3][bb[2][var]] = bb[3][var]
-        # del bb[3][var]
   return bbs
 
 prog = json.load(sys.stdin)
@@ -296,6 +310,10 @@ for function in prog['functions']:
   bbs = form_bbs(function)
   form_predecessor_map(bbs)
   form_successor_map(bbs)
+  succ_2_map = {}
+  for i in succ_map:
+    succ_2_map[bbs[i][1]] = succ_map[i]
+  print(f'succ_map: {succ_2_map}', file=sys.stderr)
 
   for bb in bbs:
     for inst in bb[0]:
@@ -304,8 +322,6 @@ for function in prog['functions']:
         if inst['dest'] not in defs:
           defs[inst['dest']] = []
         defs[inst['dest']].append(bb[1])
-  # print(f'vars: {vars}', file=sys.stderr)
-  # print(f'defs: {defs}', file=sys.stderr)
 
   #Initialize the dominator map
   initialize_bb_doms(bbs)
@@ -316,6 +332,7 @@ for function in prog['functions']:
       if new_doms != dom_map[bb[1]]:
         dom_map[bb[1]] = new_doms
         dom_map_changed = True
+  print(f'dom_map: {dom_map}', file=sys.stderr)
 
   # add phi nodes
   cfg = gen_cfg(bbs)
@@ -335,8 +352,10 @@ for function in prog['functions']:
     for inst in bb[0]:
       if 'dest' in inst:
         if inst['dest'][0] == 'v':
-          if int(inst['dest'][1:]) > highest_v:
-            highest_v = int(inst['dest'][1:])
+          # if the remaining characters are all digits
+          if inst['dest'][1:].isdigit():
+            if int(inst['dest'][1:]) > highest_v:
+              highest_v = int(inst['dest'][1:])
   n_ctr = highest_v
 
   # rename the variables
