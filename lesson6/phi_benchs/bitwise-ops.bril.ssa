@@ -1,0 +1,114 @@
+@mod2(a: int): bool {
+  v1: int = const 2;
+  v2: int = div a v1;
+  v3: int = mul v2 v1;
+  v4: int = sub a v3;
+  v5: int = const 1;
+  v6: bool = eq v5 v4;
+  ret ans;
+}
+@loop_subroutine(a: int, b: int, c: bool): int {
+  v1: int = const 0;
+  v2: int = const 63;
+  v3: int = const 1;
+  v4: int = const 2;
+  v5: int = const 0;
+  v6: int = const 1;
+.loop:
+  v52 = phi v40 .end_loop;
+  v51 = phi v19 .end_loop;
+  v50 = phi v18 .end_loop;
+  v11 = phi b v42 .Entry .end_loop;
+  v10 = phi a v41 .Entry .end_loop;
+  v9 = phi v6 v43 .Entry .end_loop;
+  v8 = phi v1 v44 .Entry .end_loop;
+  v7 = phi v5 v39 .Entry .end_loop;
+  v12: bool = le v8 v2;
+  br cond .here .end;
+.here:
+  v17 = phi v11 .loop;
+  v16 = phi v10 .loop;
+  v15 = phi v9 .loop;
+  v14 = phi v8 .loop;
+  v13 = phi v7 .loop;
+  v18: bool = call @mod2 v16;
+  v19: bool = call @mod2 v17;
+  v20: bool = and v18 v19;
+  br c .doOr .stay;
+.doOr:
+  v25 = phi v17 .here;
+  v24 = phi v16 .here;
+  v23 = phi v15 .here;
+  v22 = phi v14 .here;
+  v21 = phi v13 .here;
+  v26: bool = or v18 v19;
+.stay:
+  v32 = phi v17 v25 .here .doOr;
+  v31 = phi v16 v24 .here .doOr;
+  v30 = phi v20 v26 .here .doOr;
+  v29 = phi v15 v23 .here .doOr;
+  v28 = phi v14 v22 .here .doOr;
+  v27 = phi v13 v21 .here .doOr;
+  br cond_add .add .end_loop;
+.add:
+  v37 = phi v32 .stay;
+  v36 = phi v31 .stay;
+  v35 = phi v30 .stay;
+  v34 = phi v29 .stay;
+  v33 = phi v28 .stay;
+  v38: int = add v27 v34;
+.end_loop:
+  v40 = phi v30 v35 .stay .add;
+  v39 = phi v27 v38 .stay .add;
+  v41: int = div v36 v4;
+  v42: int = div v37 v4;
+  v43: int = mul v34 v4;
+  v44: int = add v33 v3;
+  jmp .loop;
+.end:
+  v49 = phi v11 .loop;
+  v48 = phi v10 .loop;
+  v47 = phi v9 .loop;
+  v46 = phi v8 .loop;
+  v45 = phi v7 .loop;
+  ret ans;
+}
+@OR(a: int, b: int): int {
+  v2: bool = const true;
+  v3: int = call @loop_subroutine a b v2;
+  ret v1;
+}
+@AND(a: int, b: int): int {
+  v2: bool = const false;
+  v3: int = call @loop_subroutine a b v2;
+  ret v1;
+}
+@XOR(a: int, b: int): int {
+  v1: int = call @AND a b;
+  v2: int = call @OR a b;
+  v3: int = sub v2 v1;
+  ret ans;
+}
+@main(a: int, b: int, c: int) {
+  v1: int = const 1;
+  v2: int = const 0;
+  v3: int = sub c v1;
+  v4: int = id v2;
+  v5: bool = lt v3 v2;
+  v6: bool = eq v3 v2;
+  v7: bool = gt v3 v2;
+  br less .and_op .useless_lbl;
+.useless_lbl:
+  br equal .or_op .xor_op;
+.and_op:
+  v10: int = call @AND a b;
+  jmp .end;
+.or_op:
+  v8: int = call @OR a b;
+  jmp .end;
+.xor_op:
+  v9: int = call @XOR a b;
+.end:
+  v11 = phi v8 v9 v10 .or_op .xor_op .and_op;
+  print ans;
+}

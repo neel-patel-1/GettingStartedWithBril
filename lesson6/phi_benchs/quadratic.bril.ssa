@@ -1,0 +1,87 @@
+@main(a: int, b: int, c: int) {
+  call @quadratic a b c;
+}
+@sqrt(x: int): int {
+  v18: int = const 1;
+  v19: int = id v18;
+.for.cond.0:
+  v48 = phi v37 .endif.7;
+  v47 = phi v36 .endif.7;
+  v46 = phi v35 .endif.7;
+  v45 = phi v31 .endif.7;
+  v44 = phi v30 .endif.7;
+  v43 = phi v29 .endif.7;
+  v42 = phi v28 .endif.7;
+  v41 = phi v27 .endif.7;
+  v20 = phi v19 v38 .Entry .endif.7;
+  v21: int = id v20;
+  v22: int = id x;
+  v23: int = const 1;
+  v24: int = sub v22 v23;
+  v25: bool = lt v21 v24;
+  br v6 .for.body.0 .for.end.0;
+.for.body.0:
+  v26 = phi v20 .for.cond.0;
+  v27: int = id v26;
+  v28: int = id v26;
+  v29: int = mul v27 v28;
+  v30: int = id x;
+  v31: bool = ge v29 v30;
+  br v12 .then.7 .else.7;
+.then.7:
+  v32 = phi v26 .for.body.0;
+  v33: int = id v32;
+  ret v13;
+.else.7:
+  v34 = phi v26 .for.body.0;
+.endif.7:
+  v35: int = id v34;
+  v36: int = const 1;
+  v37: int = add v35 v36;
+  v38: int = id v37;
+  jmp .for.cond.0;
+.for.end.0:
+  v39 = phi v20 .for.cond.0;
+  v40: int = const 0;
+  ret v17;
+}
+@quadratic(a: int, b: int, c: int) {
+  v32: int = id b;
+  v33: int = id b;
+  v34: int = mul v32 v33;
+  v35: int = const 4;
+  v36: int = id a;
+  v37: int = mul v35 v36;
+  v38: int = id c;
+  v39: int = mul v37 v38;
+  v40: int = sub v34 v39;
+  v41: int = id v40;
+  v42: int = const 2;
+  v43: int = id a;
+  v44: int = mul v42 v43;
+  v45: int = id v44;
+  v46: int = const 0;
+  v47: int = id b;
+  v48: int = sub v46 v47;
+  v49: int = id v41;
+  v50: int = call @sqrt v49;
+  v51: int = add v48 v50;
+  v52: int = id v51;
+  v53: int = const 0;
+  v54: int = id b;
+  v55: int = sub v53 v54;
+  v56: int = id v41;
+  v57: int = call @sqrt v56;
+  v58: int = sub v55 v57;
+  v59: int = id v58;
+  v60: int = id v52;
+  v61: int = id v45;
+  v62: int = div v60 v61;
+  print v26;
+  v63: int = const 0;
+  v64: int = id v59;
+  v65: int = id v45;
+  v66: int = div v64 v65;
+  print v30;
+  v67: int = const 0;
+}

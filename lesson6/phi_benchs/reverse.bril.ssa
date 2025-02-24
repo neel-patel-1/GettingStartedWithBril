@@ -1,0 +1,41 @@
+@main(input: int) {
+  v6: int = id input;
+  v7: int = const 0;
+  v8: int = const 10;
+  v9: int = id v7;
+  v10: bool = const true;
+  v11: bool = id v10;
+.for.cond.3:
+  v34 = phi v24 v24 .if.body .for.incre;
+  v33 = phi v20 v20 .if.body .for.incre;
+  v32 = phi v19 v19 .if.body .for.incre;
+  v31 = phi v18 v18 .if.body .for.incre;
+  v30 = phi v17 v17 .if.body .for.incre;
+  v14 = phi v11 v25 v26 .Entry .if.body .for.incre;
+  v13 = phi v9 v22 v22 .Entry .if.body .for.incre;
+  v12 = phi v6 v23 v23 .Entry .if.body .for.incre;
+  v15: bool = id v14;
+  br v4 .for.body.3 .for.end.3;
+.for.body.3:
+  v16 = phi v14 .for.cond.3;
+  v17: int = id v12;
+  v18: int = div v17 v8;
+  v19: int = mul v18 v8;
+  v20: int = sub v17 v19;
+  v21: int = mul v13 v8;
+  v22: int = add v21 v20;
+  v23: int = id v18;
+  v24: bool = eq v23 v7;
+  br comp1 .if.body .for.incre;
+.if.body:
+  v25: bool = const false;
+  jmp .for.cond.3;
+.for.incre:
+  v26 = phi v16 .for.body.3;
+  jmp .for.cond.3;
+.for.end.3:
+  v29 = phi v14 .for.cond.3;
+  v28 = phi v13 .for.cond.3;
+  v27 = phi v12 .for.cond.3;
+  print result;
+}

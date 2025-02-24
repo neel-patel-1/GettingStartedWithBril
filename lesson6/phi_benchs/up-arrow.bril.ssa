@@ -1,0 +1,40 @@
+@main(n: int, arrows: int, repeats: int) {
+  v1: int = call @up_arrow n arrows repeats;
+  print ans;
+}
+@up_arrow(num: int, arrows: int, repeats: int): int {
+  v1: int = const 1;
+  v2: int = id num;
+  v3: int = const 1;
+.loopstart:
+  v23 = phi v18 .finally;
+  v22 = phi v9 .finally;
+  v5 = phi v3 v19 .Entry .finally;
+  v4 = phi v2 v17 .Entry .finally;
+  v6: bool = lt v5 repeats;
+  br keepgoing .loopbody .endloop;
+.loopbody:
+  v8 = phi v5 .loopstart;
+  v7 = phi v4 .loopstart;
+  v9: bool = le arrows v1;
+  br base_case .base .arrowsgreaterthan1;
+.base:
+  v11 = phi v8 .loopbody;
+  v10 = phi v7 .loopbody;
+  v12: int = mul v10 num;
+  jmp .finally;
+.arrowsgreaterthan1:
+  v14 = phi v8 .loopbody;
+  v13 = phi v7 .loopbody;
+  v15: int = sub arrows v1;
+  v16: int = call @up_arrow num v15 v13;
+.finally:
+  v18 = phi v15 .arrowsgreaterthan1;
+  v17 = phi v12 v16 .base .arrowsgreaterthan1;
+  v19: int = add v14 v1;
+  jmp .loopstart;
+.endloop:
+  v21 = phi v5 .loopstart;
+  v20 = phi v4 .loopstart;
+  ret ans;
+}

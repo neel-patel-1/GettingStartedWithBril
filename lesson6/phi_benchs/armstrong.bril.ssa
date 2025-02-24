@@ -1,0 +1,64 @@
+@main(input: int) {
+  v1: int = const 0;
+  v2: int = const 10;
+  v3: int = const 0;
+  v4: int = call @getDigits input;
+  v5: int = id input;
+.loop:
+  v17 = phi v10 .body;
+  v16 = phi v9 .body;
+  v7 = phi v5 v12 .Entry .body;
+  v6 = phi v3 v11 .Entry .body;
+  v8: bool = gt v7 v1;
+  br b .body .done;
+.body:
+  v9: int = call @mod v7 v2;
+  v10: int = call @power v9 v4;
+  v11: int = add v6 v10;
+  v12: int = div v7 v2;
+  jmp .loop;
+.done:
+  v14 = phi v7 .loop;
+  v13 = phi v6 .loop;
+  v15: bool = eq input v13;
+  print res;
+}
+@getDigits(n: int): int {
+  v1: int = const 10;
+  v2: int = const 0;
+  v3: int = const 1;
+  v4: int = div n v1;
+  v5: bool = eq v4 v2;
+  br cond .then .else;
+.then:
+  ret one;
+.else:
+  v6: int = call @getDigits v4;
+  v7: int = add v6 v3;
+  ret res;
+}
+@mod(a: int, b: int): int {
+  v1: int = div a b;
+  v2: int = mul b v1;
+  v3: int = sub a v2;
+  ret mod;
+}
+@power(base: int, exp: int): int {
+  v1: int = const 10;
+  v2: int = const 0;
+  v3: int = const 1;
+  v4: int = const 1;
+.loop:
+  v6 = phi exp v9 .Entry .body;
+  v5 = phi v4 v8 .Entry .body;
+  v7: bool = eq v6 v2;
+  br b .done .body;
+.body:
+  v8: int = mul v5 base;
+  v9: int = sub v6 v3;
+  jmp .loop;
+.done:
+  v11 = phi v6 .loop;
+  v10 = phi v5 .loop;
+  ret res;
+}

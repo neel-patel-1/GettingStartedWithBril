@@ -1,0 +1,66 @@
+@main {
+  v3: int = const 5;
+  v4: int = id v3;
+  v5: int = id v4;
+  call @generateNthRow v1;
+  v6: int = const 0;
+}
+@generateNthRow(x: int) {
+  v23: int = const 1;
+  v24: int = id v23;
+  v25: int = id v24;
+  print v1;
+  v26: int = const 0;
+  v27: int = const 0;
+  v28: int = id v27;
+.for.cond.3:
+  v72 = phi v52 .for.body.3;
+  v71 = phi v51 .for.body.3;
+  v70 = phi v50 .for.body.3;
+  v69 = phi v48 .for.body.3;
+  v68 = phi v47 .for.body.3;
+  v67 = phi v46 .for.body.3;
+  v66 = phi v45 .for.body.3;
+  v65 = phi v44 .for.body.3;
+  v64 = phi v43 .for.body.3;
+  v63 = phi v42 .for.body.3;
+  v62 = phi v40 .for.body.3;
+  v61 = phi v39 .for.body.3;
+  v60 = phi v38 .for.body.3;
+  v59 = phi v41 .for.body.3;
+  v58 = phi v36 .for.body.3;
+  v57 = phi v35 .for.body.3;
+  v56 = phi v34 .for.body.3;
+  v30 = phi v28 v53 .Entry .for.body.3;
+  v29 = phi v24 v49 .Entry .for.body.3;
+  v31: int = id v30;
+  v32: int = id x;
+  v33: bool = lt v31 v32;
+  br v7 .for.body.3 .for.end.3;
+.for.body.3:
+  v34: int = id x;
+  v35: int = id v30;
+  v36: int = sub v34 v35;
+  v37: int = id v36;
+  v38: int = id v37;
+  v39: int = const 1;
+  v40: int = add v38 v39;
+  v41: int = id v40;
+  v42: int = id v29;
+  v43: int = id v41;
+  v44: int = mul v42 v43;
+  v45: int = id v44;
+  v46: int = id v45;
+  print v17;
+  v47: int = const 0;
+  v48: int = id v45;
+  v49: int = id v48;
+  v50: int = id v30;
+  v51: int = const 1;
+  v52: int = add v50 v51;
+  v53: int = id v52;
+  jmp .for.cond.3;
+.for.end.3:
+  v55 = phi v30 .for.cond.3;
+  v54 = phi v29 .for.cond.3;
+}

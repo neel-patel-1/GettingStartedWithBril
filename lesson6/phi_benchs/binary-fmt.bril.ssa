@@ -1,0 +1,24 @@
+@main(n: int) {
+  call @printBinary n;
+}
+@printBinary(n: int) {
+  v2: int = const 0;
+  v3: bool = eq n v2;
+  br cond .end .rec;
+.rec:
+  v4: int = const 2;
+  v5: int = call @mod n v4;
+  v6: int = div n v4;
+  call @printBinary v1;
+  print v0;
+.end:
+  v9 = phi v6 .rec;
+  v8 = phi v5 .rec;
+  v7 = phi v4 .rec;
+}
+@mod(a0: int, a1: int): int {
+  v3: int = div a0 a1;
+  v4: int = mul v3 a1;
+  v5: int = sub a0 v4;
+  ret v2;
+}

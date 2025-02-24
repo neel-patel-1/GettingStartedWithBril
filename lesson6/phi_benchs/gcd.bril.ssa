@@ -1,0 +1,48 @@
+@main(op1: int, op2: int) {
+  v5: int = const 0;
+  v6: int = id op1;
+  v7: int = id op2;
+.cmp.val:
+  v34 = phi v20 v20 .if.2 .else.2;
+  v33 = phi v25 v28 .if.2 .else.2;
+  v9 = phi v7 v26 v27 .Entry .if.2 .else.2;
+  v8 = phi v6 v24 v29 .Entry .if.2 .else.2;
+  v10: bool = lt v8 v9;
+  br v2 .if.1 .else.1;
+.if.1:
+  v12 = phi v9 .cmp.val;
+  v11 = phi v8 .cmp.val;
+  v13: int = sub v12 v11;
+  jmp .loop.bound;
+.else.1:
+  v15 = phi v9 .cmp.val;
+  v14 = phi v8 .cmp.val;
+  v16: int = sub v14 v15;
+  jmp .loop.bound;
+.loop.bound:
+  v19 = phi v13 v16 .if.1 .else.1;
+  v18 = phi v12 v15 .if.1 .else.1;
+  v17 = phi v11 v14 .if.1 .else.1;
+  v20: bool = eq v19 v5;
+  br v4 .program.end .update.val;
+.update.val:
+  v23 = phi v19 .loop.bound;
+  v22 = phi v18 .loop.bound;
+  v21 = phi v17 .loop.bound;
+  br v2 .if.2 .else.2;
+.if.2:
+  v25 = phi v23 .update.val;
+  v24 = phi v21 .update.val;
+  v26: int = id v25;
+  jmp .cmp.val;
+.else.2:
+  v28 = phi v23 .update.val;
+  v27 = phi v22 .update.val;
+  v29: int = id v28;
+  jmp .cmp.val;
+.program.end:
+  v32 = phi v19 .loop.bound;
+  v31 = phi v18 .loop.bound;
+  v30 = phi v17 .loop.bound;
+  print v1;
+}

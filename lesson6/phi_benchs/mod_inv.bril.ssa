@@ -1,0 +1,103 @@
+@main(n: int, p: int) {
+  v34: int = const 2;
+  v35: int = id v34;
+  v36: int = id p;
+  v37: int = id v35;
+  v38: int = sub v36 v37;
+  v39: int = id v38;
+  v40: int = const 1;
+  v41: int = id v40;
+  v42: int = id n;
+  v43: int = id v42;
+  v44: int = const 1;
+  v45: int = id v44;
+.for.cond.6:
+  v113 = phi v87 .endif.11;
+  v112 = phi v86 .endif.11;
+  v111 = phi v85 .endif.11;
+  v110 = phi v83 .endif.11;
+  v109 = phi v82 .endif.11;
+  v108 = phi v81 .endif.11;
+  v107 = phi v80 .endif.11;
+  v106 = phi v79 .endif.11;
+  v105 = phi v78 .endif.11;
+  v104 = phi v77 .endif.11;
+  v103 = phi v76 .endif.11;
+  v102 = phi v75 .endif.11;
+  v101 = phi v74 .endif.11;
+  v100 = phi v61 .endif.11;
+  v99 = phi v60 .endif.11;
+  v98 = phi v59 .endif.11;
+  v97 = phi v58 .endif.11;
+  v96 = phi v57 .endif.11;
+  v95 = phi v56 .endif.11;
+  v94 = phi v55 .endif.11;
+  v48 = phi v43 v84 .Entry .endif.11;
+  v47 = phi v41 v73 .Entry .endif.11;
+  v46 = phi v39 v88 .Entry .endif.11;
+  v49: int = id v46;
+  v50: int = const 0;
+  v51: bool = gt v49 v50;
+  br v10 .for.body.6 .for.end.6;
+.for.body.6:
+  v54 = phi v48 .for.cond.6;
+  v53 = phi v47 .for.cond.6;
+  v52 = phi v46 .for.cond.6;
+  v55: int = id v52;
+  v56: int = id v52;
+  v57: int = id v35;
+  v58: int = div v56 v57;
+  v59: int = id v35;
+  v60: int = mul v58 v59;
+  v61: bool = eq v55 v60;
+  br v18 .then.11 .else.11;
+.then.11:
+  v64 = phi v54 .for.body.6;
+  v63 = phi v53 .for.body.6;
+  v62 = phi v52 .for.body.6;
+  jmp .endif.11;
+.else.11:
+  v66 = phi v54 .for.body.6;
+  v65 = phi v52 .for.body.6;
+  v67: int = id v63;
+  v68: int = id v66;
+  v69: int = mul v67 v68;
+  v70: int = id p;
+  v71: int = call @mod v69 v70;
+  v72: int = id v71;
+.endif.11:
+  v78 = phi v71 .else.11;
+  v77 = phi v70 .else.11;
+  v76 = phi v69 .else.11;
+  v75 = phi v68 .else.11;
+  v74 = phi v67 .else.11;
+  v73 = phi v63 v72 .then.11 .else.11;
+  v79: int = id v66;
+  v80: int = id v66;
+  v81: int = mul v79 v80;
+  v82: int = id p;
+  v83: int = call @mod v81 v82;
+  v84: int = id v83;
+  v85: int = id v65;
+  v86: int = id v35;
+  v87: int = div v85 v86;
+  v88: int = id v87;
+  jmp .for.cond.6;
+.for.end.6:
+  v91 = phi v48 .for.cond.6;
+  v90 = phi v47 .for.cond.6;
+  v89 = phi v46 .for.cond.6;
+  v92: int = id v90;
+  print v32;
+  v93: int = const 0;
+}
+@mod(n: int, p: int): int {
+  v7: int = id n;
+  v8: int = id n;
+  v9: int = id p;
+  v10: int = div v8 v9;
+  v11: int = id p;
+  v12: int = mul v10 v11;
+  v13: int = sub v7 v12;
+  ret v6;
+}

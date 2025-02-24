@@ -1,0 +1,30 @@
+@main(input: int) {
+  v4: int = id input;
+  v5: int = id v4;
+  v6: int = call @fac v5;
+  v7: int = id v6;
+  v8: int = id v7;
+  print v2;
+  v9: int = const 0;
+}
+@fac(x: int): int {
+  v12: int = id x;
+  v13: int = const 1;
+  v14: bool = le v12 v13;
+  br v3 .then.0 .else.0;
+.then.0:
+  v15: int = const 1;
+  ret v4;
+  jmp .endif.0;
+.else.0:
+.endif.0:
+  v16: int = id x;
+  v17: int = id x;
+  v18: int = const 1;
+  v19: int = sub v17 v18;
+  v20: int = call @fac v19;
+  v21: int = mul v16 v20;
+  v22: int = id v21;
+  v23: int = id v22;
+  ret v11;
+}

@@ -1,0 +1,57 @@
+@main(input: int) {
+  v3: int = id input;
+  v4: int = const 0;
+  v5: int = const 1;
+  v6: int = const 2;
+  v7: int = id v5;
+  v8: int = id v6;
+  v9: int = id v5;
+.for.cond.1:
+  v45 = phi v19 .for.incre;
+  v44 = phi v18 .for.incre;
+  v43 = phi v17 .for.incre;
+  v42 = phi v16 .for.incre;
+  v11 = phi v8 v24 .Entry .for.incre;
+  v10 = phi v7 v23 .Entry .for.incre;
+  v12: int = mul v11 v11;
+  v13: bool = gt v12 v3;
+  br comp .for.end .for.body;
+.for.body:
+  v15 = phi v11 .for.cond.1;
+  v14 = phi v10 .for.cond.1;
+  v16: int = div v3 v15;
+  v17: int = mul v16 v15;
+  v18: int = sub v3 v17;
+  v19: bool = eq v18 v4;
+  br comp1 .if.body .for.incre;
+.if.body:
+  v20 = phi v15 .for.body;
+  v21: int = add v14 v20;
+  v22: int = add v21 v16;
+.for.incre:
+  v23 = phi v14 v22 .for.body .if.body;
+  v24: int = add v20 v5;
+  jmp .for.cond.1;
+.for.end:
+  v26 = phi v11 .for.cond.1;
+  v25 = phi v10 .for.cond.1;
+  v27: bool = eq v25 v3;
+  br comp2 .if.success .if.failure.end;
+.if.success:
+  v33 = phi v19 .for.end;
+  v32 = phi v18 .for.end;
+  v31 = phi v17 .for.end;
+  v30 = phi v16 .for.end;
+  v29 = phi v26 .for.end;
+  v28 = phi v25 .for.end;
+  v34: int = id v4;
+.if.failure.end:
+  v41 = phi v19 v33 .for.end .if.success;
+  v40 = phi v18 v32 .for.end .if.success;
+  v39 = phi v17 v31 .for.end .if.success;
+  v38 = phi v16 v30 .for.end .if.success;
+  v37 = phi v9 v34 .for.end .if.success;
+  v36 = phi v26 v29 .for.end .if.success;
+  v35 = phi v25 v28 .for.end .if.success;
+  print result;
+}

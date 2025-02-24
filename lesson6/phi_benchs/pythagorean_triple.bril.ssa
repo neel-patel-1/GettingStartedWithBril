@@ -1,0 +1,37 @@
+@main(n: int) {
+  v1: int = const 1;
+  v2: int = mul n n;
+  v3: int = id v1;
+.outer_loop:
+  v24 = phi v18 .outer_continue;
+  v23 = phi v11 .outer_continue;
+  v22 = phi v10 .outer_continue;
+  v21 = phi v9 .outer_continue;
+  v20 = phi v8 .outer_continue;
+  v19 = phi v15 .outer_continue;
+  v4 = phi v3 v17 .Entry .outer_continue;
+  v5: int = id v1;
+.inner_loop:
+  v25 = phi v16 .inner_continue;
+  v7 = phi v5 v15 .outer_loop .inner_continue;
+  v6 = phi v4 v14 .outer_loop .inner_continue;
+  v8: int = mul v6 v6;
+  v9: int = mul v7 v7;
+  v10: int = add v8 v9;
+  v11: bool = eq v10 v2;
+  br found .found .inner_continue;
+.found:
+  v13 = phi v7 .inner_loop;
+  v12 = phi v6 .inner_loop;
+  print b a;
+.inner_continue:
+  v14 = phi v6 v12 .inner_loop .found;
+  v15: int = add v13 v1;
+  v16: bool = ge v15 v14;
+  br done .outer_continue .inner_loop;
+.outer_continue:
+  v17: int = add v14 v1;
+  v18: bool = ge v17 n;
+  br done .finish .outer_loop;
+.finish:
+}

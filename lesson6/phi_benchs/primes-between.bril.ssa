@@ -1,0 +1,117 @@
+@main(a: int, b: int) {
+.for.outer.init:
+  v1: int = const 2;
+  v2: bool = lt a v1;
+  br t1 .true .false;
+.true:
+  v3: int = const 2;
+  jmp .for.outer.cond;
+.false:
+  v4: int = id a;
+.for.outer.cond:
+  v79 = phi v63 .if.outer.end;
+  v78 = phi v43 .if.outer.end;
+  v77 = phi v62 .if.outer.end;
+  v76 = phi v61 .if.outer.end;
+  v75 = phi v60 .if.outer.end;
+  v74 = phi v59 .if.outer.end;
+  v73 = phi v58 .if.outer.end;
+  v72 = phi v57 .if.outer.end;
+  v71 = phi v18 .if.outer.end;
+  v70 = phi v17 .if.outer.end;
+  v69 = phi v13 .if.outer.end;
+  v68 = phi v56 .if.outer.end;
+  v67 = phi v55 .if.outer.end;
+  v66 = phi v8 .if.outer.end;
+  v5 = phi v3 v4 v64 .true .false .if.outer.end;
+  v6: bool = le v5 b;
+  br t3 .for.outer.body .for.outer.end;
+.for.outer.body:
+  v7 = phi v5 .for.outer.cond;
+  v8: int = const 1;
+  v9: bool = eq v8 v8;
+.for.inner.init:
+  v11 = phi v9 .for.outer.body;
+  v10 = phi v7 .for.outer.body;
+  v12: int = const 2;
+  v13: int = const 2;
+.for.inner.cond:
+  v109 = phi v33 .if.inner.end;
+  v108 = phi v28 .if.inner.end;
+  v107 = phi v27 .if.inner.end;
+  v106 = phi v24 .if.inner.end;
+  v105 = phi v23 .if.inner.end;
+  v104 = phi v22 .if.inner.end;
+  v16 = phi v12 v34 .for.inner.init .if.inner.end;
+  v15 = phi v11 v31 .for.inner.init .if.inner.end;
+  v14 = phi v10 v30 .for.inner.init .if.inner.end;
+  v17: int = div v14 v13;
+  v18: bool = le v16 v17;
+  br t9 .for.inner.body .for.inner.end;
+.for.inner.body:
+  v21 = phi v16 .for.inner.cond;
+  v20 = phi v15 .for.inner.cond;
+  v19 = phi v14 .for.inner.cond;
+  v22: int = call @mod v19 v21;
+  v23: int = const 0;
+  v24: bool = eq v22 v23;
+  br t12 .if.inner.body .if.inner.end;
+.if.inner.body:
+  v26 = phi v21 .for.inner.body;
+  v25 = phi v19 .for.inner.body;
+  v27: int = const 1;
+  v28: int = const 2;
+  v29: bool = eq v27 v28;
+  jmp .for.inner.end;
+.if.inner.end:
+  v32 = phi v21 .for.inner.body;
+  v31 = phi v20 .for.inner.body;
+  v30 = phi v19 .for.inner.body;
+  v33: int = const 1;
+  v34: int = add v33 v32;
+  jmp .for.inner.cond;
+.for.inner.end:
+  v42 = phi v28 .if.inner.body;
+  v41 = phi v27 .if.inner.body;
+  v40 = phi v24 .if.inner.body;
+  v39 = phi v23 .if.inner.body;
+  v38 = phi v22 .if.inner.body;
+  v37 = phi v16 v26 .for.inner.cond .if.inner.body;
+  v36 = phi v15 v29 .for.inner.cond .if.inner.body;
+  v35 = phi v14 v25 .for.inner.cond .if.inner.body;
+  v43: int = const 1;
+  v44: int = add v37 v43;
+  br t5 .if.outer.body .if.outer.end;
+.if.outer.body:
+  v53 = phi v33 .for.inner.end;
+  v52 = phi v42 .for.inner.end;
+  v51 = phi v41 .for.inner.end;
+  v50 = phi v40 .for.inner.end;
+  v49 = phi v39 .for.inner.end;
+  v48 = phi v38 .for.inner.end;
+  v47 = phi v44 .for.inner.end;
+  v46 = phi v36 .for.inner.end;
+  v45 = phi v35 .for.inner.end;
+  print t2;
+.if.outer.end:
+  v62 = phi v33 v53 .for.inner.end .if.outer.body;
+  v61 = phi v42 v52 .for.inner.end .if.outer.body;
+  v60 = phi v41 v51 .for.inner.end .if.outer.body;
+  v59 = phi v40 v50 .for.inner.end .if.outer.body;
+  v58 = phi v39 v49 .for.inner.end .if.outer.body;
+  v57 = phi v38 v48 .for.inner.end .if.outer.body;
+  v56 = phi v44 v47 .for.inner.end .if.outer.body;
+  v55 = phi v36 v46 .for.inner.end .if.outer.body;
+  v54 = phi v35 v45 .for.inner.end .if.outer.body;
+  v63: int = const 1;
+  v64: int = add v54 v63;
+  jmp .for.outer.cond;
+.for.outer.end:
+  v65 = phi v5 .for.outer.cond;
+}
+@mod(a: int, b: int): int {
+  v1: int = div a b;
+  v2: int = mul b v1;
+  v3: int = sub a v2;
+  ret t3;
+}

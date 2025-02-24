@@ -1,0 +1,34 @@
+@main(num: int) {
+  v1: int = const 0;
+  v2: int = const 1;
+  v3: int = const 2;
+.loopcheck:
+  v22 = phi v12 v12 .ifyes .ifno;
+  v21 = phi v11 v11 .ifyes .ifno;
+  v20 = phi v10 v10 .ifyes .ifno;
+  v19 = phi v9 v9 .ifyes .ifno;
+  v5 = phi num v14 v15 .Entry .ifyes .ifno;
+  v4 = phi v3 v13 v16 .Entry .ifyes .ifno;
+  v6: bool = lt v2 v5;
+  br ispos .loopbody .loopend;
+.loopbody:
+  v8 = phi v5 .loopcheck;
+  v7 = phi v4 .loopcheck;
+  v9: int = div v8 v7;
+  v10: int = mul v9 v7;
+  v11: int = sub v8 v10;
+  v12: bool = eq v11 v1;
+  br iszero .ifyes .ifno;
+.ifyes:
+  v13 = phi v7 .loopbody;
+  print fac;
+  v14: int = div v8 v13;
+  jmp .loopcheck;
+.ifno:
+  v15 = phi v8 .loopbody;
+  v16: int = add v13 v2;
+  jmp .loopcheck;
+.loopend:
+  v18 = phi v5 .loopcheck;
+  v17 = phi v4 .loopcheck;
+}

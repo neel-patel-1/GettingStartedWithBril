@@ -1,0 +1,154 @@
+@main {
+  v3: int = const 20;
+  v4: int = id v3;
+  v5: int = id v4;
+  call @relative_primes v1;
+  v6: int = const 0;
+}
+@mod(a: int, b: int): int {
+  v5: int = id a;
+  v6: int = id b;
+  v7: int = div v5 v6;
+  v8: int = mul v7 v6;
+  v9: int = sub v5 v8;
+  ret v4;
+}
+@gcd(a: int, b: int): int {
+  v22: int = id b;
+  v23: int = id a;
+  v24: bool = gt v22 v23;
+  br v3 .then.0 .else.0;
+.then.0:
+  v25: int = id a;
+  v26: int = id v25;
+  v27: int = id b;
+  v28: int = id v27;
+  v29: int = id v26;
+  v30: int = id v29;
+  jmp .endif.0;
+.else.0:
+.endif.0:
+  v36 = phi v30 v30 .then.0 .else.0;
+  v35 = phi v29 v29 .then.0 .else.0;
+  v34 = phi v27 v27 .then.0 .else.0;
+  v33 = phi v26 v26 .then.0 .else.0;
+  v32 = phi v25 v25 .then.0 .else.0;
+  v31 = phi v28 v28 .then.0 .else.0;
+  v37: int = id v31;
+  v38: int = const 0;
+  v39: bool = eq v37 v38;
+  br v10 .then.7 .else.7;
+.then.7:
+  v45 = phi v36 .endif.0;
+  v44 = phi v35 .endif.0;
+  v43 = phi v34 .endif.0;
+  v42 = phi v33 .endif.0;
+  v41 = phi v32 .endif.0;
+  v40 = phi v31 .endif.0;
+  v46: int = id v45;
+  ret v11;
+  jmp .endif.7;
+.else.7:
+  v52 = phi v36 .endif.0;
+  v51 = phi v35 .endif.0;
+  v50 = phi v34 .endif.0;
+  v49 = phi v33 .endif.0;
+  v48 = phi v32 .endif.0;
+  v47 = phi v31 .endif.0;
+  v53: int = id v52;
+  v54: int = const 0;
+  v55: bool = eq v53 v54;
+  br v15 .then.12 .else.12;
+.then.12:
+  v61 = phi v52 .else.7;
+  v60 = phi v51 .else.7;
+  v59 = phi v50 .else.7;
+  v58 = phi v49 .else.7;
+  v57 = phi v48 .else.7;
+  v56 = phi v47 .else.7;
+  v62: int = id v56;
+  ret v16;
+  jmp .endif.12;
+.else.12:
+  v68 = phi v52 .else.7;
+  v67 = phi v51 .else.7;
+  v66 = phi v50 .else.7;
+  v65 = phi v49 .else.7;
+  v64 = phi v48 .else.7;
+  v63 = phi v47 .else.7;
+.endif.12:
+  v74 = phi v68 .else.12;
+  v73 = phi v67 .else.12;
+  v72 = phi v66 .else.12;
+  v71 = phi v65 .else.12;
+  v70 = phi v64 .else.12;
+  v69 = phi v63 .else.12;
+.endif.7:
+  v80 = phi v74 .endif.12;
+  v79 = phi v73 .endif.12;
+  v78 = phi v72 .endif.12;
+  v77 = phi v71 .endif.12;
+  v76 = phi v70 .endif.12;
+  v75 = phi v69 .endif.12;
+  v81: int = id v75;
+  v82: int = id v80;
+  v83: int = call @mod v81 v82;
+  v84: int = id v83;
+  v85: int = id v80;
+  v86: int = id v84;
+  v87: int = call @gcd v85 v86;
+  v88: int = id v87;
+  v89: int = id v88;
+  ret v21;
+}
+@relative_primes(a: int) {
+  v16: int = id a;
+  v17: int = id v16;
+.for.cond.0:
+  v59 = phi v37 .endif.7;
+  v57 = phi v35 .endif.7;
+  v53 = phi v17 v41 .Entry .endif.7;
+  v51 = phi v40 .endif.7;
+  v50 = phi v39 .endif.7;
+  v49 = phi v38 .endif.7;
+  v48 = phi v36 .endif.7;
+  v47 = phi v29 .endif.7;
+  v46 = phi v28 .endif.7;
+  v45 = phi v27 .endif.7;
+  v44 = phi v24 .endif.7;
+  v43 = phi v23 .endif.7;
+  v19: int = id v18;
+  v20: int = const 1;
+  v21: bool = ge v19 v20;
+  br v4 .for.body.0 .for.end.0;
+.for.body.0:
+  v22 = phi v18 .for.cond.0;
+  v23: int = id a;
+  v24: int = id v22;
+  v25: int = call @gcd v23 v24;
+  v26: int = id v25;
+  v27: int = id v26;
+  v28: int = const 1;
+  v29: bool = eq v27 v28;
+  br v10 .then.7 .else.7;
+.then.7:
+  v31 = phi v26 .for.body.0;
+  v30 = phi v22 .for.body.0;
+  v32: int = id v30;
+  print v11;
+  v33: int = const 0;
+  jmp .endif.7;
+.else.7:
+  v35 = phi v26 .for.body.0;
+  v34 = phi v22 .for.body.0;
+.endif.7:
+  v37 = phi v33 v33 .then.7 .else.7;
+  v36 = phi v32 v32 .then.7 .else.7;
+  v38: int = id v34;
+  v39: int = const 1;
+  v40: int = sub v38 v39;
+  v41: int = id v40;
+  jmp .for.cond.0;
+.for.end.0:
+  v42 = phi v18 .for.cond.0;
+}

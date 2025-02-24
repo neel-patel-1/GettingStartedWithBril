@@ -1,0 +1,92 @@
+@abs(a: int): int {
+  v1: int = const 0;
+  v2: bool = lt a v1;
+  br is_neg .mul_neg_one .abs_res;
+.mul_neg_one:
+  v3: int = const -1;
+  v4: int = mul a v3;
+.abs_res:
+  v6 = phi v3 .mul_neg_one;
+  v5 = phi a v4 .Entry .mul_neg_one;
+  ret a;
+}
+@mod(a: int, b: int): int {
+  v1: int = div a b;
+  v2: int = mul b v1;
+  v3: int = sub a v2;
+  ret mod;
+}
+@gcd(a: int, b: int): int {
+.while.cond:
+  v9 = phi v5 .while.body;
+  v8 = phi v4 .while.body;
+  v1: int = call @mod a b;
+  v2: int = const 0;
+  v3: bool = eq v1 v2;
+  br is_term .while.finish .while.body;
+.while.body:
+  v4: int = id b;
+  v5: int = id v1;
+  jmp .while.cond;
+.while.finish:
+  v7 = phi b .while.cond;
+  v6 = phi a .while.cond;
+  ret b;
+}
+@lcm(a: int, b: int): int {
+  v1: int = const 0;
+  v2: bool = eq a v1;
+  br a_is_zero .check_b .is_good;
+.check_b:
+  v3: bool = eq b v1;
+  br b_is_zero .special_case .is_good;
+.special_case:
+  ret zero;
+.is_good:
+  v4 = phi v3 .check_b;
+  v5: int = mul a b;
+  v6: int = call @abs v5;
+  v7: int = call @gcd a b;
+  v8: int = div v6 v7;
+  ret lcm;
+}
+@orders(u: int, n: int, use_lcm: bool) {
+.for.cond:
+  v19 = phi v13 .for.body.print;
+  v18 = phi v12 .for.body.print;
+  v17 = phi v11 .for.body.print;
+  v16 = phi v10 .for.body.print;
+  v15 = phi v9 .for.body.print;
+  v1: bool = eq u n;
+  br is_term .for.finish .for.body;
+.for.body:
+  v2 = phi u .for.cond;
+  br use_lcm .lcm .gcd;
+.lcm:
+  v3 = phi v2 .for.body;
+  v4: int = call @lcm v3 n;
+  v5: int = div v4 v3;
+  jmp .for.body.print;
+.gcd:
+  v6 = phi v2 .for.body;
+  v7: int = call @gcd v6 n;
+  v8: int = div n v7;
+.for.body.print:
+  v11 = phi v7 .gcd;
+  v10 = phi v5 v8 .lcm .gcd;
+  v9 = phi v4 v4 .lcm .gcd;
+  print u ordu;
+  v12: int = const 1;
+  v13: int = add v6 v12;
+  jmp .for.cond;
+.for.finish:
+  v14 = phi u .for.cond;
+  ret;
+}
+@main(n: int, use_lcm: bool) {
+  v1: int = const 0;
+  v2: int = const 1;
+  v3: int = call @abs n;
+  print zero u;
+  call @orders u n use_lcm;
+}

@@ -1,0 +1,96 @@
+@sumOfSquares(n: int): int {
+  v16: int = const 0;
+  v17: int = id v16;
+  v18: int = const 1;
+  v19: int = id v18;
+.for.cond.1:
+  v49 = phi v35 .for.body.1;
+  v48 = phi v34 .for.body.1;
+  v47 = phi v33 .for.body.1;
+  v46 = phi v31 .for.body.1;
+  v45 = phi v30 .for.body.1;
+  v44 = phi v29 .for.body.1;
+  v43 = phi v28 .for.body.1;
+  v42 = phi v27 .for.body.1;
+  v41 = phi v26 .for.body.1;
+  v40 = phi v25 .for.body.1;
+  v21 = phi v19 v36 .Entry .for.body.1;
+  v20 = phi v17 v32 .Entry .for.body.1;
+  v22: int = id v21;
+  v23: int = id n;
+  v24: bool = le v22 v23;
+  br v5 .for.body.1 .for.end.1;
+.for.body.1:
+  v25: int = id v21;
+  v26: int = id v21;
+  v27: int = mul v25 v26;
+  v28: int = id v27;
+  v29: int = id v20;
+  v30: int = id v28;
+  v31: int = add v29 v30;
+  v32: int = id v31;
+  v33: int = id v21;
+  v34: int = const 1;
+  v35: int = add v33 v34;
+  v36: int = id v35;
+  jmp .for.cond.1;
+.for.end.1:
+  v38 = phi v21 .for.cond.1;
+  v37 = phi v20 .for.cond.1;
+  v39: int = id v37;
+  ret v15;
+}
+@squareOfSum(n: int): int {
+  v16: int = const 0;
+  v17: int = id v16;
+  v18: int = const 1;
+  v19: int = id v18;
+.for.cond.1:
+  v46 = phi v31 .for.body.1;
+  v45 = phi v30 .for.body.1;
+  v44 = phi v29 .for.body.1;
+  v42 = phi v27 .for.body.1;
+  v41 = phi v26 .for.body.1;
+  v40 = phi v25 .for.body.1;
+  v21 = phi v19 v32 .Entry .for.body.1;
+  v20 = phi v17 v28 .Entry .for.body.1;
+  v22: int = id v21;
+  v23: int = id n;
+  v24: bool = le v22 v23;
+  br v5 .for.body.1 .for.end.1;
+.for.body.1:
+  v25: int = id v20;
+  v26: int = id v21;
+  v27: int = add v25 v26;
+  v28: int = id v27;
+  v29: int = id v21;
+  v30: int = const 1;
+  v31: int = add v29 v30;
+  v32: int = id v31;
+  jmp .for.cond.1;
+.for.end.1:
+  v34 = phi v21 .for.cond.1;
+  v33 = phi v20 .for.cond.1;
+  v35: int = id v33;
+  v36: int = id v33;
+  v37: int = mul v35 v36;
+  v38: int = id v37;
+  v39: int = id v38;
+  ret v15;
+}
+@main(n: int) {
+  v8: int = id n;
+  v9: int = call @sumOfSquares v8;
+  v10: int = id v9;
+  v11: int = id n;
+  v12: int = call @squareOfSum v11;
+  v13: int = id v12;
+  v14: int = id v13;
+  v15: int = id v10;
+  v16: int = sub v14 v15;
+  v17: int = id v16;
+  v18: int = id v17;
+  print v5;
+  v19: int = const 0;
+  v20: int = id v17;
+}

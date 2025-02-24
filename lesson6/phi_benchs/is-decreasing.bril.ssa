@@ -1,0 +1,59 @@
+@main(x: int) {
+  v1: bool = call @is_decreasing x;
+  v2: bool = id v1;
+  print tmp;
+}
+@is_decreasing(x: int): bool {
+  v1: int = id x;
+  v2: int = const 1;
+  v3: int = const -1;
+  v4: int = mul v2 v3;
+  v5: int = id v4;
+.label4:
+  v31 = phi v22 .label13;
+  v30 = phi v21 .label13;
+  v29 = phi v14 .label13;
+  v28 = phi v13 .label13;
+  v27 = phi v12 .label13;
+  v7 = phi v5 v20 .Entry .label13;
+  v6 = phi v1 v23 .Entry .label13;
+  v8: int = const 0;
+  v9: bool = gt v6 v8;
+  br tmp8 .label5 .label6;
+.label5:
+  v11 = phi v7 .label4;
+  v10 = phi v6 .label4;
+  v12: int = call @last_digit v10;
+  v13: int = id v12;
+  v14: bool = lt v13 v11;
+  br tmp10 .label11 .label12;
+.label11:
+  v16 = phi v11 .label5;
+  v15 = phi v10 .label5;
+  v17: bool = const false;
+  ret tmp14;
+  jmp .label13;
+.label12:
+  v19 = phi v11 .label5;
+  v18 = phi v10 .label5;
+  jmp .label13;
+.label13:
+  v20: int = id v13;
+  v21: int = const 10;
+  v22: int = div v18 v21;
+  v23: int = id v22;
+  jmp .label4;
+.label6:
+  v25 = phi v7 .label4;
+  v24 = phi v6 .label4;
+  v26: bool = const true;
+  ret tmp17;
+}
+@last_digit(x: int): int {
+  v1: int = const 10;
+  v2: int = div x v1;
+  v3: int = const 10;
+  v4: int = mul v2 v3;
+  v5: int = sub x v4;
+  ret tmp22;
+}
