@@ -219,7 +219,7 @@ def gen_d_tree(bbs):
                 immediately_dominates = False
           if immediately_dominates:
             print(f'{bb[1]} immediately dominates {b[1]}', file=sys.stderr)
-            if dtree.add_node(bb[1], b[1]) == False:
+            if dtree.add_node(b[1], bb[1]) == False:
               retry_queue.put((b[1], bb[1]))
 
   while not retry_queue.empty():
