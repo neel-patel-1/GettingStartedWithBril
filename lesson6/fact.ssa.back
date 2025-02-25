@@ -16,9 +16,7 @@
   v10: int = sub v5 v9;
   jmp .header;
   v13 = id v9;
-  v5 = id v2;
   v5 = id v10;
-  v4 = id v1;
   v4 = id v8;
 .end:
   print v11;

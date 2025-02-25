@@ -398,11 +398,14 @@ for function in prog['functions']:
       if 'op' in inst and inst['op'] == 'phi':
         print(inst, file=sys.stderr)
         predecessors = pred_map[bb[1]]
-        for arg in inst['args']:
-          for predecessor in predecessors:
-            if arg in outsets[bbs[predecessor][1]]:
-              print(f'{arg} is in {bbs[predecessor][1]}\'s outset', file=sys.stderr)
-              new_bbs[predecessor].append({'op': 'id', 'dest': inst['dest'], 'args': [arg]})
+        # for arg in inst['args']:
+          # for predecessor in predecessors:
+          #   if arg in outsets[bbs[predecessor][1]]:
+          #     print(f'{arg} is in {bbs[predecessor][1]}\'s outset', file=sys.stderr)
+          #     new_bbs[predecessor].append({'op': 'id', 'dest': inst['dest'], 'args': [arg]})
+        for label in inst['labels']:
+          b_idx = bb_list_idx(bbs, label)
+          new_bbs[b_idx].append({'op': 'id', 'dest': inst['dest'], 'args': [inst['args'][inst['labels'].index(label)]]})
     new_bbs[index] = [inst for inst in new_bbs[index] if 'op' not in inst or ('op' in inst and inst['op'] != 'phi')]
   for bb in new_bbs:
     function['instrs'] += bb
