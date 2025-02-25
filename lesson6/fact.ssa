@@ -1,0 +1,21 @@
+@main {
+  v1: int = const 1;
+  v2: int = const 8;
+  v3: int = const 0;
+.header:
+  v13 = phi v9 .body;
+  v5 = phi v2 v10 .Entry .body;
+  v4 = phi v1 v8 .Entry .body;
+  v6: int = const 0;
+  v7: bool = gt v5 v6;
+  br v7 .body .end;
+.body:
+  v8: int = mul v4 v5;
+  v9: int = const 1;
+  v10: int = sub v5 v9;
+  jmp .header;
+.end:
+  v12 = phi v5 .header;
+  v11 = phi v4 .header;
+  print v11;
+}
