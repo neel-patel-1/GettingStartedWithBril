@@ -11,18 +11,18 @@
   v23: int = const 1;
   v24: int = sub v22 v23;
   v25: bool = lt v21 v24;
-  br v25 .for.body.0 .for.end.0;
   v26 = id v20;
   v39 = id v20;
+  br v25 .for.body.0 .for.end.0;
 .for.body.0:
   v27: int = id v26;
   v28: int = id v26;
   v29: int = mul v27 v28;
   v30: int = id x;
   v31: bool = ge v29 v30;
-  br v31 .then.7 .else.7;
   v32 = id v26;
   v34 = id v26;
+  br v31 .then.7 .else.7;
 .then.7:
   v33: int = id v32;
   ret v33;
@@ -32,7 +32,6 @@
   v36: int = const 1;
   v37: int = add v35 v36;
   v38: int = id v37;
-  jmp .for.cond.0;
   v48 = id v37;
   v47 = id v36;
   v46 = id v35;
@@ -41,8 +40,8 @@
   v43 = id v29;
   v42 = id v28;
   v41 = id v27;
-  v20 = id v19;
   v20 = id v38;
+  jmp .for.cond.0;
 .for.end.0:
   v40: int = const 0;
   ret v40;

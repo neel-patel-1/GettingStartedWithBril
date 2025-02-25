@@ -19,9 +19,9 @@
   v31: int = id v30;
   v32: int = id x;
   v33: bool = lt v31 v32;
-  br v33 .for.body.3 .for.end.3;
   v55 = id v30;
   v54 = id v29;
+  br v33 .for.body.3 .for.end.3;
 .for.body.3:
   v34: int = id x;
   v35: int = id v30;
@@ -44,7 +44,6 @@
   v51: int = const 1;
   v52: int = add v50 v51;
   v53: int = id v52;
-  jmp .for.cond.3;
   v72 = id v52;
   v71 = id v51;
   v70 = id v50;
@@ -62,9 +61,8 @@
   v58 = id v36;
   v57 = id v35;
   v56 = id v34;
-  v30 = id v28;
   v30 = id v53;
-  v29 = id v24;
   v29 = id v49;
+  jmp .for.cond.3;
 .for.end.3:
 }

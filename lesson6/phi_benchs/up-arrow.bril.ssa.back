@@ -10,22 +10,22 @@
   v4 = id v2;
 .loopstart:
   v6: bool = lt v5 repeats;
-  br v6 .loopbody .endloop;
   v8 = id v5;
   v7 = id v4;
   v21 = id v5;
   v20 = id v4;
+  br v6 .loopbody .endloop;
 .loopbody:
   v9: bool = le arrows v1;
-  br v9 .base .arrowsgreaterthan1;
   v11 = id v8;
   v10 = id v7;
   v14 = id v8;
   v13 = id v7;
+  br v9 .base .arrowsgreaterthan1;
 .base:
   v12: int = mul v10 num;
-  jmp .finally;
   v17 = id v12;
+  jmp .finally;
 .arrowsgreaterthan1:
   v15: int = sub arrows v1;
   v16: int = call @up_arrow num v15 v13;
@@ -33,13 +33,11 @@
   v17 = id v16;
 .finally:
   v19: int = add v14 v1;
-  jmp .loopstart;
   v23 = id v18;
   v22 = id v9;
-  v5 = id v3;
   v5 = id v19;
-  v4 = id v2;
   v4 = id v17;
+  jmp .loopstart;
 .endloop:
   ret v20;
 }

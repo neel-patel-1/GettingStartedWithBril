@@ -6,19 +6,17 @@
   v4 = id v1;
 .loop:
   v6: bool = eq v5 v3;
-  br v6 .done .body;
   v11 = id v5;
   v10 = id v4;
+  br v6 .done .body;
 .body:
   v7: int = call @mod v5 v2;
   v8: int = div v5 v2;
   v9: int = add v4 v7;
-  jmp .loop;
   v12 = id v7;
-  v5 = id input;
   v5 = id v8;
-  v4 = id v1;
   v4 = id v9;
+  jmp .loop;
 .done:
   print v10;
   ret;

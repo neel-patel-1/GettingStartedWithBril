@@ -21,7 +21,6 @@
   v7 = id v5;
 .loop:
   v12: bool = le v8 v2;
-  br v12 .here .end;
   v17 = id v11;
   v16 = id v10;
   v15 = id v9;
@@ -32,11 +31,11 @@
   v47 = id v9;
   v46 = id v8;
   v45 = id v7;
+  br v12 .here .end;
 .here:
   v18: bool = call @mod2 v16;
   v19: bool = call @mod2 v17;
   v20: bool = and v18 v19;
-  br c .doOr .stay;
   v25 = id v17;
   v24 = id v16;
   v23 = id v15;
@@ -48,22 +47,16 @@
   v29 = id v15;
   v28 = id v14;
   v27 = id v13;
+  br c .doOr .stay;
 .doOr:
   v26: bool = or v18 v19;
-  v32 = id v17;
   v32 = id v25;
-  v31 = id v16;
   v31 = id v24;
-  v30 = id v20;
   v30 = id v26;
-  v29 = id v15;
   v29 = id v23;
-  v28 = id v14;
   v28 = id v22;
-  v27 = id v13;
   v27 = id v21;
 .stay:
-  br v30 .add .end_loop;
   v37 = id v32;
   v36 = id v31;
   v35 = id v30;
@@ -71,31 +64,25 @@
   v33 = id v28;
   v40 = id v30;
   v39 = id v27;
+  br v30 .add .end_loop;
 .add:
   v38: int = add v27 v34;
-  v40 = id v30;
   v40 = id v35;
-  v39 = id v27;
   v39 = id v38;
 .end_loop:
   v41: int = div v36 v4;
   v42: int = div v37 v4;
   v43: int = mul v34 v4;
   v44: int = add v33 v3;
-  jmp .loop;
   v52 = id v40;
   v51 = id v19;
   v50 = id v18;
-  v11 = id b;
   v11 = id v42;
-  v10 = id a;
   v10 = id v41;
-  v9 = id v6;
   v9 = id v43;
-  v8 = id v1;
   v8 = id v44;
-  v7 = id v5;
   v7 = id v39;
+  jmp .loop;
 .end:
   ret v45;
 }
@@ -128,12 +115,12 @@
   br v6 .or_op .xor_op;
 .and_op:
   v10: int = call @AND a b;
-  jmp .end;
   v11 = id v10;
+  jmp .end;
 .or_op:
   v8: int = call @OR a b;
-  jmp .end;
   v11 = id v8;
+  jmp .end;
 .xor_op:
   v9: int = call @XOR a b;
   v11 = id v9;

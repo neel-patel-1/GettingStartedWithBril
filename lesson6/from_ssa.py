@@ -320,6 +320,11 @@ def create_inset(bb,bb_list):
     # print(f'bb: {bb[1]} inset: {inset}')
   return inset
 
+def insert_before_terminator(bb, inst):
+  if bb[-1]['op'] in TERMINATORS:
+    bb.insert(-1, inst)
+  else:
+    bb.append(inst)
 
 
 prog = json.load(sys.stdin)
@@ -405,7 +410,7 @@ for function in prog['functions']:
           #     new_bbs[predecessor].append({'op': 'id', 'dest': inst['dest'], 'args': [arg]})
         for label in inst['labels']:
           b_idx = bb_list_idx(bbs, label)
-          new_bbs[b_idx].append({'op': 'id', 'dest': inst['dest'], 'args': [inst['args'][inst['labels'].index(label)]]})
+          insert_before_terminator(new_bbs[b_idx], {'op': 'id', 'dest': inst['dest'], 'args': [inst['args'][inst['labels'].index(label)]]})
     new_bbs[index] = [inst for inst in new_bbs[index] if 'op' not in inst or ('op' in inst and inst['op'] != 'phi')]
   for bb in new_bbs:
     function['instrs'] += bb

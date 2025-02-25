@@ -50,6 +50,7 @@
   cond_temp: bool = id v14;
   v15: bool = not cond_temp;
   cond: bool = id v15;
+  print a;
   jmp .for.cond.5;
 .for.end.5:
   v16: int = id a;

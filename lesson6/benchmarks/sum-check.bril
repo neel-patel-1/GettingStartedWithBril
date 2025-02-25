@@ -15,13 +15,15 @@
     one: int = const 1;
     sum: int = const 0;
     i: int = const 1;
-    
+
 .for_start:
     con: bool = le i n;
     br con .for .end;
 .for:
     sum: int = add sum i;
     i: int = add i one;
+    print sum;
+    print i;
     jmp .for_start;
 .end:
     ret sum;

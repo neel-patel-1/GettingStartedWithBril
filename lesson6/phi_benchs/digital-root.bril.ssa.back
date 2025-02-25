@@ -11,24 +11,24 @@
 .check_result:
   print v8;
   v9: bool = call @is_single_digit v8;
-  br v9 .check_done .process_result;
   v13 = id v8;
+  br v9 .check_done .process_result;
 .process_result:
   v10: int = call @peel_last_digit v8;
   v11: int = div v8 v2;
   v12: int = add v11 v10;
-  jmp .check_result;
   v20 = id v10;
-  v8 = id v7;
   v8 = id v12;
+  jmp .check_result;
 .check_done:
   v14: bool = eq v6 v1;
-  br v14 .done .begin;
   v19 = id v14;
+  v18 = id v10;
   v17 = id v9;
-  v4 = id v3;
   v4 = id v13;
+  v16 = id v10;
   v15 = id v13;
+  br v14 .done .begin;
 .done:
   print v15;
 }

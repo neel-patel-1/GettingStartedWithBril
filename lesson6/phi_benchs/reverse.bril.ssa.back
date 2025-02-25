@@ -10,11 +10,11 @@
   v12 = id v6;
 .for.cond.3:
   v15: bool = id v14;
-  br v15 .for.body.3 .for.end.3;
   v16 = id v14;
   v29 = id v14;
   v28 = id v13;
   v27 = id v12;
+  br v15 .for.body.3 .for.end.3;
 .for.body.3:
   v17: int = id v12;
   v18: int = div v17 v8;
@@ -24,49 +24,29 @@
   v22: int = add v21 v20;
   v23: int = id v18;
   v24: bool = eq v23 v7;
-  br v24 .if.body .for.incre;
   v26 = id v16;
+  br v24 .if.body .for.incre;
 .if.body:
   v25: bool = const false;
-  jmp .for.cond.3;
-  v34 = id v24;
   v34 = id v24;
   v33 = id v20;
-  v33 = id v20;
-  v32 = id v19;
   v32 = id v19;
   v31 = id v18;
-  v31 = id v18;
   v30 = id v17;
-  v30 = id v17;
-  v14 = id v11;
   v14 = id v25;
-  v13 = id v9;
   v13 = id v22;
-  v13 = id v22;
-  v12 = id v6;
   v12 = id v23;
-  v12 = id v23;
-.for.incre:
   jmp .for.cond.3;
-  v34 = id v24;
+.for.incre:
   v34 = id v24;
   v33 = id v20;
-  v33 = id v20;
-  v32 = id v19;
   v32 = id v19;
   v31 = id v18;
-  v31 = id v18;
   v30 = id v17;
-  v30 = id v17;
-  v14 = id v11;
   v14 = id v26;
-  v13 = id v9;
   v13 = id v22;
-  v13 = id v22;
-  v12 = id v6;
   v12 = id v23;
-  v12 = id v23;
+  jmp .for.cond.3;
 .for.end.3:
   print v28;
 }

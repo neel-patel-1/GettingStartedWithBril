@@ -10,9 +10,9 @@
   v22: int = id v21;
   v23: int = const 0;
   v24: bool = gt v22 v23;
-  br v24 .for.body.2 .for.end.2;
   v34 = id v21;
   v33 = id v20;
+  br v24 .for.body.2 .for.end.2;
 .for.body.2:
   v25: int = id v20;
   v26: int = id v21;
@@ -22,17 +22,15 @@
   v30: int = const 1;
   v31: int = sub v29 v30;
   v32: int = id v31;
-  jmp .for.cond.2;
   v42 = id v31;
   v41 = id v30;
   v40 = id v29;
   v39 = id v27;
   v38 = id v26;
   v37 = id v25;
-  v21 = id v19;
   v21 = id v32;
-  v20 = id v17;
   v20 = id v28;
+  jmp .for.cond.2;
 .for.end.2:
   v35: int = id v33;
   print v35;

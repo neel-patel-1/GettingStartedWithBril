@@ -38,11 +38,11 @@
   v25 = id v22;
 .for.cond.5:
   v29: bool = id v26;
-  br v29 .for.body.5 .for.end.5;
   v47 = id v28;
   v46 = id v27;
   v45 = id v26;
   v44 = id v25;
+  br v29 .for.body.5 .for.end.5;
 .for.body.5:
   v30: int = id v27;
   v31: int = id v30;
@@ -58,7 +58,6 @@
   v41: bool = id v40;
   v42: bool = not v41;
   v43: bool = id v42;
-  jmp .for.cond.5;
   v58 = id v42;
   v57 = id v40;
   v56 = id v39;
@@ -69,14 +68,11 @@
   v51 = id v32;
   v50 = id v31;
   v49 = id v30;
-  v28 = id a;
   v28 = id v37;
-  v27 = id b;
   v27 = id v35;
-  v26 = id v24;
   v26 = id v43;
-  v25 = id v22;
   v25 = id v41;
+  jmp .for.cond.5;
 .for.end.5:
   v48: int = id v47;
   ret v48;

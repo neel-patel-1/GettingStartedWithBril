@@ -8,21 +8,19 @@
   v6 = id v3;
 .loop:
   v8: bool = gt v7 v1;
-  br v8 .body .done;
   v14 = id v7;
   v13 = id v6;
+  br v8 .body .done;
 .body:
   v9: int = call @mod v7 v2;
   v10: int = call @power v9 v4;
   v11: int = add v6 v10;
   v12: int = div v7 v2;
-  jmp .loop;
   v17 = id v10;
   v16 = id v9;
-  v7 = id v5;
   v7 = id v12;
-  v6 = id v3;
   v6 = id v11;
+  jmp .loop;
 .done:
   v15: bool = eq input v13;
   print v15;
@@ -56,17 +54,15 @@
   v5 = id v4;
 .loop:
   v7: bool = eq v6 v2;
-  br v7 .done .body;
   v11 = id v6;
   v10 = id v5;
+  br v7 .done .body;
 .body:
   v8: int = mul v5 base;
   v9: int = sub v6 v3;
-  jmp .loop;
-  v6 = id exp;
   v6 = id v9;
-  v5 = id v4;
   v5 = id v8;
+  jmp .loop;
 .done:
   ret v10;
 }

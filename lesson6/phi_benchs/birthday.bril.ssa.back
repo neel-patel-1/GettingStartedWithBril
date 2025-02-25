@@ -17,9 +17,9 @@
   v31: float = id v30;
   v32: float = id n;
   v33: bool = flt v31 v32;
-  br v33 .for.body.1 .for.end.1;
   v51 = id v30;
   v50 = id v29;
+  br v33 .for.body.1 .for.end.1;
 .for.body.1:
   v34: float = const 365;
   v35: float = id v30;
@@ -37,7 +37,6 @@
   v47: float = const 1;
   v48: float = fadd v46 v47;
   v49: float = id v48;
-  jmp .for.cond.1;
   v72 = id v48;
   v71 = id v47;
   v70 = id v46;
@@ -52,10 +51,9 @@
   v61 = id v36;
   v60 = id v35;
   v59 = id v34;
-  v30 = id v28;
   v30 = id v49;
-  v29 = id v26;
   v29 = id v45;
+  jmp .for.cond.1;
 .for.end.1:
   v52: float = const 1;
   v53: float = id v50;

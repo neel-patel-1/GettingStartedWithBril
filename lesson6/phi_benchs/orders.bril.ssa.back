@@ -1,13 +1,12 @@
 @abs(a: int): int {
   v1: int = const 0;
   v2: bool = lt a v1;
-  br v2 .mul_neg_one .abs_res;
   v5 = id a;
+  br v2 .mul_neg_one .abs_res;
 .mul_neg_one:
   v3: int = const -1;
   v4: int = mul a v3;
   v6 = id v3;
-  v5 = id a;
   v5 = id v4;
 .abs_res:
   ret v5;
@@ -23,13 +22,15 @@
   v1: int = call @mod a b;
   v2: int = const 0;
   v3: bool = eq v1 v2;
+  v7 = id b;
+  v6 = id a;
   br v3 .while.finish .while.body;
 .while.body:
   v4: int = id b;
   v5: int = id v1;
-  jmp .while.cond;
   v9 = id v5;
   v8 = id v4;
+  jmp .while.cond;
 .while.finish:
   ret v7;
 }
@@ -39,8 +40,8 @@
   br v2 .check_b .is_good;
 .check_b:
   v3: bool = eq b v1;
-  br v3 .special_case .is_good;
   v4 = id v3;
+  br v3 .special_case .is_good;
 .special_case:
   ret v1;
 .is_good:
@@ -53,33 +54,35 @@
 @orders(u: int, n: int, use_lcm: bool) {
 .for.cond:
   v1: bool = eq u n;
+  v2 = id u;
+  v14 = id u;
   br v1 .for.finish .for.body;
 .for.body:
-  br use_lcm .lcm .gcd;
   v3 = id v2;
   v6 = id v2;
+  br use_lcm .lcm .gcd;
 .lcm:
   v4: int = call @lcm v3 n;
   v5: int = div v4 v3;
-  jmp .for.body.print;
   v10 = id v5;
   v9 = id v4;
-  v9 = id v4;
+  jmp .for.body.print;
 .gcd:
   v7: int = call @gcd v6 n;
   v8: int = div n v7;
   v11 = id v7;
   v10 = id v8;
+  v9 = id v4;
 .for.body.print:
   print v6 v10;
   v12: int = const 1;
   v13: int = add v6 v12;
-  jmp .for.cond;
   v19 = id v13;
   v18 = id v12;
   v17 = id v11;
   v16 = id v10;
   v15 = id v9;
+  jmp .for.cond;
 .for.finish:
   ret;
 }

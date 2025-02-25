@@ -14,17 +14,15 @@
   v4 = id v2;
 .for_start:
   v6: bool = le v5 n;
-  br v6 .for .end;
   v10 = id v5;
   v9 = id v4;
+  br v6 .for .end;
 .for:
   v7: int = add v4 v5;
   v8: int = add v5 v1;
-  jmp .for_start;
-  v5 = id v3;
   v5 = id v8;
-  v4 = id v2;
   v4 = id v7;
+  jmp .for_start;
 .end:
   ret v9;
 }

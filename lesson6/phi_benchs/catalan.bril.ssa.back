@@ -17,9 +17,9 @@
   v9 = id v6;
 .while:
   v11: bool = le v10 v8;
-  br v11 .while.body .while.end;
   v19 = id v10;
   v18 = id v9;
+  br v11 .while.body .while.end;
 .while.body:
   v12: int = sub v8 v10;
   v13: int = call @catalan v10;
@@ -27,15 +27,13 @@
   v15: int = mul v13 v14;
   v16: int = add v9 v15;
   v17: int = add v10 v3;
-  jmp .while;
   v23 = id v15;
   v22 = id v14;
   v21 = id v13;
   v20 = id v12;
-  v10 = id v7;
   v10 = id v17;
-  v9 = id v6;
   v9 = id v16;
+  jmp .while;
 .while.end:
   ret v18;
 }

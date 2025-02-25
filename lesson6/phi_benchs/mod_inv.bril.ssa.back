@@ -18,13 +18,13 @@
   v49: int = id v46;
   v50: int = const 0;
   v51: bool = gt v49 v50;
-  br v51 .for.body.6 .for.end.6;
   v54 = id v48;
   v53 = id v47;
   v52 = id v46;
   v91 = id v48;
   v90 = id v47;
   v89 = id v46;
+  br v51 .for.body.6 .for.end.6;
 .for.body.6:
   v55: int = id v52;
   v56: int = id v52;
@@ -33,15 +33,15 @@
   v59: int = id v35;
   v60: int = mul v58 v59;
   v61: bool = eq v55 v60;
-  br v61 .then.11 .else.11;
   v64 = id v54;
   v63 = id v53;
   v62 = id v52;
   v66 = id v54;
   v65 = id v52;
+  br v61 .then.11 .else.11;
 .then.11:
-  jmp .endif.11;
   v73 = id v63;
+  jmp .endif.11;
 .else.11:
   v67: int = id v63;
   v68: int = id v66;
@@ -66,7 +66,6 @@
   v86: int = id v35;
   v87: int = div v85 v86;
   v88: int = id v87;
-  jmp .for.cond.6;
   v113 = id v87;
   v112 = id v86;
   v111 = id v85;
@@ -87,12 +86,10 @@
   v96 = id v57;
   v95 = id v56;
   v94 = id v55;
-  v48 = id v43;
   v48 = id v84;
-  v47 = id v41;
   v47 = id v73;
-  v46 = id v39;
   v46 = id v88;
+  jmp .for.cond.6;
 .for.end.6:
   v92: int = id v90;
   print v92;

@@ -6,49 +6,37 @@
   v4 = id v3;
 .loopcheck:
   v6: bool = lt v2 v5;
-  br v6 .loopbody .loopend;
   v8 = id v5;
   v7 = id v4;
   v18 = id v5;
   v17 = id v4;
+  br v6 .loopbody .loopend;
 .loopbody:
   v9: int = div v8 v7;
   v10: int = mul v9 v7;
   v11: int = sub v8 v10;
   v12: bool = eq v11 v1;
-  br v12 .ifyes .ifno;
   v13 = id v7;
   v15 = id v8;
+  br v12 .ifyes .ifno;
 .ifyes:
   print v13;
   v14: int = div v8 v13;
-  jmp .loopcheck;
-  v22 = id v12;
   v22 = id v12;
   v21 = id v11;
-  v21 = id v11;
-  v20 = id v10;
   v20 = id v10;
   v19 = id v9;
-  v19 = id v9;
-  v5 = id num;
   v5 = id v14;
-  v4 = id v3;
   v4 = id v13;
+  jmp .loopcheck;
 .ifno:
   v16: int = add v13 v2;
-  jmp .loopcheck;
-  v22 = id v12;
   v22 = id v12;
   v21 = id v11;
-  v21 = id v11;
-  v20 = id v10;
   v20 = id v10;
   v19 = id v9;
-  v19 = id v9;
-  v5 = id num;
   v5 = id v15;
-  v4 = id v3;
   v4 = id v16;
+  jmp .loopcheck;
 .loopend:
 }

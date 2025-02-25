@@ -28,19 +28,19 @@
   v43: int = id x;
   v44: int = mul v42 v43;
   v45: int = id v44;
-  jmp .endif.12;
   v51 = id v45;
   v50 = id v44;
-  v50 = id v44;
-  v49 = id v43;
   v49 = id v43;
   v48 = id v42;
-  v48 = id v42;
+  jmp .endif.12;
 .else.12:
   v46: int = id v36;
   v47: int = id v46;
   v52 = id v46;
   v51 = id v47;
+  v50 = id v44;
+  v49 = id v43;
+  v48 = id v42;
 .endif.12:
   v53: int = id v51;
   ret v53;

@@ -9,9 +9,9 @@
   v22: int = id v21;
   v23: int = id n;
   v24: bool = le v22 v23;
-  br v24 .for.body.1 .for.end.1;
   v38 = id v21;
   v37 = id v20;
+  br v24 .for.body.1 .for.end.1;
 .for.body.1:
   v25: int = id v21;
   v26: int = id v21;
@@ -25,7 +25,6 @@
   v34: int = const 1;
   v35: int = add v33 v34;
   v36: int = id v35;
-  jmp .for.cond.1;
   v49 = id v35;
   v48 = id v34;
   v47 = id v33;
@@ -36,10 +35,9 @@
   v42 = id v27;
   v41 = id v26;
   v40 = id v25;
-  v21 = id v19;
   v21 = id v36;
-  v20 = id v17;
   v20 = id v32;
+  jmp .for.cond.1;
 .for.end.1:
   v39: int = id v37;
   ret v39;
@@ -55,9 +53,9 @@
   v22: int = id v21;
   v23: int = id n;
   v24: bool = le v22 v23;
-  br v24 .for.body.1 .for.end.1;
   v34 = id v21;
   v33 = id v20;
+  br v24 .for.body.1 .for.end.1;
 .for.body.1:
   v25: int = id v20;
   v26: int = id v21;
@@ -67,17 +65,15 @@
   v30: int = const 1;
   v31: int = add v29 v30;
   v32: int = id v31;
-  jmp .for.cond.1;
   v46 = id v31;
   v45 = id v30;
   v44 = id v29;
   v42 = id v27;
   v41 = id v26;
   v40 = id v25;
-  v21 = id v19;
   v21 = id v32;
-  v20 = id v17;
   v20 = id v28;
+  jmp .for.cond.1;
 .for.end.1:
   v35: int = id v33;
   v36: int = id v33;
