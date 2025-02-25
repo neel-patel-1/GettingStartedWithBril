@@ -4,6 +4,8 @@ import queue
 
 TERMINATORS = 'br', 'jmp', 'ret'
 defs = {}
+use_defs = {}
+outsets = {}
 pred_map = {}
 succ_map = {}
 dom_map = {}
@@ -289,15 +291,36 @@ def sub_phis_for_insts(bbs):
       bb[0].insert(1, phi_inst)
   return bbs
 
-def rename_phis(bbs):
-  for bb in bbs:
-    for var in bb[2]:
-      if bb[2][var] == var:
-        bb[2][var] = push_alias(var, var_renames)
-        if var in bb[3]:
-          bb[3][bb[2][var]] = bb[3][var]
-          del bb[3][var]
-  return bbs
+
+def get_repr(index,bb):
+  bb_instnum = bb[1] + "_" + str(index)
+  return bb_instnum
+
+def transfer(bb, inset):
+  insts = bb[0]
+  outset = dict(inset)
+  for index, inst in enumerate(insts):
+    if 'args' in inst:
+      use_defs[(get_repr(index,bb))] = outset
+    if 'dest' in inst:
+      outset[inst['dest']] = [get_repr(index,bb)]
+  return outset
+
+def create_inset(bb,bb_list):
+  global pred_map
+  inset = dict()
+  if bb[1] in pred_map:
+    for pred in pred_map[bb[1]]:
+      if bb_list[pred][1] in outsets:
+        for key in outsets[bb_list[pred][1]]:
+          if key in inset:
+            inset[key] = inset[key] + outsets[bb_list[pred][1]][key]
+          else:
+            inset[key] = outsets[bb_list[pred][1]][key]
+    # print(f'bb: {bb[1]} inset: {inset}')
+  return inset
+
+
 
 prog = json.load(sys.stdin)
 for function in prog['functions']:
@@ -322,6 +345,37 @@ for function in prog['functions']:
         if inst['dest'] not in defs:
           defs[inst['dest']] = []
         defs[inst['dest']].append(bb[1])
+
+
+  if 'args' in function:
+    function_args = function['args']
+  else:
+    function_args = None
+  bbq = queue.Queue()
+  for bb in bbs:
+    bbq.put(bb)
+
+  while not bbq.empty():
+    bb = bbq.get()
+    inset = create_inset(bb,bbs)
+    if bb[1] == 'Entry' and function_args:
+      for arg in function_args:
+        inset[arg['name']] = 'Entry_Args'
+        # print(f'bb: {bb[1]} inset: {inset}')
+    if bb[1] in outsets:
+      outset = outsets[bb[1]]
+    else:
+      outset = dict()
+    new_outset = transfer(bb, inset)
+    if new_outset != outset:
+      outsets[bb[1]] = new_outset
+      if bb[1] in succ_map:
+        for succ in succ_map[bb[1]]:
+          bbq.put(bbs[succ])
+
+  # display the outsets of each bb
+  for bb in bbs:
+    print(f'bb: {bb[1]} outset: {outsets[bb[1]]}', file=sys.stderr)
 
   #Initialize the dominator map
   initialize_bb_doms(bbs)
