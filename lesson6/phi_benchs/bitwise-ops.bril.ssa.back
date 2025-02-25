@@ -1,15 +1,13 @@
 @mod2(a: int): bool {
   v1: int = const 2;
-  v1: int = const 2;
   v2: int = div a v1;
   v3: int = mul v2 v1;
   v4: int = sub a v3;
   v5: int = const 1;
   v6: bool = eq v5 v4;
-  ret ans;
+  ret v6;
 }
 @loop_subroutine(a: int, b: int, c: bool): int {
-  v1: int = const 0;
   v1: int = const 0;
   v2: int = const 63;
   v3: int = const 1;
@@ -23,7 +21,7 @@
   v7 = id v5;
 .loop:
   v12: bool = le v8 v2;
-  br cond .here .end;
+  br v12 .here .end;
   v17 = id v11;
   v16 = id v10;
   v15 = id v9;
@@ -65,7 +63,7 @@
   v27 = id v13;
   v27 = id v21;
 .stay:
-  br cond_add .add .end_loop;
+  br v30 .add .end_loop;
   v37 = id v32;
   v36 = id v31;
   v35 = id v30;
@@ -99,29 +97,25 @@
   v7 = id v5;
   v7 = id v39;
 .end:
-  ret ans;
+  ret v45;
 }
 @OR(a: int, b: int): int {
   v2: bool = const true;
-  v2: bool = const true;
   v3: int = call @loop_subroutine a b v2;
-  ret v1;
+  ret v3;
 }
 @AND(a: int, b: int): int {
   v2: bool = const false;
-  v2: bool = const false;
   v3: int = call @loop_subroutine a b v2;
-  ret v1;
+  ret v3;
 }
 @XOR(a: int, b: int): int {
   v1: int = call @AND a b;
-  v1: int = call @AND a b;
   v2: int = call @OR a b;
   v3: int = sub v2 v1;
-  ret ans;
+  ret v3;
 }
 @main(a: int, b: int, c: int) {
-  v1: int = const 1;
   v1: int = const 1;
   v2: int = const 0;
   v3: int = sub c v1;
@@ -129,9 +123,9 @@
   v5: bool = lt v3 v2;
   v6: bool = eq v3 v2;
   v7: bool = gt v3 v2;
-  br less .and_op .useless_lbl;
+  br v5 .and_op .useless_lbl;
 .useless_lbl:
-  br equal .or_op .xor_op;
+  br v6 .or_op .xor_op;
 .and_op:
   v10: int = call @AND a b;
   jmp .end;
@@ -144,5 +138,5 @@
   v9: int = call @XOR a b;
   v11 = id v9;
 .end:
-  print ans;
+  print v11;
 }

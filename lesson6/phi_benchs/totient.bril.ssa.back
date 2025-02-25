@@ -1,11 +1,9 @@
 @main(n: int) {
   print n;
-  print n;
   v1: int = call @totient n;
-  print tot;
+  print v1;
 }
 @totient(n: int): int {
-  v1: int = id n;
   v1: int = id n;
   v2: int = const 2;
   v3: int = const 1;
@@ -16,7 +14,7 @@
 .for.set.cond:
   v8: int = mul v6 v6;
   v9: bool = le v8 v7;
-  br cond .for.set.body .for.set.end;
+  br v9 .for.set.body .for.set.end;
   v12 = id v7;
   v11 = id v6;
   v10 = id v5;
@@ -26,7 +24,7 @@
 .for.set.body:
   v13: int = call @mod v12 v11;
   v14: bool = eq v13 v4;
-  br if_cond .if_lbl .else_lbl;
+  br v14 .if_lbl .else_lbl;
   v18 = id v12;
   v17 = id v13;
   v16 = id v11;
@@ -41,7 +39,7 @@
 .while.set.cond:
   v22: int = call @mod v21 v20;
   v23: bool = eq v22 v4;
-  br while_cond .while.body .while.end;
+  br v23 .while.body .while.end;
   v25 = id v20;
   v24 = id v19;
   v29 = id v21;
@@ -84,7 +82,7 @@
   v5 = id v32;
 .for.set.end:
   v42: bool = gt v41 v3;
-  br final_if_cond .final_if_label .final_else_label;
+  br v42 .final_if_label .final_else_label;
   v49 = id v41;
   v44 = id v40;
   v43 = id v39;
@@ -106,12 +104,11 @@
   v53 = id v39;
   v53 = id v52;
 .final_else_label:
-  ret result;
+  ret v53;
 }
 @mod(a: int, b: int): int {
   v1: int = div a b;
-  v1: int = div a b;
   v2: int = mul b v1;
   v3: int = sub a v2;
-  ret ans;
+  ret v3;
 }

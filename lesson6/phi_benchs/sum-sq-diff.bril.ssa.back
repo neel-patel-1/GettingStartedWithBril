@@ -1,6 +1,5 @@
 @sumOfSquares(n: int): int {
   v16: int = const 0;
-  v16: int = const 0;
   v17: int = id v16;
   v18: int = const 1;
   v19: int = id v18;
@@ -10,7 +9,7 @@
   v22: int = id v21;
   v23: int = id n;
   v24: bool = le v22 v23;
-  br v5 .for.body.1 .for.end.1;
+  br v24 .for.body.1 .for.end.1;
   v38 = id v21;
   v37 = id v20;
 .for.body.1:
@@ -43,10 +42,9 @@
   v20 = id v32;
 .for.end.1:
   v39: int = id v37;
-  ret v15;
+  ret v39;
 }
 @squareOfSum(n: int): int {
-  v16: int = const 0;
   v16: int = const 0;
   v17: int = id v16;
   v18: int = const 1;
@@ -57,7 +55,7 @@
   v22: int = id v21;
   v23: int = id n;
   v24: bool = le v22 v23;
-  br v5 .for.body.1 .for.end.1;
+  br v24 .for.body.1 .for.end.1;
   v34 = id v21;
   v33 = id v20;
 .for.body.1:
@@ -86,10 +84,9 @@
   v37: int = mul v35 v36;
   v38: int = id v37;
   v39: int = id v38;
-  ret v15;
+  ret v39;
 }
 @main(n: int) {
-  v8: int = id n;
   v8: int = id n;
   v9: int = call @sumOfSquares v8;
   v10: int = id v9;
@@ -101,7 +98,7 @@
   v16: int = sub v14 v15;
   v17: int = id v16;
   v18: int = id v17;
-  print v5;
+  print v18;
   v19: int = const 0;
   v20: int = id v17;
 }

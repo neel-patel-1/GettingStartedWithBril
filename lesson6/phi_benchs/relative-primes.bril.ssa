@@ -2,7 +2,7 @@
   v3: int = const 20;
   v4: int = id v3;
   v5: int = id v4;
-  call @relative_primes v1;
+  call @relative_primes v5;
   v6: int = const 0;
 }
 @mod(a: int, b: int): int {
@@ -11,13 +11,13 @@
   v7: int = div v5 v6;
   v8: int = mul v7 v6;
   v9: int = sub v5 v8;
-  ret v4;
+  ret v9;
 }
 @gcd(a: int, b: int): int {
   v22: int = id b;
   v23: int = id a;
   v24: bool = gt v22 v23;
-  br v3 .then.0 .else.0;
+  br v24 .then.0 .else.0;
 .then.0:
   v25: int = id a;
   v26: int = id v25;
@@ -37,7 +37,7 @@
   v37: int = id v31;
   v38: int = const 0;
   v39: bool = eq v37 v38;
-  br v10 .then.7 .else.7;
+  br v39 .then.7 .else.7;
 .then.7:
   v45 = phi v36 .endif.0;
   v44 = phi v35 .endif.0;
@@ -46,7 +46,7 @@
   v41 = phi v32 .endif.0;
   v40 = phi v31 .endif.0;
   v46: int = id v45;
-  ret v11;
+  ret v46;
   jmp .endif.7;
 .else.7:
   v52 = phi v36 .endif.0;
@@ -58,7 +58,7 @@
   v53: int = id v52;
   v54: int = const 0;
   v55: bool = eq v53 v54;
-  br v15 .then.12 .else.12;
+  br v55 .then.12 .else.12;
 .then.12:
   v61 = phi v52 .else.7;
   v60 = phi v51 .else.7;
@@ -67,7 +67,7 @@
   v57 = phi v48 .else.7;
   v56 = phi v47 .else.7;
   v62: int = id v56;
-  ret v16;
+  ret v62;
   jmp .endif.12;
 .else.12:
   v68 = phi v52 .else.7;
@@ -99,7 +99,7 @@
   v87: int = call @gcd v85 v86;
   v88: int = id v87;
   v89: int = id v88;
-  ret v21;
+  ret v89;
 }
 @relative_primes(a: int) {
   v16: int = id a;
@@ -120,7 +120,7 @@
   v19: int = id v18;
   v20: int = const 1;
   v21: bool = ge v19 v20;
-  br v4 .for.body.0 .for.end.0;
+  br v21 .for.body.0 .for.end.0;
 .for.body.0:
   v22 = phi v18 .for.cond.0;
   v23: int = id a;
@@ -130,12 +130,12 @@
   v27: int = id v26;
   v28: int = const 1;
   v29: bool = eq v27 v28;
-  br v10 .then.7 .else.7;
+  br v29 .then.7 .else.7;
 .then.7:
   v31 = phi v26 .for.body.0;
   v30 = phi v22 .for.body.0;
   v32: int = id v30;
-  print v11;
+  print v32;
   v33: int = const 0;
   jmp .endif.7;
 .else.7:

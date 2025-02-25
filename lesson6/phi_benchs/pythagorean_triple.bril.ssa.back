@@ -1,6 +1,5 @@
 @main(n: int) {
   v1: int = const 1;
-  v1: int = const 1;
   v2: int = mul n n;
   v3: int = id v1;
   v4 = id v3;
@@ -13,18 +12,18 @@
   v9: int = mul v7 v7;
   v10: int = add v8 v9;
   v11: bool = eq v10 v2;
-  br found .found .inner_continue;
+  br v11 .found .inner_continue;
   v13 = id v7;
   v12 = id v6;
   v14 = id v6;
 .found:
-  print b a;
+  print v13 v12;
   v14 = id v6;
   v14 = id v12;
 .inner_continue:
   v15: int = add v13 v1;
   v16: bool = ge v15 v14;
-  br done .outer_continue .inner_loop;
+  br v16 .outer_continue .inner_loop;
   v25 = id v16;
   v7 = id v5;
   v7 = id v15;
@@ -33,7 +32,7 @@
 .outer_continue:
   v17: int = add v14 v1;
   v18: bool = ge v17 n;
-  br done .finish .outer_loop;
+  br v18 .finish .outer_loop;
   v24 = id v18;
   v23 = id v11;
   v22 = id v10;

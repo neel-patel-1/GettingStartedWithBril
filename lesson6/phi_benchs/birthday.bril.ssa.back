@@ -1,14 +1,12 @@
 @main(n: float) {
   v3: float = id n;
-  v3: float = id n;
   v4: float = call @probability v3;
   v5: float = id v4;
   v6: float = id v5;
-  print v1;
+  print v6;
   v7: int = const 0;
 }
 @probability(n: float): float {
-  v25: float = const 1;
   v25: float = const 1;
   v26: float = id v25;
   v27: float = const 1;
@@ -19,7 +17,7 @@
   v31: float = id v30;
   v32: float = id n;
   v33: bool = flt v31 v32;
-  br v5 .for.body.1 .for.end.1;
+  br v33 .for.body.1 .for.end.1;
   v51 = id v30;
   v50 = id v29;
 .for.body.1:
@@ -66,5 +64,5 @@
   v56: float = const 100;
   v57: float = fdiv v55 v56;
   v58: float = fsub v52 v57;
-  ret v24;
+  ret v58;
 }

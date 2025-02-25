@@ -16,7 +16,7 @@
   v22: int = id v21;
   v23: int = const 0;
   v24: bool = gt v22 v23;
-  br v6 .for.body.2 .for.end.2;
+  br v24 .for.body.2 .for.end.2;
 .for.body.2:
   v25: int = id v20;
   v26: int = id v21;
@@ -31,6 +31,6 @@
   v34 = phi v21 .for.cond.2;
   v33 = phi v20 .for.cond.2;
   v35: int = id v33;
-  print v13;
+  print v35;
   v36: int = const 0;
 }

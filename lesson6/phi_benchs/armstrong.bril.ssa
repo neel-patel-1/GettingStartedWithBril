@@ -10,7 +10,7 @@
   v7 = phi v5 v12 .Entry .body;
   v6 = phi v3 v11 .Entry .body;
   v8: bool = gt v7 v1;
-  br b .body .done;
+  br v8 .body .done;
 .body:
   v9: int = call @mod v7 v2;
   v10: int = call @power v9 v4;
@@ -21,7 +21,7 @@
   v14 = phi v7 .loop;
   v13 = phi v6 .loop;
   v15: bool = eq input v13;
-  print res;
+  print v15;
 }
 @getDigits(n: int): int {
   v1: int = const 10;
@@ -29,19 +29,19 @@
   v3: int = const 1;
   v4: int = div n v1;
   v5: bool = eq v4 v2;
-  br cond .then .else;
+  br v5 .then .else;
 .then:
-  ret one;
+  ret v3;
 .else:
   v6: int = call @getDigits v4;
   v7: int = add v6 v3;
-  ret res;
+  ret v7;
 }
 @mod(a: int, b: int): int {
   v1: int = div a b;
   v2: int = mul b v1;
   v3: int = sub a v2;
-  ret mod;
+  ret v3;
 }
 @power(base: int, exp: int): int {
   v1: int = const 10;
@@ -52,7 +52,7 @@
   v6 = phi exp v9 .Entry .body;
   v5 = phi v4 v8 .Entry .body;
   v7: bool = eq v6 v2;
-  br b .done .body;
+  br v7 .done .body;
 .body:
   v8: int = mul v5 base;
   v9: int = sub v6 v3;
@@ -60,5 +60,5 @@
 .done:
   v11 = phi v6 .loop;
   v10 = phi v5 .loop;
-  ret res;
+  ret v10;
 }

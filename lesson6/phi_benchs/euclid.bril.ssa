@@ -8,7 +8,7 @@
   v12: int = call @gcd v10 v11;
   v13: int = id v12;
   v14: int = id v13;
-  print v4;
+  print v14;
   v15: int = const 0;
 }
 @mod(r: int, s: int): int {
@@ -21,7 +21,7 @@
   v14: int = sub v8 v13;
   v15: int = id v14;
   v16: int = id v15;
-  ret v7;
+  ret v16;
 }
 @gcd(a: int, b: int): int {
   v17: int = const 0;
@@ -48,7 +48,7 @@
   v26 = phi v24 v43 .Entry .for.body.5;
   v25 = phi v22 v41 .Entry .for.body.5;
   v29: bool = id v26;
-  br v6 .for.body.5 .for.end.5;
+  br v29 .for.body.5 .for.end.5;
 .for.body.5:
   v30: int = id v27;
   v31: int = id v30;
@@ -71,5 +71,5 @@
   v45 = phi v26 .for.cond.5;
   v44 = phi v25 .for.cond.5;
   v48: int = id v47;
-  ret v16;
+  ret v48;
 }

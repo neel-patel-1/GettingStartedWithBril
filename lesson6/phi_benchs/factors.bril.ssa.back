@@ -1,13 +1,12 @@
 @main(num: int) {
   v1: int = const 0;
-  v1: int = const 0;
   v2: int = const 1;
   v3: int = const 2;
   v5 = id num;
   v4 = id v3;
 .loopcheck:
   v6: bool = lt v2 v5;
-  br ispos .loopbody .loopend;
+  br v6 .loopbody .loopend;
   v8 = id v5;
   v7 = id v4;
   v18 = id v5;
@@ -17,11 +16,11 @@
   v10: int = mul v9 v7;
   v11: int = sub v8 v10;
   v12: bool = eq v11 v1;
-  br iszero .ifyes .ifno;
+  br v12 .ifyes .ifno;
   v13 = id v7;
   v15 = id v8;
 .ifyes:
-  print fac;
+  print v13;
   v14: int = div v8 v13;
   jmp .loopcheck;
   v22 = id v12;

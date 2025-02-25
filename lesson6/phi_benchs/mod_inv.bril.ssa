@@ -38,7 +38,7 @@
   v49: int = id v46;
   v50: int = const 0;
   v51: bool = gt v49 v50;
-  br v10 .for.body.6 .for.end.6;
+  br v51 .for.body.6 .for.end.6;
 .for.body.6:
   v54 = phi v48 .for.cond.6;
   v53 = phi v47 .for.cond.6;
@@ -50,7 +50,7 @@
   v59: int = id v35;
   v60: int = mul v58 v59;
   v61: bool = eq v55 v60;
-  br v18 .then.11 .else.11;
+  br v61 .then.11 .else.11;
 .then.11:
   v64 = phi v54 .for.body.6;
   v63 = phi v53 .for.body.6;
@@ -88,7 +88,7 @@
   v90 = phi v47 .for.cond.6;
   v89 = phi v46 .for.cond.6;
   v92: int = id v90;
-  print v32;
+  print v92;
   v93: int = const 0;
 }
 @mod(n: int, p: int): int {
@@ -99,5 +99,5 @@
   v11: int = id p;
   v12: int = mul v10 v11;
   v13: int = sub v7 v12;
-  ret v6;
+  ret v13;
 }

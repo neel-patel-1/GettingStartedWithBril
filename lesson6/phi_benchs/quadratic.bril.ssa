@@ -19,7 +19,7 @@
   v23: int = const 1;
   v24: int = sub v22 v23;
   v25: bool = lt v21 v24;
-  br v6 .for.body.0 .for.end.0;
+  br v25 .for.body.0 .for.end.0;
 .for.body.0:
   v26 = phi v20 .for.cond.0;
   v27: int = id v26;
@@ -27,11 +27,11 @@
   v29: int = mul v27 v28;
   v30: int = id x;
   v31: bool = ge v29 v30;
-  br v12 .then.7 .else.7;
+  br v31 .then.7 .else.7;
 .then.7:
   v32 = phi v26 .for.body.0;
   v33: int = id v32;
-  ret v13;
+  ret v33;
 .else.7:
   v34 = phi v26 .for.body.0;
 .endif.7:
@@ -43,7 +43,7 @@
 .for.end.0:
   v39 = phi v20 .for.cond.0;
   v40: int = const 0;
-  ret v17;
+  ret v40;
 }
 @quadratic(a: int, b: int, c: int) {
   v32: int = id b;
@@ -77,11 +77,11 @@
   v60: int = id v52;
   v61: int = id v45;
   v62: int = div v60 v61;
-  print v26;
+  print v62;
   v63: int = const 0;
   v64: int = id v59;
   v65: int = id v45;
   v66: int = div v64 v65;
-  print v30;
+  print v66;
   v67: int = const 0;
 }

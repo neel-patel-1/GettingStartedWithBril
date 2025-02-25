@@ -1,6 +1,5 @@
 @main {
   v6: int = const 23789216;
-  v6: int = const 23789216;
   v7: int = id v6;
   v8: int = const 1748698766;
   v9: int = id v8;
@@ -9,11 +8,10 @@
   v12: int = call @gcd v10 v11;
   v13: int = id v12;
   v14: int = id v13;
-  print v4;
+  print v14;
   v15: int = const 0;
 }
 @mod(r: int, s: int): int {
-  v8: int = id r;
   v8: int = id r;
   v9: int = id r;
   v10: int = id s;
@@ -23,10 +21,9 @@
   v14: int = sub v8 v13;
   v15: int = id v14;
   v16: int = id v15;
-  ret v7;
+  ret v16;
 }
 @gcd(a: int, b: int): int {
-  v17: int = const 0;
   v17: int = const 0;
   v18: int = id v17;
   v19: int = id b;
@@ -41,7 +38,7 @@
   v25 = id v22;
 .for.cond.5:
   v29: bool = id v26;
-  br v6 .for.body.5 .for.end.5;
+  br v29 .for.body.5 .for.end.5;
   v47 = id v28;
   v46 = id v27;
   v45 = id v26;
@@ -82,5 +79,5 @@
   v25 = id v41;
 .for.end.5:
   v48: int = id v47;
-  ret v16;
+  ret v48;
 }

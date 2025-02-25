@@ -19,7 +19,7 @@
   v22: int = id v21;
   v23: int = id n;
   v24: bool = le v22 v23;
-  br v5 .for.body.1 .for.end.1;
+  br v24 .for.body.1 .for.end.1;
 .for.body.1:
   v25: int = id v21;
   v26: int = id v21;
@@ -38,7 +38,7 @@
   v38 = phi v21 .for.cond.1;
   v37 = phi v20 .for.cond.1;
   v39: int = id v37;
-  ret v15;
+  ret v39;
 }
 @squareOfSum(n: int): int {
   v16: int = const 0;
@@ -57,7 +57,7 @@
   v22: int = id v21;
   v23: int = id n;
   v24: bool = le v22 v23;
-  br v5 .for.body.1 .for.end.1;
+  br v24 .for.body.1 .for.end.1;
 .for.body.1:
   v25: int = id v20;
   v26: int = id v21;
@@ -76,7 +76,7 @@
   v37: int = mul v35 v36;
   v38: int = id v37;
   v39: int = id v38;
-  ret v15;
+  ret v39;
 }
 @main(n: int) {
   v8: int = id n;
@@ -90,7 +90,7 @@
   v16: int = sub v14 v15;
   v17: int = id v16;
   v18: int = id v17;
-  print v5;
+  print v18;
   v19: int = const 0;
   v20: int = id v17;
 }

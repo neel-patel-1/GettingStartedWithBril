@@ -1,14 +1,13 @@
 @hanoi(disks: int, src: int, dst: int, spare: int) {
   v1: int = const 0;
-  v1: int = const 0;
   v2: bool = gt disks v1;
-  br pos .then .else;
+  br v2 .then .else;
 .then:
   v3: int = const 1;
   v4: int = sub disks v3;
-  call @hanoi above src spare dst;
+  call @hanoi v4 src spare dst;
   print src dst;
-  call @hanoi above spare dst src;
+  call @hanoi v4 spare dst src;
   v6 = id v4;
   v5 = id v3;
 .else:
@@ -16,8 +15,7 @@
 }
 @main(disks: int) {
   v1: int = const 0;
-  v1: int = const 0;
   v2: int = const 2;
   v3: int = const 1;
-  call @hanoi disks src dst spare;
+  call @hanoi disks v1 v2 v3;
 }

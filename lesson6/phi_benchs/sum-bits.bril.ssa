@@ -7,7 +7,7 @@
   v5 = phi input v8 .Entry .body;
   v4 = phi v1 v9 .Entry .body;
   v6: bool = eq v5 v3;
-  br cond .done .body;
+  br v6 .done .body;
 .body:
   v7: int = call @mod v5 v2;
   v8: int = div v5 v2;
@@ -16,7 +16,7 @@
 .done:
   v11 = phi v5 .loop;
   v10 = phi v4 .loop;
-  print sum;
+  print v10;
   ret;
 }
 @mod(dividend: int, divisor: int): int {
@@ -24,5 +24,5 @@
   v2: int = const 2;
   v3: int = mul v2 v1;
   v4: int = sub dividend v3;
-  ret diff;
+  ret v4;
 }

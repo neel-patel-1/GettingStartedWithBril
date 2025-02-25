@@ -1,6 +1,5 @@
 @main(input: int) {
   v6: int = id input;
-  v6: int = id input;
   v7: int = const 0;
   v8: int = const 10;
   v9: int = id v7;
@@ -11,7 +10,7 @@
   v12 = id v6;
 .for.cond.3:
   v15: bool = id v14;
-  br v4 .for.body.3 .for.end.3;
+  br v15 .for.body.3 .for.end.3;
   v16 = id v14;
   v29 = id v14;
   v28 = id v13;
@@ -25,7 +24,7 @@
   v22: int = add v21 v20;
   v23: int = id v18;
   v24: bool = eq v23 v7;
-  br comp1 .if.body .for.incre;
+  br v24 .if.body .for.incre;
   v26 = id v16;
 .if.body:
   v25: bool = const false;
@@ -69,5 +68,5 @@
   v12 = id v23;
   v12 = id v23;
 .for.end.3:
-  print result;
+  print v28;
 }

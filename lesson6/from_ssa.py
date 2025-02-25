@@ -403,7 +403,7 @@ for function in prog['functions']:
             if arg in outsets[bbs[predecessor][1]]:
               print(f'{arg} is in {bbs[predecessor][1]}\'s outset', file=sys.stderr)
               new_bbs[predecessor].append({'op': 'id', 'dest': inst['dest'], 'args': [arg]})
-    new_bbs[index] = [bb[0][0]] + [inst for inst in new_bbs[index] if 'op' in inst and inst['op'] != 'phi']
+    new_bbs[index] = [inst for inst in new_bbs[index] if 'op' not in inst or ('op' in inst and inst['op'] != 'phi')]
   for bb in new_bbs:
     function['instrs'] += bb
   print(f'function: {function}', file=sys.stderr)

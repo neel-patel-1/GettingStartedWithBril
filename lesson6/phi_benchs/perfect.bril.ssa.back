@@ -1,6 +1,5 @@
 @main(input: int) {
   v3: int = id input;
-  v3: int = id input;
   v4: int = const 0;
   v5: int = const 1;
   v6: int = const 2;
@@ -12,7 +11,7 @@
 .for.cond.1:
   v12: int = mul v11 v11;
   v13: bool = gt v12 v3;
-  br comp .for.end .for.body;
+  br v13 .for.end .for.body;
   v15 = id v11;
   v14 = id v10;
   v26 = id v11;
@@ -22,7 +21,7 @@
   v17: int = mul v16 v15;
   v18: int = sub v3 v17;
   v19: bool = eq v18 v4;
-  br comp1 .if.body .for.incre;
+  br v19 .if.body .for.incre;
   v20 = id v15;
   v23 = id v14;
 .if.body:
@@ -43,7 +42,7 @@
   v10 = id v23;
 .for.end:
   v27: bool = eq v25 v3;
-  br comp2 .if.success .if.failure.end;
+  br v27 .if.success .if.failure.end;
   v29 = id v26;
   v28 = id v25;
   v37 = id v9;
@@ -62,5 +61,5 @@
   v35 = id v25;
   v35 = id v28;
 .if.failure.end:
-  print result;
+  print v37;
 }

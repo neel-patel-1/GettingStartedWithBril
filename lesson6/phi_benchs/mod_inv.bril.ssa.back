@@ -1,6 +1,5 @@
 @main(n: int, p: int) {
   v34: int = const 2;
-  v34: int = const 2;
   v35: int = id v34;
   v36: int = id p;
   v37: int = id v35;
@@ -19,7 +18,7 @@
   v49: int = id v46;
   v50: int = const 0;
   v51: bool = gt v49 v50;
-  br v10 .for.body.6 .for.end.6;
+  br v51 .for.body.6 .for.end.6;
   v54 = id v48;
   v53 = id v47;
   v52 = id v46;
@@ -34,7 +33,7 @@
   v59: int = id v35;
   v60: int = mul v58 v59;
   v61: bool = eq v55 v60;
-  br v18 .then.11 .else.11;
+  br v61 .then.11 .else.11;
   v64 = id v54;
   v63 = id v53;
   v62 = id v52;
@@ -96,11 +95,10 @@
   v46 = id v88;
 .for.end.6:
   v92: int = id v90;
-  print v32;
+  print v92;
   v93: int = const 0;
 }
 @mod(n: int, p: int): int {
-  v7: int = id n;
   v7: int = id n;
   v8: int = id n;
   v9: int = id p;
@@ -108,5 +106,5 @@
   v11: int = id p;
   v12: int = mul v10 v11;
   v13: int = sub v7 v12;
-  ret v6;
+  ret v13;
 }

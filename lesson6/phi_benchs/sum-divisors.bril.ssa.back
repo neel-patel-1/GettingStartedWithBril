@@ -1,12 +1,11 @@
 @main(n: int) {
   v1: int = const 0;
-  v1: int = const 0;
   v2: int = const 0;
   v3: int = const 1;
   v4: int = const -1;
   v5: int = const 0;
   v6: bool = lt n v5;
-  br nlz .neg .begin;
+  br v6 .neg .begin;
   v9 = id n;
   v8 = id v2;
   v8 = id v2;
@@ -20,7 +19,7 @@
   v10: int = add v1 v3;
   v11: int = mul v10 v10;
   v12: bool = gt v11 v9;
-  br sqgt .end .check;
+  br v12 .end .check;
   v14 = id v9;
   v13 = id v8;
   v25 = id v9;
@@ -28,7 +27,7 @@
 .check:
   v15: int = call @mod v14 v10;
   v16: bool = eq v15 v5;
-  br eqz .body .begin;
+  br v16 .body .begin;
   v27 = id v16;
   v27 = id v16;
   v27 = id v16;
@@ -44,11 +43,11 @@
   v18 = id v14;
   v17 = id v13;
 .body:
-  print i;
+  print v10;
   v19: int = add v17 v10;
   v20: int = div v18 v10;
   v21: bool = eq v20 v10;
-  br deqi .begin .then;
+  br v21 .begin .then;
   v29 = id v21;
   v29 = id v21;
   v28 = id v20;
@@ -69,7 +68,7 @@
   v8 = id v19;
   v22 = id v18;
 .then:
-  print d;
+  print v20;
   v23: int = add v19 v20;
   jmp .begin;
   v29 = id v21;
@@ -93,12 +92,11 @@
   v8 = id v19;
   v8 = id v23;
 .end:
-  print res;
+  print v24;
 }
 @mod(dividend: int, divisor: int): int {
   v1: int = div dividend divisor;
-  v1: int = div dividend divisor;
   v2: int = mul divisor v1;
   v3: int = sub dividend v2;
-  ret diff;
+  ret v3;
 }

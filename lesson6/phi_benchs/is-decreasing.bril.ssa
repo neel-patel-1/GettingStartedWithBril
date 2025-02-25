@@ -1,7 +1,7 @@
 @main(x: int) {
   v1: bool = call @is_decreasing x;
   v2: bool = id v1;
-  print tmp;
+  print v2;
 }
 @is_decreasing(x: int): bool {
   v1: int = id x;
@@ -19,19 +19,19 @@
   v6 = phi v1 v23 .Entry .label13;
   v8: int = const 0;
   v9: bool = gt v6 v8;
-  br tmp8 .label5 .label6;
+  br v9 .label5 .label6;
 .label5:
   v11 = phi v7 .label4;
   v10 = phi v6 .label4;
   v12: int = call @last_digit v10;
   v13: int = id v12;
   v14: bool = lt v13 v11;
-  br tmp10 .label11 .label12;
+  br v14 .label11 .label12;
 .label11:
   v16 = phi v11 .label5;
   v15 = phi v10 .label5;
   v17: bool = const false;
-  ret tmp14;
+  ret v17;
   jmp .label13;
 .label12:
   v19 = phi v11 .label5;
@@ -47,7 +47,7 @@
   v25 = phi v7 .label4;
   v24 = phi v6 .label4;
   v26: bool = const true;
-  ret tmp17;
+  ret v26;
 }
 @last_digit(x: int): int {
   v1: int = const 10;
@@ -55,5 +55,5 @@
   v3: int = const 10;
   v4: int = mul v2 v3;
   v5: int = sub x v4;
-  ret tmp22;
+  ret v5;
 }

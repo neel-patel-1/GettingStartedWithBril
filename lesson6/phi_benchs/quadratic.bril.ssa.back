@@ -1,9 +1,7 @@
 @main(a: int, b: int, c: int) {
   call @quadratic a b c;
-  call @quadratic a b c;
 }
 @sqrt(x: int): int {
-  v18: int = const 1;
   v18: int = const 1;
   v19: int = id v18;
   v20 = id v19;
@@ -13,7 +11,7 @@
   v23: int = const 1;
   v24: int = sub v22 v23;
   v25: bool = lt v21 v24;
-  br v6 .for.body.0 .for.end.0;
+  br v25 .for.body.0 .for.end.0;
   v26 = id v20;
   v39 = id v20;
 .for.body.0:
@@ -22,12 +20,12 @@
   v29: int = mul v27 v28;
   v30: int = id x;
   v31: bool = ge v29 v30;
-  br v12 .then.7 .else.7;
+  br v31 .then.7 .else.7;
   v32 = id v26;
   v34 = id v26;
 .then.7:
   v33: int = id v32;
-  ret v13;
+  ret v33;
 .else.7:
 .endif.7:
   v35: int = id v34;
@@ -47,10 +45,9 @@
   v20 = id v38;
 .for.end.0:
   v40: int = const 0;
-  ret v17;
+  ret v40;
 }
 @quadratic(a: int, b: int, c: int) {
-  v32: int = id b;
   v32: int = id b;
   v33: int = id b;
   v34: int = mul v32 v33;
@@ -82,11 +79,11 @@
   v60: int = id v52;
   v61: int = id v45;
   v62: int = div v60 v61;
-  print v26;
+  print v62;
   v63: int = const 0;
   v64: int = id v59;
   v65: int = id v45;
   v66: int = div v64 v65;
-  print v30;
+  print v66;
   v67: int = const 0;
 }

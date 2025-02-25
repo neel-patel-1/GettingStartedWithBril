@@ -1,13 +1,12 @@
 @main(input: int) {
   v1: int = const 0;
-  v1: int = const 0;
   v2: int = const 2;
   v3: int = const 0;
   v5 = id input;
   v4 = id v1;
 .loop:
   v6: bool = eq v5 v3;
-  br cond .done .body;
+  br v6 .done .body;
   v11 = id v5;
   v10 = id v4;
 .body:
@@ -21,14 +20,13 @@
   v4 = id v1;
   v4 = id v9;
 .done:
-  print sum;
+  print v10;
   ret;
 }
 @mod(dividend: int, divisor: int): int {
   v1: int = div dividend divisor;
-  v1: int = div dividend divisor;
   v2: int = const 2;
   v3: int = mul v2 v1;
   v4: int = sub dividend v3;
-  ret diff;
+  ret v4;
 }

@@ -1,12 +1,11 @@
 @main(input: int) {
   v44: int = const 1;
-  v44: int = const 1;
   v45: int = id v44;
   v46 = id v45;
 .for.cond.0:
   v47: int = id v46;
   v48: bool = lt v47 input;
-  br v4 .for.body.0 .for.end.0;
+  br v48 .for.body.0 .for.end.0;
   v49 = id v46;
   v156 = id v46;
 .for.body.0:
@@ -31,19 +30,19 @@
   v68: bool = eq v66 v67;
   v69: bool = id v68;
   v70: bool = id v59;
-  br v22 .then.21 .else.21;
+  br v70 .then.21 .else.21;
   v71 = id v49;
   v92 = id v49;
 .then.21:
   v72: bool = id v69;
-  br v24 .then.23 .else.23;
+  br v72 .then.23 .else.23;
   v73 = id v71;
   v78 = id v71;
 .then.23:
   v74: int = const 0;
   v75: int = const 1;
   v76: int = sub v74 v75;
-  print v27;
+  print v76;
   v77: int = const 0;
   jmp .endif.23;
   v87 = id v77;
@@ -59,7 +58,7 @@
   v79: int = const 0;
   v80: int = const 2;
   v81: int = sub v79 v80;
-  print v31;
+  print v81;
   v82: int = const 0;
   v91 = id v82;
   v90 = id v81;
@@ -79,14 +78,14 @@
   v136 = id v72;
 .else.21:
   v93: bool = id v69;
-  br v34 .then.33 .else.33;
+  br v93 .then.33 .else.33;
   v94 = id v92;
   v108 = id v92;
 .then.33:
   v104: int = const 0;
   v105: int = const 3;
   v106: int = sub v104 v105;
-  print v37;
+  print v106;
   v107: int = const 0;
   jmp .endif.33;
   v133 = id v107;
@@ -109,7 +108,7 @@
   v120 = id v94;
 .else.33:
   v118: int = id v108;
-  print v39;
+  print v118;
   v119: int = const 0;
   v135 = id v119;
   v134 = id v118;

@@ -1,6 +1,6 @@
 @main(n: int, arrows: int, repeats: int) {
   v1: int = call @up_arrow n arrows repeats;
-  print ans;
+  print v1;
 }
 @up_arrow(num: int, arrows: int, repeats: int): int {
   v1: int = const 1;
@@ -12,12 +12,12 @@
   v5 = phi v3 v19 .Entry .finally;
   v4 = phi v2 v17 .Entry .finally;
   v6: bool = lt v5 repeats;
-  br keepgoing .loopbody .endloop;
+  br v6 .loopbody .endloop;
 .loopbody:
   v8 = phi v5 .loopstart;
   v7 = phi v4 .loopstart;
   v9: bool = le arrows v1;
-  br base_case .base .arrowsgreaterthan1;
+  br v9 .base .arrowsgreaterthan1;
 .base:
   v11 = phi v8 .loopbody;
   v10 = phi v7 .loopbody;
@@ -36,5 +36,5 @@
 .endloop:
   v21 = phi v5 .loopstart;
   v20 = phi v4 .loopstart;
-  ret ans;
+  ret v20;
 }

@@ -1,8 +1,7 @@
 @abs(a: int): int {
   v1: int = const 0;
-  v1: int = const 0;
   v2: bool = lt a v1;
-  br is_neg .mul_neg_one .abs_res;
+  br v2 .mul_neg_one .abs_res;
   v5 = id a;
 .mul_neg_one:
   v3: int = const -1;
@@ -11,21 +10,20 @@
   v5 = id a;
   v5 = id v4;
 .abs_res:
-  ret a;
+  ret v5;
 }
 @mod(a: int, b: int): int {
   v1: int = div a b;
-  v1: int = div a b;
   v2: int = mul b v1;
   v3: int = sub a v2;
-  ret mod;
+  ret v3;
 }
 @gcd(a: int, b: int): int {
 .while.cond:
   v1: int = call @mod a b;
   v2: int = const 0;
   v3: bool = eq v1 v2;
-  br is_term .while.finish .while.body;
+  br v3 .while.finish .while.body;
 .while.body:
   v4: int = id b;
   v5: int = id v1;
@@ -33,30 +31,29 @@
   v9 = id v5;
   v8 = id v4;
 .while.finish:
-  ret b;
+  ret v7;
 }
 @lcm(a: int, b: int): int {
   v1: int = const 0;
-  v1: int = const 0;
   v2: bool = eq a v1;
-  br a_is_zero .check_b .is_good;
+  br v2 .check_b .is_good;
 .check_b:
   v3: bool = eq b v1;
-  br b_is_zero .special_case .is_good;
+  br v3 .special_case .is_good;
   v4 = id v3;
 .special_case:
-  ret zero;
+  ret v1;
 .is_good:
   v5: int = mul a b;
   v6: int = call @abs v5;
   v7: int = call @gcd a b;
   v8: int = div v6 v7;
-  ret lcm;
+  ret v8;
 }
 @orders(u: int, n: int, use_lcm: bool) {
 .for.cond:
   v1: bool = eq u n;
-  br is_term .for.finish .for.body;
+  br v1 .for.finish .for.body;
 .for.body:
   br use_lcm .lcm .gcd;
   v3 = id v2;
@@ -74,7 +71,7 @@
   v11 = id v7;
   v10 = id v8;
 .for.body.print:
-  print u ordu;
+  print v6 v10;
   v12: int = const 1;
   v13: int = add v6 v12;
   jmp .for.cond;
@@ -88,9 +85,8 @@
 }
 @main(n: int, use_lcm: bool) {
   v1: int = const 0;
-  v1: int = const 0;
   v2: int = const 1;
   v3: int = call @abs n;
-  print zero u;
-  call @orders u n use_lcm;
+  print v1 v2;
+  call @orders v2 v3 use_lcm;
 }

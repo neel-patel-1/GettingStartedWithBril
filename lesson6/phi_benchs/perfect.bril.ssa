@@ -15,7 +15,7 @@
   v10 = phi v7 v23 .Entry .for.incre;
   v12: int = mul v11 v11;
   v13: bool = gt v12 v3;
-  br comp .for.end .for.body;
+  br v13 .for.end .for.body;
 .for.body:
   v15 = phi v11 .for.cond.1;
   v14 = phi v10 .for.cond.1;
@@ -23,7 +23,7 @@
   v17: int = mul v16 v15;
   v18: int = sub v3 v17;
   v19: bool = eq v18 v4;
-  br comp1 .if.body .for.incre;
+  br v19 .if.body .for.incre;
 .if.body:
   v20 = phi v15 .for.body;
   v21: int = add v14 v20;
@@ -36,7 +36,7 @@
   v26 = phi v11 .for.cond.1;
   v25 = phi v10 .for.cond.1;
   v27: bool = eq v25 v3;
-  br comp2 .if.success .if.failure.end;
+  br v27 .if.success .if.failure.end;
 .if.success:
   v33 = phi v19 .for.end;
   v32 = phi v18 .for.end;
@@ -53,5 +53,5 @@
   v37 = phi v9 v34 .for.end .if.success;
   v36 = phi v26 v29 .for.end .if.success;
   v35 = phi v25 v28 .for.end .if.success;
-  print result;
+  print v37;
 }

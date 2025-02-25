@@ -1,16 +1,14 @@
 @main(input: int) {
   v1: int = call @catalan input;
-  v1: int = call @catalan input;
-  print catn;
+  print v1;
 }
 @catalan(n: int): int {
   v3: int = const 1;
-  v3: int = const 1;
   v4: int = const 0;
   v5: bool = eq n v4;
-  br guard0 .if .else;
+  br v5 .if .else;
 .if:
-  ret one;
+  ret v3;
 .else:
   v6: int = id v4;
   v7: int = id v4;
@@ -19,7 +17,7 @@
   v9 = id v6;
 .while:
   v11: bool = le v10 v8;
-  br guard1 .while.body .while.end;
+  br v11 .while.body .while.end;
   v19 = id v10;
   v18 = id v9;
 .while.body:
@@ -39,5 +37,5 @@
   v9 = id v6;
   v9 = id v16;
 .while.end:
-  ret sum;
+  ret v18;
 }

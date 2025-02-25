@@ -263,10 +263,10 @@ def rename_vars(bb, bbs, d_tree, var_renames):
     bb[2][key] = new_key
   bb = (bb[0], bb[1], bb[2], new_phi_nodes, True) # mark that the phi node dest was renamed
   for inst in bb[0]:
+    if 'args' in inst:
+      for index,arg in enumerate(inst['args']):
+        inst['args'][index] = get_alias(arg, var_renames)
     if 'dest' in inst:
-      if 'args' in inst:
-        for index,arg in enumerate(inst['args']):
-          inst['args'][index] = get_alias(arg, var_renames)
       inst['dest'] = push_alias(inst['dest'], var_renames)
   if bb_list_idx(bbs, bb[1]) in succ_map:
     for s in succ_map[bb_list_idx(bbs, bb[1])]: #if its a successor

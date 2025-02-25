@@ -10,7 +10,7 @@
   v5 = phi num v14 v15 .Entry .ifyes .ifno;
   v4 = phi v3 v13 v16 .Entry .ifyes .ifno;
   v6: bool = lt v2 v5;
-  br ispos .loopbody .loopend;
+  br v6 .loopbody .loopend;
 .loopbody:
   v8 = phi v5 .loopcheck;
   v7 = phi v4 .loopcheck;
@@ -18,10 +18,10 @@
   v10: int = mul v9 v7;
   v11: int = sub v8 v10;
   v12: bool = eq v11 v1;
-  br iszero .ifyes .ifno;
+  br v12 .ifyes .ifno;
 .ifyes:
   v13 = phi v7 .loopbody;
-  print fac;
+  print v13;
   v14: int = div v8 v13;
   jmp .loopcheck;
 .ifno:

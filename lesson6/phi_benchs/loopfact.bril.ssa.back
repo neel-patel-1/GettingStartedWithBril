@@ -1,6 +1,5 @@
 @main(input: int) {
   v15: int = id input;
-  v15: int = id input;
   v16: int = const 1;
   v17: int = id v16;
   v18: int = id v15;
@@ -11,7 +10,7 @@
   v22: int = id v21;
   v23: int = const 0;
   v24: bool = gt v22 v23;
-  br v6 .for.body.2 .for.end.2;
+  br v24 .for.body.2 .for.end.2;
   v34 = id v21;
   v33 = id v20;
 .for.body.2:
@@ -36,6 +35,6 @@
   v20 = id v28;
 .for.end.2:
   v35: int = id v33;
-  print v13;
+  print v35;
   v36: int = const 0;
 }

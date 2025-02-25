@@ -15,7 +15,7 @@
   v13 = phi v9 v22 v22 .Entry .if.body .for.incre;
   v12 = phi v6 v23 v23 .Entry .if.body .for.incre;
   v15: bool = id v14;
-  br v4 .for.body.3 .for.end.3;
+  br v15 .for.body.3 .for.end.3;
 .for.body.3:
   v16 = phi v14 .for.cond.3;
   v17: int = id v12;
@@ -26,7 +26,7 @@
   v22: int = add v21 v20;
   v23: int = id v18;
   v24: bool = eq v23 v7;
-  br comp1 .if.body .for.incre;
+  br v24 .if.body .for.incre;
 .if.body:
   v25: bool = const false;
   jmp .for.cond.3;
@@ -37,5 +37,5 @@
   v29 = phi v14 .for.cond.3;
   v28 = phi v13 .for.cond.3;
   v27 = phi v12 .for.cond.3;
-  print result;
+  print v28;
 }

@@ -1,6 +1,5 @@
 @main(input: int) {
   v1: int = const 0;
-  v1: int = const 0;
   v2: int = const 10;
   v3: int = const 0;
   v4: int = call @getDigits input;
@@ -9,7 +8,7 @@
   v6 = id v3;
 .loop:
   v8: bool = gt v7 v1;
-  br b .body .done;
+  br v8 .body .done;
   v14 = id v7;
   v13 = id v6;
 .body:
@@ -26,32 +25,29 @@
   v6 = id v11;
 .done:
   v15: bool = eq input v13;
-  print res;
+  print v15;
 }
 @getDigits(n: int): int {
-  v1: int = const 10;
   v1: int = const 10;
   v2: int = const 0;
   v3: int = const 1;
   v4: int = div n v1;
   v5: bool = eq v4 v2;
-  br cond .then .else;
+  br v5 .then .else;
 .then:
-  ret one;
+  ret v3;
 .else:
   v6: int = call @getDigits v4;
   v7: int = add v6 v3;
-  ret res;
+  ret v7;
 }
 @mod(a: int, b: int): int {
   v1: int = div a b;
-  v1: int = div a b;
   v2: int = mul b v1;
   v3: int = sub a v2;
-  ret mod;
+  ret v3;
 }
 @power(base: int, exp: int): int {
-  v1: int = const 10;
   v1: int = const 10;
   v2: int = const 0;
   v3: int = const 1;
@@ -60,7 +56,7 @@
   v5 = id v4;
 .loop:
   v7: bool = eq v6 v2;
-  br b .done .body;
+  br v7 .done .body;
   v11 = id v6;
   v10 = id v5;
 .body:
@@ -72,5 +68,5 @@
   v5 = id v4;
   v5 = id v8;
 .done:
-  ret res;
+  ret v10;
 }

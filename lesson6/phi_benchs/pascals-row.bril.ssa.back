@@ -1,17 +1,15 @@
 @main {
   v3: int = const 5;
-  v3: int = const 5;
   v4: int = id v3;
   v5: int = id v4;
-  call @generateNthRow v1;
+  call @generateNthRow v5;
   v6: int = const 0;
 }
 @generateNthRow(x: int) {
   v23: int = const 1;
-  v23: int = const 1;
   v24: int = id v23;
   v25: int = id v24;
-  print v1;
+  print v25;
   v26: int = const 0;
   v27: int = const 0;
   v28: int = id v27;
@@ -21,7 +19,7 @@
   v31: int = id v30;
   v32: int = id x;
   v33: bool = lt v31 v32;
-  br v7 .for.body.3 .for.end.3;
+  br v33 .for.body.3 .for.end.3;
   v55 = id v30;
   v54 = id v29;
 .for.body.3:
@@ -38,7 +36,7 @@
   v44: int = mul v42 v43;
   v45: int = id v44;
   v46: int = id v45;
-  print v17;
+  print v46;
   v47: int = const 0;
   v48: int = id v45;
   v49: int = id v48;

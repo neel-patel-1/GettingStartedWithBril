@@ -19,19 +19,19 @@
   v9: int = mul v7 v7;
   v10: int = add v8 v9;
   v11: bool = eq v10 v2;
-  br found .found .inner_continue;
+  br v11 .found .inner_continue;
 .found:
   v13 = phi v7 .inner_loop;
   v12 = phi v6 .inner_loop;
-  print b a;
+  print v13 v12;
 .inner_continue:
   v14 = phi v6 v12 .inner_loop .found;
   v15: int = add v13 v1;
   v16: bool = ge v15 v14;
-  br done .outer_continue .inner_loop;
+  br v16 .outer_continue .inner_loop;
 .outer_continue:
   v17: int = add v14 v1;
   v18: bool = ge v17 n;
-  br done .finish .outer_loop;
+  br v18 .finish .outer_loop;
 .finish:
 }

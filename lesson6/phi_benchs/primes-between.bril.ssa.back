@@ -2,7 +2,7 @@
 .for.outer.init:
   v1: int = const 2;
   v2: bool = lt a v1;
-  br t1 .true .false;
+  br v2 .true .false;
 .true:
   v3: int = const 2;
   jmp .for.outer.cond;
@@ -12,7 +12,7 @@
   v5 = id v4;
 .for.outer.cond:
   v6: bool = le v5 b;
-  br t3 .for.outer.body .for.outer.end;
+  br v6 .for.outer.body .for.outer.end;
   v7 = id v5;
   v65 = id v5;
 .for.outer.body:
@@ -29,7 +29,7 @@
 .for.inner.cond:
   v17: int = div v14 v13;
   v18: bool = le v16 v17;
-  br t9 .for.inner.body .for.inner.end;
+  br v18 .for.inner.body .for.inner.end;
   v21 = id v16;
   v20 = id v15;
   v19 = id v14;
@@ -40,7 +40,7 @@
   v22: int = call @mod v19 v21;
   v23: int = const 0;
   v24: bool = eq v22 v23;
-  br t12 .if.inner.body .if.inner.end;
+  br v24 .if.inner.body .if.inner.end;
   v26 = id v21;
   v25 = id v19;
   v32 = id v21;
@@ -79,7 +79,7 @@
 .for.inner.end:
   v43: int = const 1;
   v44: int = add v37 v43;
-  br t5 .if.outer.body .if.outer.end;
+  br v36 .if.outer.body .if.outer.end;
   v52 = id v42;
   v51 = id v41;
   v50 = id v40;
@@ -97,7 +97,7 @@
   v55 = id v36;
   v54 = id v35;
 .if.outer.body:
-  print t2;
+  print v45;
   v62 = id v53;
   v61 = id v42;
   v61 = id v52;
@@ -140,8 +140,7 @@
 }
 @mod(a: int, b: int): int {
   v1: int = div a b;
-  v1: int = div a b;
   v2: int = mul b v1;
   v3: int = sub a v2;
-  ret t3;
+  ret v3;
 }

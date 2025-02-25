@@ -5,7 +5,7 @@
   v4: int = sub a v3;
   v5: int = const 1;
   v6: bool = eq v5 v4;
-  ret ans;
+  ret v6;
 }
 @loop_subroutine(a: int, b: int, c: bool): int {
   v1: int = const 0;
@@ -24,7 +24,7 @@
   v8 = phi v1 v44 .Entry .end_loop;
   v7 = phi v5 v39 .Entry .end_loop;
   v12: bool = le v8 v2;
-  br cond .here .end;
+  br v12 .here .end;
 .here:
   v17 = phi v11 .loop;
   v16 = phi v10 .loop;
@@ -49,7 +49,7 @@
   v29 = phi v15 v23 .here .doOr;
   v28 = phi v14 v22 .here .doOr;
   v27 = phi v13 v21 .here .doOr;
-  br cond_add .add .end_loop;
+  br v30 .add .end_loop;
 .add:
   v37 = phi v32 .stay;
   v36 = phi v31 .stay;
@@ -71,23 +71,23 @@
   v47 = phi v9 .loop;
   v46 = phi v8 .loop;
   v45 = phi v7 .loop;
-  ret ans;
+  ret v45;
 }
 @OR(a: int, b: int): int {
   v2: bool = const true;
   v3: int = call @loop_subroutine a b v2;
-  ret v1;
+  ret v3;
 }
 @AND(a: int, b: int): int {
   v2: bool = const false;
   v3: int = call @loop_subroutine a b v2;
-  ret v1;
+  ret v3;
 }
 @XOR(a: int, b: int): int {
   v1: int = call @AND a b;
   v2: int = call @OR a b;
   v3: int = sub v2 v1;
-  ret ans;
+  ret v3;
 }
 @main(a: int, b: int, c: int) {
   v1: int = const 1;
@@ -97,9 +97,9 @@
   v5: bool = lt v3 v2;
   v6: bool = eq v3 v2;
   v7: bool = gt v3 v2;
-  br less .and_op .useless_lbl;
+  br v5 .and_op .useless_lbl;
 .useless_lbl:
-  br equal .or_op .xor_op;
+  br v6 .or_op .xor_op;
 .and_op:
   v10: int = call @AND a b;
   jmp .end;
@@ -110,5 +110,5 @@
   v9: int = call @XOR a b;
 .end:
   v11 = phi v8 v9 v10 .or_op .xor_op .and_op;
-  print ans;
+  print v11;
 }

@@ -1,28 +1,26 @@
 @ack(m: int, n: int): int {
   v1: int = const 0;
-  v1: int = const 0;
   v2: int = const 1;
   v3: bool = eq m v1;
-  br cond_m .m_zero .m_nonzero;
+  br v3 .m_zero .m_nonzero;
 .m_zero:
   v4: int = add n v2;
-  ret tmp;
+  ret v4;
 .m_nonzero:
   v5: bool = eq n v1;
-  br cond_n .n_zero .n_nonzero;
+  br v5 .n_zero .n_nonzero;
 .n_zero:
   v6: int = sub m v2;
   v7: int = call @ack v6 v2;
-  ret tmp;
+  ret v7;
 .n_nonzero:
   v8: int = sub m v2;
   v9: int = sub n v2;
   v10: int = call @ack m v9;
   v11: int = call @ack v8 v10;
-  ret t2;
+  ret v11;
 }
 @main(m: int, n: int) {
   v1: int = call @ack m n;
-  v1: int = call @ack m n;
-  print tmp;
+  print v1;
 }

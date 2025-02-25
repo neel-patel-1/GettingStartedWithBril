@@ -5,7 +5,7 @@
   v4: int = const -1;
   v5: int = const 0;
   v6: bool = lt n v5;
-  br nlz .neg .begin;
+  br v6 .neg .begin;
 .neg:
   v7: int = mul n v4;
 .begin:
@@ -18,34 +18,34 @@
   v10: int = add v1 v3;
   v11: int = mul v10 v10;
   v12: bool = gt v11 v9;
-  br sqgt .end .check;
+  br v12 .end .check;
 .check:
   v14 = phi v9 .begin;
   v13 = phi v8 .begin;
   v15: int = call @mod v14 v10;
   v16: bool = eq v15 v5;
-  br eqz .body .begin;
+  br v16 .body .begin;
 .body:
   v18 = phi v14 .check;
   v17 = phi v13 .check;
-  print i;
+  print v10;
   v19: int = add v17 v10;
   v20: int = div v18 v10;
   v21: bool = eq v20 v10;
-  br deqi .begin .then;
+  br v21 .begin .then;
 .then:
   v22 = phi v18 .body;
-  print d;
+  print v20;
   v23: int = add v19 v20;
   jmp .begin;
 .end:
   v25 = phi v9 .begin;
   v24 = phi v8 .begin;
-  print res;
+  print v24;
 }
 @mod(dividend: int, divisor: int): int {
   v1: int = div dividend divisor;
   v2: int = mul divisor v1;
   v3: int = sub dividend v2;
-  ret diff;
+  ret v3;
 }

@@ -2,7 +2,7 @@
 .for.outer.init:
   v1: int = const 2;
   v2: bool = lt a v1;
-  br t1 .true .false;
+  br v2 .true .false;
 .true:
   v3: int = const 2;
   jmp .for.outer.cond;
@@ -25,7 +25,7 @@
   v66 = phi v8 .if.outer.end;
   v5 = phi v3 v4 v64 .true .false .if.outer.end;
   v6: bool = le v5 b;
-  br t3 .for.outer.body .for.outer.end;
+  br v6 .for.outer.body .for.outer.end;
 .for.outer.body:
   v7 = phi v5 .for.outer.cond;
   v8: int = const 1;
@@ -47,7 +47,7 @@
   v14 = phi v10 v30 .for.inner.init .if.inner.end;
   v17: int = div v14 v13;
   v18: bool = le v16 v17;
-  br t9 .for.inner.body .for.inner.end;
+  br v18 .for.inner.body .for.inner.end;
 .for.inner.body:
   v21 = phi v16 .for.inner.cond;
   v20 = phi v15 .for.inner.cond;
@@ -55,7 +55,7 @@
   v22: int = call @mod v19 v21;
   v23: int = const 0;
   v24: bool = eq v22 v23;
-  br t12 .if.inner.body .if.inner.end;
+  br v24 .if.inner.body .if.inner.end;
 .if.inner.body:
   v26 = phi v21 .for.inner.body;
   v25 = phi v19 .for.inner.body;
@@ -81,7 +81,7 @@
   v35 = phi v14 v25 .for.inner.cond .if.inner.body;
   v43: int = const 1;
   v44: int = add v37 v43;
-  br t5 .if.outer.body .if.outer.end;
+  br v36 .if.outer.body .if.outer.end;
 .if.outer.body:
   v53 = phi v33 .for.inner.end;
   v52 = phi v42 .for.inner.end;
@@ -92,7 +92,7 @@
   v47 = phi v44 .for.inner.end;
   v46 = phi v36 .for.inner.end;
   v45 = phi v35 .for.inner.end;
-  print t2;
+  print v45;
 .if.outer.end:
   v62 = phi v33 v53 .for.inner.end .if.outer.body;
   v61 = phi v42 v52 .for.inner.end .if.outer.body;
@@ -113,5 +113,5 @@
   v1: int = div a b;
   v2: int = mul b v1;
   v3: int = sub a v2;
-  ret t3;
+  ret v3;
 }

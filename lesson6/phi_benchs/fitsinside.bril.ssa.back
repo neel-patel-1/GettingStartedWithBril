@@ -1,10 +1,8 @@
 @main(width1: int, height1: int, width2: int, height2: int) {
   v1: bool = call @fitsInside width1 height1 width2 height2;
-  v1: bool = call @fitsInside width1 height1 width2 height2;
-  print output;
+  print v1;
 }
 @fitsInside(w1: int, h1: int, w2: int, h2: int): bool {
-  v1: bool = le w1 w2;
   v1: bool = le w1 w2;
   v2: bool = le h1 h2;
   v3: bool = and v1 v2;
@@ -12,5 +10,5 @@
   v5: bool = le h1 w2;
   v6: bool = and v4 v5;
   v7: bool = or v3 v6;
-  ret ret_val;
+  ret v7;
 }
