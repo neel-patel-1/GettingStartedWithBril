@@ -1,0 +1,104 @@
+@main(n: int) {
+  v1: int = const 0;
+  v1: int = const 0;
+  v2: int = const 0;
+  v3: int = const 1;
+  v4: int = const -1;
+  v5: int = const 0;
+  v6: bool = lt n v5;
+  br nlz .neg .begin;
+  v9 = id n;
+  v8 = id v2;
+  v8 = id v2;
+.neg:
+  v7: int = mul n v4;
+  v9 = id n;
+  v9 = id v7;
+  v8 = id v2;
+  v8 = id v2;
+.begin:
+  v10: int = add v1 v3;
+  v11: int = mul v10 v10;
+  v12: bool = gt v11 v9;
+  br sqgt .end .check;
+  v14 = id v9;
+  v13 = id v8;
+  v25 = id v9;
+  v24 = id v8;
+.check:
+  v15: int = call @mod v14 v10;
+  v16: bool = eq v15 v5;
+  br eqz .body .begin;
+  v27 = id v16;
+  v27 = id v16;
+  v27 = id v16;
+  v26 = id v15;
+  v26 = id v15;
+  v26 = id v15;
+  v9 = id n;
+  v9 = id v7;
+  v9 = id v14;
+  v8 = id v2;
+  v8 = id v2;
+  v8 = id v13;
+  v18 = id v14;
+  v17 = id v13;
+.body:
+  print i;
+  v19: int = add v17 v10;
+  v20: int = div v18 v10;
+  v21: bool = eq v20 v10;
+  br deqi .begin .then;
+  v29 = id v21;
+  v29 = id v21;
+  v28 = id v20;
+  v28 = id v20;
+  v27 = id v16;
+  v27 = id v16;
+  v27 = id v16;
+  v26 = id v15;
+  v26 = id v15;
+  v26 = id v15;
+  v9 = id n;
+  v9 = id v7;
+  v9 = id v14;
+  v9 = id v18;
+  v8 = id v2;
+  v8 = id v2;
+  v8 = id v13;
+  v8 = id v19;
+  v22 = id v18;
+.then:
+  print d;
+  v23: int = add v19 v20;
+  jmp .begin;
+  v29 = id v21;
+  v29 = id v21;
+  v28 = id v20;
+  v28 = id v20;
+  v27 = id v16;
+  v27 = id v16;
+  v27 = id v16;
+  v26 = id v15;
+  v26 = id v15;
+  v26 = id v15;
+  v9 = id n;
+  v9 = id v7;
+  v9 = id v14;
+  v9 = id v18;
+  v9 = id v22;
+  v8 = id v2;
+  v8 = id v2;
+  v8 = id v13;
+  v8 = id v19;
+  v8 = id v23;
+.end:
+  print res;
+}
+@mod(dividend: int, divisor: int): int {
+  v1: int = div dividend divisor;
+  v1: int = div dividend divisor;
+  v2: int = mul divisor v1;
+  v3: int = sub dividend v2;
+  ret diff;
+}

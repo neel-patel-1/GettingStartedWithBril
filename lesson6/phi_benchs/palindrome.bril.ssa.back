@@ -1,0 +1,168 @@
+@main(in: int) {
+  v1: int = const 10;
+  v1: int = const 10;
+  v2: int = const 0;
+  v3: int = const 1;
+  v4: int = const 1;
+  v5: bool = const true;
+  v7 = id v5;
+  v6 = id v4;
+.for.cond:
+  br not_finished .for.body .for.end;
+  v9 = id v7;
+  v8 = id v6;
+  v18 = id v7;
+  v17 = id v6;
+.for.body:
+  v10: int = call @pow v1 v8;
+  v11: int = div in v10;
+  v12: bool = eq v11 v2;
+  br check .if.true .if.false;
+  v13 = id v8;
+  v15 = id v9;
+.if.true:
+  v14: bool = const false;
+  jmp .for.cond;
+  v23 = id v12;
+  v23 = id v12;
+  v22 = id v11;
+  v22 = id v11;
+  v21 = id v10;
+  v21 = id v10;
+  v7 = id v5;
+  v7 = id v14;
+  v6 = id v4;
+  v6 = id v13;
+.if.false:
+  v16: int = add v13 v3;
+  jmp .for.cond;
+  v23 = id v12;
+  v23 = id v12;
+  v22 = id v11;
+  v22 = id v11;
+  v21 = id v10;
+  v21 = id v10;
+  v7 = id v5;
+  v7 = id v15;
+  v6 = id v4;
+  v6 = id v16;
+.for.end:
+  v19: int = sub v17 v3;
+  v20: bool = call @palindrome in v19;
+  print is_palindrome;
+}
+@pow(base: int, exp: int): int {
+  v1: int = const 1;
+  v1: int = const 1;
+  v2: int = const 0;
+  v3: int = const 1;
+  v4: bool = const true;
+  v7 = id v1;
+  v6 = id exp;
+  v5 = id v4;
+.for.cond.pow:
+  br not_finished .for.body.pow .for.end.pow;
+  v10 = id v7;
+  v9 = id v6;
+  v8 = id v5;
+  v20 = id v7;
+  v19 = id v6;
+  v18 = id v5;
+.for.body.pow:
+  v11: bool = eq v9 v2;
+  br finished .if.true.pow .if.false.pow;
+  v13 = id v10;
+  v12 = id v9;
+  v15 = id v8;
+.if.true.pow:
+  v14: bool = const false;
+  jmp .for.cond.pow;
+  v21 = id v11;
+  v21 = id v11;
+  v7 = id v1;
+  v7 = id v13;
+  v6 = id exp;
+  v6 = id v12;
+  v5 = id v4;
+  v5 = id v14;
+.if.false.pow:
+  v16: int = mul v13 base;
+  v17: int = sub v12 v3;
+  jmp .for.cond.pow;
+  v21 = id v11;
+  v21 = id v11;
+  v7 = id v1;
+  v7 = id v16;
+  v6 = id exp;
+  v6 = id v17;
+  v5 = id v4;
+  v5 = id v15;
+.for.end.pow:
+  ret res;
+}
+@palindrome(in: int, len: int): bool {
+  v3: bool = const false;
+  v3: bool = const false;
+  v4: int = const 0;
+  v5: int = const 2;
+  v6: int = const 10;
+  v7: bool = le len v4;
+  br check .if.true.palindrome .if.false.palindrome;
+.if.true.palindrome:
+  v8: bool = const true;
+  jmp .if.end.palindrome;
+  v22 = id v8;
+.if.false.palindrome:
+  v9: int = call @pow v6 len;
+  v10: int = div in v9;
+  v11: int = div in v6;
+  v12: int = mul v11 v6;
+  v13: int = sub in v12;
+  v14: bool = eq v10 v13;
+  br is_equal .if.true.mirror .if.false.mirror;
+.if.true.mirror:
+  v15: int = mul v9 v10;
+  v16: int = sub in v15;
+  v17: int = sub v16 v13;
+  v18: int = div v17 v6;
+  v19: int = sub len v5;
+  v20: bool = call @palindrome v18 v19;
+  jmp .if.end.palindrome;
+  v31 = id v19;
+  v31 = id v19;
+  v30 = id v18;
+  v30 = id v18;
+  v29 = id v17;
+  v29 = id v17;
+  v28 = id v14;
+  v28 = id v14;
+  v27 = id v13;
+  v27 = id v13;
+  v26 = id v12;
+  v26 = id v12;
+  v25 = id v11;
+  v25 = id v11;
+  v24 = id v10;
+  v24 = id v10;
+  v23 = id v9;
+  v23 = id v9;
+  v22 = id v20;
+.if.false.mirror:
+  v21: bool = const false;
+  jmp .if.end.palindrome;
+  v28 = id v14;
+  v28 = id v14;
+  v27 = id v13;
+  v27 = id v13;
+  v26 = id v12;
+  v26 = id v12;
+  v25 = id v11;
+  v25 = id v11;
+  v24 = id v10;
+  v24 = id v10;
+  v23 = id v9;
+  v23 = id v9;
+  v22 = id v21;
+.if.end.palindrome:
+  ret is_palindrome;
+}

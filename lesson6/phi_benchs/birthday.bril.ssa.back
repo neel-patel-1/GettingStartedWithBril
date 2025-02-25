@@ -1,0 +1,70 @@
+@main(n: float) {
+  v3: float = id n;
+  v3: float = id n;
+  v4: float = call @probability v3;
+  v5: float = id v4;
+  v6: float = id v5;
+  print v1;
+  v7: int = const 0;
+}
+@probability(n: float): float {
+  v25: float = const 1;
+  v25: float = const 1;
+  v26: float = id v25;
+  v27: float = const 1;
+  v28: float = id v27;
+  v30 = id v28;
+  v29 = id v26;
+.for.cond.1:
+  v31: float = id v30;
+  v32: float = id n;
+  v33: bool = flt v31 v32;
+  br v5 .for.body.1 .for.end.1;
+  v51 = id v30;
+  v50 = id v29;
+.for.body.1:
+  v34: float = const 365;
+  v35: float = id v30;
+  v36: float = fsub v34 v35;
+  v37: float = id v36;
+  v38: float = id v37;
+  v39: float = const 365;
+  v40: float = fdiv v38 v39;
+  v41: float = id v40;
+  v42: float = id v29;
+  v43: float = id v41;
+  v44: float = fmul v42 v43;
+  v45: float = id v44;
+  v46: float = id v30;
+  v47: float = const 1;
+  v48: float = fadd v46 v47;
+  v49: float = id v48;
+  jmp .for.cond.1;
+  v72 = id v48;
+  v71 = id v47;
+  v70 = id v46;
+  v69 = id v44;
+  v68 = id v43;
+  v67 = id v42;
+  v66 = id v41;
+  v65 = id v40;
+  v64 = id v39;
+  v63 = id v38;
+  v62 = id v37;
+  v61 = id v36;
+  v60 = id v35;
+  v59 = id v34;
+  v30 = id v28;
+  v30 = id v49;
+  v29 = id v26;
+  v29 = id v45;
+.for.end.1:
+  v52: float = const 1;
+  v53: float = id v50;
+  v54: float = const 100;
+  v55: float = fmul v53 v54;
+  v56: float = const 100;
+  v57: float = fdiv v55 v56;
+  v58: float = fsub v52 v57;
+  ret v24;
+}

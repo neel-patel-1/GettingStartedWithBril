@@ -1,2 +1,8 @@
+[envs.to_ssa]
 command = "bril2json < {filename} | python3 ssa.py | python3 ../bril/examples/is_ssa.py"
 output.out = "-"
+
+[envs.from_ssa]
+command = "bril2json < {filename} | python3 from_ssa.py | brili -p {args}"
+output.out = "-"
+output.prof = "2"

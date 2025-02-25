@@ -1,0 +1,55 @@
+@main(num: int) {
+  v1: int = const 0;
+  v1: int = const 0;
+  v2: int = const 1;
+  v3: int = const 2;
+  v5 = id num;
+  v4 = id v3;
+.loopcheck:
+  v6: bool = lt v2 v5;
+  br ispos .loopbody .loopend;
+  v8 = id v5;
+  v7 = id v4;
+  v18 = id v5;
+  v17 = id v4;
+.loopbody:
+  v9: int = div v8 v7;
+  v10: int = mul v9 v7;
+  v11: int = sub v8 v10;
+  v12: bool = eq v11 v1;
+  br iszero .ifyes .ifno;
+  v13 = id v7;
+  v15 = id v8;
+.ifyes:
+  print fac;
+  v14: int = div v8 v13;
+  jmp .loopcheck;
+  v22 = id v12;
+  v22 = id v12;
+  v21 = id v11;
+  v21 = id v11;
+  v20 = id v10;
+  v20 = id v10;
+  v19 = id v9;
+  v19 = id v9;
+  v5 = id num;
+  v5 = id v14;
+  v4 = id v3;
+  v4 = id v13;
+.ifno:
+  v16: int = add v13 v2;
+  jmp .loopcheck;
+  v22 = id v12;
+  v22 = id v12;
+  v21 = id v11;
+  v21 = id v11;
+  v20 = id v10;
+  v20 = id v10;
+  v19 = id v9;
+  v19 = id v9;
+  v5 = id num;
+  v5 = id v15;
+  v4 = id v3;
+  v4 = id v16;
+.loopend:
+}

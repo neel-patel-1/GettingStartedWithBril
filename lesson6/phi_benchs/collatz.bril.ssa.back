@@ -1,0 +1,26 @@
+@main(x: int) {
+  v1: int = const 1;
+  v1: int = const 1;
+  v2: int = const 2;
+  v3: int = const 3;
+  jmp .print;
+.cond:
+  v4: bool = eq x v1;
+  br eq_one .end .loop;
+.loop:
+  v5: int = div x v2;
+  v6: int = mul v5 v2;
+  v7: bool = eq x v6;
+  br even .even .odd;
+.even:
+  v8: int = div x v2;
+  jmp .print;
+.odd:
+  v9: int = mul v8 v3;
+  v10: int = add v9 v1;
+.print:
+  print x;
+  jmp .cond;
+.end:
+  ret;
+}

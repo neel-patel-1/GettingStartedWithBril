@@ -1,0 +1,148 @@
+@mod2(a: int): bool {
+  v1: int = const 2;
+  v1: int = const 2;
+  v2: int = div a v1;
+  v3: int = mul v2 v1;
+  v4: int = sub a v3;
+  v5: int = const 1;
+  v6: bool = eq v5 v4;
+  ret ans;
+}
+@loop_subroutine(a: int, b: int, c: bool): int {
+  v1: int = const 0;
+  v1: int = const 0;
+  v2: int = const 63;
+  v3: int = const 1;
+  v4: int = const 2;
+  v5: int = const 0;
+  v6: int = const 1;
+  v11 = id b;
+  v10 = id a;
+  v9 = id v6;
+  v8 = id v1;
+  v7 = id v5;
+.loop:
+  v12: bool = le v8 v2;
+  br cond .here .end;
+  v17 = id v11;
+  v16 = id v10;
+  v15 = id v9;
+  v14 = id v8;
+  v13 = id v7;
+  v49 = id v11;
+  v48 = id v10;
+  v47 = id v9;
+  v46 = id v8;
+  v45 = id v7;
+.here:
+  v18: bool = call @mod2 v16;
+  v19: bool = call @mod2 v17;
+  v20: bool = and v18 v19;
+  br c .doOr .stay;
+  v25 = id v17;
+  v24 = id v16;
+  v23 = id v15;
+  v22 = id v14;
+  v21 = id v13;
+  v32 = id v17;
+  v31 = id v16;
+  v30 = id v20;
+  v29 = id v15;
+  v28 = id v14;
+  v27 = id v13;
+.doOr:
+  v26: bool = or v18 v19;
+  v32 = id v17;
+  v32 = id v25;
+  v31 = id v16;
+  v31 = id v24;
+  v30 = id v20;
+  v30 = id v26;
+  v29 = id v15;
+  v29 = id v23;
+  v28 = id v14;
+  v28 = id v22;
+  v27 = id v13;
+  v27 = id v21;
+.stay:
+  br cond_add .add .end_loop;
+  v37 = id v32;
+  v36 = id v31;
+  v35 = id v30;
+  v34 = id v29;
+  v33 = id v28;
+  v40 = id v30;
+  v39 = id v27;
+.add:
+  v38: int = add v27 v34;
+  v40 = id v30;
+  v40 = id v35;
+  v39 = id v27;
+  v39 = id v38;
+.end_loop:
+  v41: int = div v36 v4;
+  v42: int = div v37 v4;
+  v43: int = mul v34 v4;
+  v44: int = add v33 v3;
+  jmp .loop;
+  v52 = id v40;
+  v51 = id v19;
+  v50 = id v18;
+  v11 = id b;
+  v11 = id v42;
+  v10 = id a;
+  v10 = id v41;
+  v9 = id v6;
+  v9 = id v43;
+  v8 = id v1;
+  v8 = id v44;
+  v7 = id v5;
+  v7 = id v39;
+.end:
+  ret ans;
+}
+@OR(a: int, b: int): int {
+  v2: bool = const true;
+  v2: bool = const true;
+  v3: int = call @loop_subroutine a b v2;
+  ret v1;
+}
+@AND(a: int, b: int): int {
+  v2: bool = const false;
+  v2: bool = const false;
+  v3: int = call @loop_subroutine a b v2;
+  ret v1;
+}
+@XOR(a: int, b: int): int {
+  v1: int = call @AND a b;
+  v1: int = call @AND a b;
+  v2: int = call @OR a b;
+  v3: int = sub v2 v1;
+  ret ans;
+}
+@main(a: int, b: int, c: int) {
+  v1: int = const 1;
+  v1: int = const 1;
+  v2: int = const 0;
+  v3: int = sub c v1;
+  v4: int = id v2;
+  v5: bool = lt v3 v2;
+  v6: bool = eq v3 v2;
+  v7: bool = gt v3 v2;
+  br less .and_op .useless_lbl;
+.useless_lbl:
+  br equal .or_op .xor_op;
+.and_op:
+  v10: int = call @AND a b;
+  jmp .end;
+  v11 = id v10;
+.or_op:
+  v8: int = call @OR a b;
+  jmp .end;
+  v11 = id v8;
+.xor_op:
+  v9: int = call @XOR a b;
+  v11 = id v9;
+.end:
+  print ans;
+}

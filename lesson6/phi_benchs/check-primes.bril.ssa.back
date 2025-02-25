@@ -1,0 +1,121 @@
+@main(n: int) {
+  v16: int = const 1;
+  v16: int = const 1;
+  v17: int = id v16;
+  v18 = id v17;
+.for.cond.1:
+  v19: int = id v18;
+  v20: int = id n;
+  v21: bool = lt v19 v20;
+  br v5 .for.body.1 .for.end.1;
+  v22 = id v18;
+  v41 = id v18;
+.for.body.1:
+  v23: int = id v22;
+  v24: bool = call @checkPrime v23;
+  v25: bool = id v24;
+  v26: bool = id v25;
+  br v8 .then.7 .else.7;
+  v27 = id v22;
+  v30 = id v22;
+.then.7:
+  v28: int = const 1;
+  print v9;
+  v29: int = const 0;
+  jmp .endif.7;
+  v34 = id v29;
+  v34 = id v29;
+  v33 = id v28;
+  v33 = id v28;
+.else.7:
+  v31: int = const 0;
+  print v11;
+  v32: int = const 0;
+  v36 = id v32;
+  v35 = id v31;
+.endif.7:
+  v37: int = id v30;
+  v38: int = const 1;
+  v39: int = add v37 v38;
+  v40: int = id v39;
+  jmp .for.cond.1;
+  v51 = id v39;
+  v50 = id v38;
+  v49 = id v37;
+  v48 = id v36;
+  v47 = id v35;
+  v46 = id v34;
+  v45 = id v33;
+  v44 = id v26;
+  v43 = id v25;
+  v42 = id v23;
+  v18 = id v17;
+  v18 = id v40;
+.for.end.1:
+}
+@checkPrime(x: int): bool {
+  v25: int = id x;
+  v25: int = id x;
+  v26: int = const 1;
+  v27: bool = le v25 v26;
+  br v3 .then.0 .else.0;
+.then.0:
+  v28: bool = const false;
+  ret v4;
+.else.0:
+.endif.0:
+  v29: int = const 2;
+  v30: int = id v29;
+  v31 = id v30;
+.for.cond.5:
+  v32: int = id v31;
+  v33: int = id x;
+  v34: bool = lt v32 v33;
+  br v9 .for.body.5 .for.end.5;
+  v35 = id v31;
+  v54 = id v31;
+.for.body.5:
+  v36: int = id x;
+  v37: int = id v35;
+  v38: int = div v36 v37;
+  v39: int = id v38;
+  v40: int = id v39;
+  v41: int = id v35;
+  v42: int = mul v40 v41;
+  v43: int = id x;
+  v44: bool = eq v42 v43;
+  v45: bool = id v44;
+  v46: bool = id v45;
+  br v19 .then.18 .else.18;
+  v47 = id v35;
+  v49 = id v35;
+.then.18:
+  v48: bool = const false;
+  ret v20;
+.else.18:
+.endif.18:
+  v50: int = id v49;
+  v51: int = const 1;
+  v52: int = add v50 v51;
+  v53: int = id v52;
+  jmp .for.cond.5;
+  v69 = id v52;
+  v68 = id v51;
+  v67 = id v50;
+  v66 = id v46;
+  v65 = id v45;
+  v64 = id v44;
+  v63 = id v43;
+  v62 = id v39;
+  v61 = id v42;
+  v60 = id v41;
+  v59 = id v40;
+  v58 = id v38;
+  v57 = id v37;
+  v56 = id v36;
+  v31 = id v30;
+  v31 = id v53;
+.for.end.5:
+  v55: bool = const true;
+  ret v24;
+}

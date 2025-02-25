@@ -1,0 +1,41 @@
+@main(n: int) {
+  v1: int = call @sum_by_loop n;
+  v1: int = call @sum_by_loop n;
+  v2: int = call @sum_by_formula n;
+  v3: bool = eq v1 v2;
+  print first;
+  print second;
+  print isSame;
+}
+@sum_by_loop(n: int): int {
+  v1: int = const 1;
+  v1: int = const 1;
+  v2: int = const 0;
+  v3: int = const 1;
+  v5 = id v3;
+  v4 = id v2;
+.for_start:
+  v6: bool = le v5 n;
+  br con .for .end;
+  v10 = id v5;
+  v9 = id v4;
+.for:
+  v7: int = add v4 v5;
+  v8: int = add v5 v1;
+  jmp .for_start;
+  v5 = id v3;
+  v5 = id v8;
+  v4 = id v2;
+  v4 = id v7;
+.end:
+  ret sum;
+}
+@sum_by_formula(n: int): int {
+  v1: int = const 1;
+  v1: int = const 1;
+  v2: int = const 2;
+  v3: int = add v1 n;
+  v4: int = mul v3 n;
+  v5: int = div v4 v2;
+  ret sum;
+}

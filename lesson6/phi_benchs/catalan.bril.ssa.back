@@ -1,0 +1,43 @@
+@main(input: int) {
+  v1: int = call @catalan input;
+  v1: int = call @catalan input;
+  print catn;
+}
+@catalan(n: int): int {
+  v3: int = const 1;
+  v3: int = const 1;
+  v4: int = const 0;
+  v5: bool = eq n v4;
+  br guard0 .if .else;
+.if:
+  ret one;
+.else:
+  v6: int = id v4;
+  v7: int = id v4;
+  v8: int = sub n v3;
+  v10 = id v7;
+  v9 = id v6;
+.while:
+  v11: bool = le v10 v8;
+  br guard1 .while.body .while.end;
+  v19 = id v10;
+  v18 = id v9;
+.while.body:
+  v12: int = sub v8 v10;
+  v13: int = call @catalan v10;
+  v14: int = call @catalan v12;
+  v15: int = mul v13 v14;
+  v16: int = add v9 v15;
+  v17: int = add v10 v3;
+  jmp .while;
+  v23 = id v15;
+  v22 = id v14;
+  v21 = id v13;
+  v20 = id v12;
+  v10 = id v7;
+  v10 = id v17;
+  v9 = id v6;
+  v9 = id v16;
+.while.end:
+  ret sum;
+}

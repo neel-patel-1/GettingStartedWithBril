@@ -1,0 +1,66 @@
+@main(input: int) {
+  v3: int = id input;
+  v3: int = id input;
+  v4: int = const 0;
+  v5: int = const 1;
+  v6: int = const 2;
+  v7: int = id v5;
+  v8: int = id v6;
+  v9: int = id v5;
+  v11 = id v8;
+  v10 = id v7;
+.for.cond.1:
+  v12: int = mul v11 v11;
+  v13: bool = gt v12 v3;
+  br comp .for.end .for.body;
+  v15 = id v11;
+  v14 = id v10;
+  v26 = id v11;
+  v25 = id v10;
+.for.body:
+  v16: int = div v3 v15;
+  v17: int = mul v16 v15;
+  v18: int = sub v3 v17;
+  v19: bool = eq v18 v4;
+  br comp1 .if.body .for.incre;
+  v20 = id v15;
+  v23 = id v14;
+.if.body:
+  v21: int = add v14 v20;
+  v22: int = add v21 v16;
+  v23 = id v14;
+  v23 = id v22;
+.for.incre:
+  v24: int = add v20 v5;
+  jmp .for.cond.1;
+  v45 = id v19;
+  v44 = id v18;
+  v43 = id v17;
+  v42 = id v16;
+  v11 = id v8;
+  v11 = id v24;
+  v10 = id v7;
+  v10 = id v23;
+.for.end:
+  v27: bool = eq v25 v3;
+  br comp2 .if.success .if.failure.end;
+  v29 = id v26;
+  v28 = id v25;
+  v37 = id v9;
+  v36 = id v26;
+  v35 = id v25;
+.if.success:
+  v34: int = id v4;
+  v41 = id v33;
+  v40 = id v32;
+  v39 = id v31;
+  v38 = id v30;
+  v37 = id v9;
+  v37 = id v34;
+  v36 = id v26;
+  v36 = id v29;
+  v35 = id v25;
+  v35 = id v28;
+.if.failure.end:
+  print result;
+}

@@ -1,0 +1,86 @@
+@main {
+  v6: int = const 23789216;
+  v6: int = const 23789216;
+  v7: int = id v6;
+  v8: int = const 1748698766;
+  v9: int = id v8;
+  v10: int = id v7;
+  v11: int = id v9;
+  v12: int = call @gcd v10 v11;
+  v13: int = id v12;
+  v14: int = id v13;
+  print v4;
+  v15: int = const 0;
+}
+@mod(r: int, s: int): int {
+  v8: int = id r;
+  v8: int = id r;
+  v9: int = id r;
+  v10: int = id s;
+  v11: int = div v9 v10;
+  v12: int = id s;
+  v13: int = mul v11 v12;
+  v14: int = sub v8 v13;
+  v15: int = id v14;
+  v16: int = id v15;
+  ret v7;
+}
+@gcd(a: int, b: int): int {
+  v17: int = const 0;
+  v17: int = const 0;
+  v18: int = id v17;
+  v19: int = id b;
+  v20: int = id v18;
+  v21: bool = eq v19 v20;
+  v22: bool = id v21;
+  v23: bool = not v22;
+  v24: bool = id v23;
+  v28 = id a;
+  v27 = id b;
+  v26 = id v24;
+  v25 = id v22;
+.for.cond.5:
+  v29: bool = id v26;
+  br v6 .for.body.5 .for.end.5;
+  v47 = id v28;
+  v46 = id v27;
+  v45 = id v26;
+  v44 = id v25;
+.for.body.5:
+  v30: int = id v27;
+  v31: int = id v30;
+  v32: int = id v28;
+  v33: int = id v27;
+  v34: int = call @mod v32 v33;
+  v35: int = id v34;
+  v36: int = id v31;
+  v37: int = id v36;
+  v38: int = id v35;
+  v39: int = id v18;
+  v40: bool = eq v38 v39;
+  v41: bool = id v40;
+  v42: bool = not v41;
+  v43: bool = id v42;
+  jmp .for.cond.5;
+  v58 = id v42;
+  v57 = id v40;
+  v56 = id v39;
+  v55 = id v38;
+  v54 = id v36;
+  v53 = id v34;
+  v52 = id v33;
+  v51 = id v32;
+  v50 = id v31;
+  v49 = id v30;
+  v28 = id a;
+  v28 = id v37;
+  v27 = id b;
+  v27 = id v35;
+  v26 = id v24;
+  v26 = id v43;
+  v25 = id v22;
+  v25 = id v41;
+.for.end.5:
+  v48: int = id v47;
+  ret v16;
+}

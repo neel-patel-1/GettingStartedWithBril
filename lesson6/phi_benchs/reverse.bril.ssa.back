@@ -1,0 +1,73 @@
+@main(input: int) {
+  v6: int = id input;
+  v6: int = id input;
+  v7: int = const 0;
+  v8: int = const 10;
+  v9: int = id v7;
+  v10: bool = const true;
+  v11: bool = id v10;
+  v14 = id v11;
+  v13 = id v9;
+  v12 = id v6;
+.for.cond.3:
+  v15: bool = id v14;
+  br v4 .for.body.3 .for.end.3;
+  v16 = id v14;
+  v29 = id v14;
+  v28 = id v13;
+  v27 = id v12;
+.for.body.3:
+  v17: int = id v12;
+  v18: int = div v17 v8;
+  v19: int = mul v18 v8;
+  v20: int = sub v17 v19;
+  v21: int = mul v13 v8;
+  v22: int = add v21 v20;
+  v23: int = id v18;
+  v24: bool = eq v23 v7;
+  br comp1 .if.body .for.incre;
+  v26 = id v16;
+.if.body:
+  v25: bool = const false;
+  jmp .for.cond.3;
+  v34 = id v24;
+  v34 = id v24;
+  v33 = id v20;
+  v33 = id v20;
+  v32 = id v19;
+  v32 = id v19;
+  v31 = id v18;
+  v31 = id v18;
+  v30 = id v17;
+  v30 = id v17;
+  v14 = id v11;
+  v14 = id v25;
+  v13 = id v9;
+  v13 = id v22;
+  v13 = id v22;
+  v12 = id v6;
+  v12 = id v23;
+  v12 = id v23;
+.for.incre:
+  jmp .for.cond.3;
+  v34 = id v24;
+  v34 = id v24;
+  v33 = id v20;
+  v33 = id v20;
+  v32 = id v19;
+  v32 = id v19;
+  v31 = id v18;
+  v31 = id v18;
+  v30 = id v17;
+  v30 = id v17;
+  v14 = id v11;
+  v14 = id v26;
+  v13 = id v9;
+  v13 = id v22;
+  v13 = id v22;
+  v12 = id v6;
+  v12 = id v23;
+  v12 = id v23;
+.for.end.3:
+  print result;
+}

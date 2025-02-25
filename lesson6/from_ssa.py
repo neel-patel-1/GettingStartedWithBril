@@ -293,7 +293,7 @@ def sub_phis_for_insts(bbs):
 
 
 def get_repr(index,bb):
-  bb_instnum = bb[1] + "_" + str(index)
+  bb_instnum = bb[1]
   return bb_instnum
 
 def transfer(bb, inset):
@@ -392,15 +392,21 @@ for function in prog['functions']:
   # --------
 
   function['instrs'] = []
-  for bb in bbs:
+  new_bbs = [bb[0] for bb in bbs]
+  for index,bb in enumerate(bbs):
     for inst in bb[0]:
       if 'op' in inst and inst['op'] == 'phi':
-        # whoever defined it is either the predecessor itself, or on the path to the predecessor in the cfg
-
         print(inst, file=sys.stderr)
         predecessors = pred_map[bb[1]]
+        for arg in inst['args']:
+          for predecessor in predecessors:
+            if arg in outsets[bbs[predecessor][1]]:
+              print(f'{arg} is in {bbs[predecessor][1]}\'s outset', file=sys.stderr)
+              new_bbs[predecessor].append({'op': 'id', 'dest': inst['dest'], 'args': [arg]})
+    new_bbs[index] = [bb[0][0]] + [inst for inst in new_bbs[index] if 'op' in inst and inst['op'] != 'phi']
+  for bb in new_bbs:
+    function['instrs'] += bb
+  print(f'function: {function}', file=sys.stderr)
 
-        # check if the block label corresponding to this phi arg
-      function['instrs'].append(inst)
 
 print(json.dumps(prog))

@@ -1,0 +1,147 @@
+@main(a: int, b: int) {
+.for.outer.init:
+  v1: int = const 2;
+  v2: bool = lt a v1;
+  br t1 .true .false;
+.true:
+  v3: int = const 2;
+  jmp .for.outer.cond;
+  v5 = id v3;
+.false:
+  v4: int = id a;
+  v5 = id v4;
+.for.outer.cond:
+  v6: bool = le v5 b;
+  br t3 .for.outer.body .for.outer.end;
+  v7 = id v5;
+  v65 = id v5;
+.for.outer.body:
+  v8: int = const 1;
+  v9: bool = eq v8 v8;
+  v11 = id v9;
+  v10 = id v7;
+.for.inner.init:
+  v12: int = const 2;
+  v13: int = const 2;
+  v16 = id v12;
+  v15 = id v11;
+  v14 = id v10;
+.for.inner.cond:
+  v17: int = div v14 v13;
+  v18: bool = le v16 v17;
+  br t9 .for.inner.body .for.inner.end;
+  v21 = id v16;
+  v20 = id v15;
+  v19 = id v14;
+  v37 = id v16;
+  v36 = id v15;
+  v35 = id v14;
+.for.inner.body:
+  v22: int = call @mod v19 v21;
+  v23: int = const 0;
+  v24: bool = eq v22 v23;
+  br t12 .if.inner.body .if.inner.end;
+  v26 = id v21;
+  v25 = id v19;
+  v32 = id v21;
+  v31 = id v20;
+  v30 = id v19;
+.if.inner.body:
+  v27: int = const 1;
+  v28: int = const 2;
+  v29: bool = eq v27 v28;
+  jmp .for.inner.end;
+  v42 = id v28;
+  v41 = id v27;
+  v40 = id v24;
+  v39 = id v23;
+  v38 = id v22;
+  v37 = id v16;
+  v37 = id v26;
+  v36 = id v15;
+  v36 = id v29;
+  v35 = id v14;
+  v35 = id v25;
+.if.inner.end:
+  v33: int = const 1;
+  v34: int = add v33 v32;
+  jmp .for.inner.cond;
+  v109 = id v33;
+  v106 = id v24;
+  v105 = id v23;
+  v104 = id v22;
+  v16 = id v12;
+  v16 = id v34;
+  v15 = id v11;
+  v15 = id v31;
+  v14 = id v10;
+  v14 = id v30;
+.for.inner.end:
+  v43: int = const 1;
+  v44: int = add v37 v43;
+  br t5 .if.outer.body .if.outer.end;
+  v52 = id v42;
+  v51 = id v41;
+  v50 = id v40;
+  v49 = id v39;
+  v48 = id v38;
+  v47 = id v44;
+  v46 = id v36;
+  v45 = id v35;
+  v61 = id v42;
+  v60 = id v41;
+  v59 = id v40;
+  v58 = id v39;
+  v57 = id v38;
+  v56 = id v44;
+  v55 = id v36;
+  v54 = id v35;
+.if.outer.body:
+  print t2;
+  v62 = id v53;
+  v61 = id v42;
+  v61 = id v52;
+  v60 = id v41;
+  v60 = id v51;
+  v59 = id v40;
+  v59 = id v50;
+  v58 = id v39;
+  v58 = id v49;
+  v57 = id v38;
+  v57 = id v48;
+  v56 = id v44;
+  v56 = id v47;
+  v55 = id v36;
+  v55 = id v46;
+  v54 = id v35;
+  v54 = id v45;
+.if.outer.end:
+  v63: int = const 1;
+  v64: int = add v54 v63;
+  jmp .for.outer.cond;
+  v79 = id v63;
+  v78 = id v43;
+  v77 = id v62;
+  v76 = id v61;
+  v75 = id v60;
+  v74 = id v59;
+  v73 = id v58;
+  v72 = id v57;
+  v71 = id v18;
+  v70 = id v17;
+  v69 = id v13;
+  v68 = id v56;
+  v67 = id v55;
+  v66 = id v8;
+  v5 = id v3;
+  v5 = id v4;
+  v5 = id v64;
+.for.outer.end:
+}
+@mod(a: int, b: int): int {
+  v1: int = div a b;
+  v1: int = div a b;
+  v2: int = mul b v1;
+  v3: int = sub a v2;
+  ret t3;
+}

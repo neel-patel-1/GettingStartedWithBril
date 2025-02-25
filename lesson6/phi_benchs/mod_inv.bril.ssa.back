@@ -1,0 +1,112 @@
+@main(n: int, p: int) {
+  v34: int = const 2;
+  v34: int = const 2;
+  v35: int = id v34;
+  v36: int = id p;
+  v37: int = id v35;
+  v38: int = sub v36 v37;
+  v39: int = id v38;
+  v40: int = const 1;
+  v41: int = id v40;
+  v42: int = id n;
+  v43: int = id v42;
+  v44: int = const 1;
+  v45: int = id v44;
+  v48 = id v43;
+  v47 = id v41;
+  v46 = id v39;
+.for.cond.6:
+  v49: int = id v46;
+  v50: int = const 0;
+  v51: bool = gt v49 v50;
+  br v10 .for.body.6 .for.end.6;
+  v54 = id v48;
+  v53 = id v47;
+  v52 = id v46;
+  v91 = id v48;
+  v90 = id v47;
+  v89 = id v46;
+.for.body.6:
+  v55: int = id v52;
+  v56: int = id v52;
+  v57: int = id v35;
+  v58: int = div v56 v57;
+  v59: int = id v35;
+  v60: int = mul v58 v59;
+  v61: bool = eq v55 v60;
+  br v18 .then.11 .else.11;
+  v64 = id v54;
+  v63 = id v53;
+  v62 = id v52;
+  v66 = id v54;
+  v65 = id v52;
+.then.11:
+  jmp .endif.11;
+  v73 = id v63;
+.else.11:
+  v67: int = id v63;
+  v68: int = id v66;
+  v69: int = mul v67 v68;
+  v70: int = id p;
+  v71: int = call @mod v69 v70;
+  v72: int = id v71;
+  v78 = id v71;
+  v77 = id v70;
+  v76 = id v69;
+  v75 = id v68;
+  v74 = id v67;
+  v73 = id v72;
+.endif.11:
+  v79: int = id v66;
+  v80: int = id v66;
+  v81: int = mul v79 v80;
+  v82: int = id p;
+  v83: int = call @mod v81 v82;
+  v84: int = id v83;
+  v85: int = id v65;
+  v86: int = id v35;
+  v87: int = div v85 v86;
+  v88: int = id v87;
+  jmp .for.cond.6;
+  v113 = id v87;
+  v112 = id v86;
+  v111 = id v85;
+  v110 = id v83;
+  v109 = id v82;
+  v108 = id v81;
+  v107 = id v80;
+  v106 = id v79;
+  v105 = id v78;
+  v104 = id v77;
+  v103 = id v76;
+  v102 = id v75;
+  v101 = id v74;
+  v100 = id v61;
+  v99 = id v60;
+  v98 = id v59;
+  v97 = id v58;
+  v96 = id v57;
+  v95 = id v56;
+  v94 = id v55;
+  v48 = id v43;
+  v48 = id v84;
+  v47 = id v41;
+  v47 = id v73;
+  v46 = id v39;
+  v46 = id v88;
+.for.end.6:
+  v92: int = id v90;
+  print v32;
+  v93: int = const 0;
+}
+@mod(n: int, p: int): int {
+  v7: int = id n;
+  v7: int = id n;
+  v8: int = id n;
+  v9: int = id p;
+  v10: int = div v8 v9;
+  v11: int = id p;
+  v12: int = mul v10 v11;
+  v13: int = sub v7 v12;
+  ret v6;
+}

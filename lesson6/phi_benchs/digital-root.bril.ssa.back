@@ -1,0 +1,52 @@
+@main(input: int) {
+  v1: int = const 0;
+  v1: int = const 0;
+  v2: int = const 10;
+  v3: int = const 0;
+  v4 = id v3;
+.begin:
+  v5: int = call @peel_last_digit input;
+  v6: int = div input v2;
+  v7: int = add v4 v5;
+  v8 = id v7;
+.check_result:
+  print result;
+  v9: bool = call @is_single_digit v8;
+  br processed .check_done .process_result;
+  v13 = id v8;
+.process_result:
+  v10: int = call @peel_last_digit v8;
+  v11: int = div v8 v2;
+  v12: int = add v11 v10;
+  jmp .check_result;
+  v20 = id v10;
+  v8 = id v7;
+  v8 = id v12;
+.check_done:
+  v14: bool = eq v6 v1;
+  br done .done .begin;
+  v19 = id v14;
+  v17 = id v9;
+  v4 = id v3;
+  v4 = id v13;
+  v15 = id v13;
+.done:
+  print result;
+}
+@is_single_digit(input: int): bool {
+  v1: int = const 10;
+  v1: int = const 10;
+  v2: int = const 0;
+  v3: int = div input v1;
+  v4: int = mul v3 v1;
+  v5: bool = eq v4 v2;
+  ret result;
+}
+@peel_last_digit(input: int): int {
+  v1: int = const 10;
+  v1: int = const 10;
+  v2: int = div input v1;
+  v3: int = mul v2 v1;
+  v4: int = sub input v3;
+  ret last_digit;
+}
