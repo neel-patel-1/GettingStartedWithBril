@@ -115,6 +115,11 @@ def form_bbs(function):
   instrs = function['instrs']
   bb = []
   bb_label = instrs[0]['label'] if 'label' in instrs[0] else 'Entry'
+  if 'label' in instrs[0]:
+    bb_label = instrs[0]['label']
+  else:
+    bb_label = 'Entry'
+    bb = [{'label': 'Entry'}]
   for instr in instrs:
     bb.append(instr)
     if 'label' in instr and len(bb) == 1:
@@ -379,8 +384,8 @@ for function in prog['functions']:
           bbq.put(bbs[succ])
 
   # display the outsets of each bb
-  for bb in bbs:
-    print(f'bb: {bb[1]} outset: {outsets[bb[1]]}', file=sys.stderr)
+  # for bb in bbs:
+  #   print(f'bb: {bb[1]} outset: {outsets[bb[1]]}', file=sys.stderr)
 
   #Initialize the dominator map
   initialize_bb_doms(bbs)
