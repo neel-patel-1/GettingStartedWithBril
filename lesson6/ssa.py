@@ -372,12 +372,15 @@ for function in prog['functions']:
   var_renames = {}
 
   arg_insts = []
-  arg_block = ([], None, None, None)
+  arg_block = ([], 'ArgBlock', None, None)
   if 'args' in function and len(function['args']) > 0:
     for arg in function['args']:
       arg_inst = {'op': 'id', 'dest': push_alias(arg['name'], var_renames), 'args': [arg['name']]}
       arg_block[0].append(arg_inst)
-    # arg_block = (arg_insts)
+      if get_alias(arg['name'], var_renames) not in bbs[0][3]:
+        bbs[0][3][get_alias(arg['name'], var_renames)] = []
+       # add the phi node for the argument
+      bbs[0][3][get_alias(arg['name'], var_renames)].append((get_alias(arg['name'], var_renames), 'ArgBlock'))
   bbs  = rename_vars(bbs[0], bbs, d_tree, var_renames,False, None)
 
 
