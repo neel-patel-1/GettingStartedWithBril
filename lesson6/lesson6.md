@@ -53,3 +53,6 @@ originally it was:
     br done .done .begin;
 
 would passing through dead code elimination fix this?
+
+bril2json <  digital-root.back | python3 ../first-optimizations/lvn.py | python3 ../first-optimizations/dce.py | bril2txt | tee digital-root.back.lvn.dce
+
