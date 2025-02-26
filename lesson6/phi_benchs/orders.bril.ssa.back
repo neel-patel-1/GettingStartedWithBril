@@ -19,7 +19,7 @@
 }
 @gcd(a: int, b: int): int {
 .while.cond:
-  v1: int = call @mod a b;
+  v1: int = call @mod a b; // should mod on v5,
   v2: int = const 0;
   v3: bool = eq v1 v2;
   v7 = id b;

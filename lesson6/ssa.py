@@ -254,7 +254,7 @@ def get_alias(name, var_renames):
     print(f'Error: {name} not in var_renames', file=sys.stderr)
     exit(1)
 
-def rename_vars(bb, bbs, d_tree, var_renames):
+def rename_vars(bb, bbs, d_tree, var_renames, is_entry=False, args=None):
   # rename the phi nodes destinations first since they may be consumed by subsequent instructions
   new_phi_nodes = {}
   for key, value in bb[3].items():
@@ -262,6 +262,11 @@ def rename_vars(bb, bbs, d_tree, var_renames):
     new_phi_nodes[new_key] = [(var[0], var[1]) for var in value]
     bb[2][key] = new_key
   bb = (bb[0], bb[1], bb[2], new_phi_nodes, True) # mark that the phi node dest was renamed
+
+  if is_entry:
+    for arg in args:
+      bb[0].insert(0, {'op': 'id', 'args': [arg['name']], 'dest': push_alias(arg['name'], var_renames)})
+      print(f'var_renames: {var_renames}', file=sys.stderr)
   for inst in bb[0]:
     if 'args' in inst:
       for index,arg in enumerate(inst['args']):
@@ -362,11 +367,8 @@ for function in prog['functions']:
   d_tree = gen_d_tree(bbs)
   d_tree.display()
   var_renames = {}
-  if 'args' in function:
-    for arg in function['args']:
-      # print(f'arg: {arg}', file=sys.stderr)
-      var_renames[str(arg['name'])] = [str(arg['name'])]
-  bbs = rename_vars(bbs[0], bbs, d_tree, var_renames)
+
+  bbs = rename_vars(bbs[0], bbs, d_tree, var_renames,True, function['args'])
 
 
   for bb in bbs:
