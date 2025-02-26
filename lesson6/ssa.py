@@ -247,6 +247,12 @@ def push_alias(name, var_renames):
     var_renames[name].append(gen_name())
   return var_renames[name][-1]
 
+def get_index_of_first_inst(bb):
+  for index, inst in enumerate(bb[0]):
+    if 'op' in inst:
+      return index
+  return -1
+
 def get_alias(name, var_renames):
   if name in var_renames:
     return var_renames[name][-1]
@@ -264,10 +270,14 @@ def rename_vars(bb, bbs, d_tree, var_renames, is_entry=False, args=None):
   bb = (bb[0], bb[1], bb[2], new_phi_nodes, True) # mark that the phi node dest was renamed
 
   if is_entry:
+    start_idx = get_index_of_first_inst(bb)
     for arg in args:
-      bb[0].insert(0, {'op': 'id', 'args': [arg['name']], 'dest': push_alias(arg['name'], var_renames)})
+      bb[0].insert(start_idx, {'op': 'id', 'args': [arg['name']], 'dest': push_alias(arg['name'], var_renames)})
       print(f'var_renames: {var_renames}', file=sys.stderr)
-  for inst in bb[0]:
+    start_idx = len(args) + start_idx
+  else:
+    start_idx = get_index_of_first_inst(bb)
+  for inst in bb[0][start_idx:]:
     if 'args' in inst:
       for index,arg in enumerate(inst['args']):
         inst['args'][index] = get_alias(arg, var_renames)
@@ -291,7 +301,7 @@ def sub_phis_for_insts(bbs):
   for bb in bbs:
     for key, value in bb[3].items():
       phi_inst = {'op': 'phi', 'dest': key, 'args': [var[0] for var in value], 'labels': [var[1] for var in value]}
-      bb[0].insert(1, phi_inst)
+      bb[0].insert(get_index_of_first_inst(bb), phi_inst)
   return bbs
 
 def rename_phis(bbs):
