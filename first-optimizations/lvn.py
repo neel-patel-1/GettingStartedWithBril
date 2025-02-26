@@ -209,12 +209,11 @@ for function in prog['functions']:
       print(f'Expr: {subst_expr}', file=sys.stderr)
       if subst_expr[0] == True:
           new_source = list(expr_num_map.items())[subst_expr[1]][1]
-          new_instr = {
-            'args': [new_source],
-            'dest': instr['dest'],
-            'op': 'id',
-            'type': instr['type']
-          }
+          new_instr = instr.copy()
+          new_instr['dest'] = instr['dest']
+          new_instr['args'] = [new_source]
+          new_instr['op'] = 'id'
+
       elif subst_expr[1][0] == 'const':
         new_instr = {
           'dest': instr['dest'],
