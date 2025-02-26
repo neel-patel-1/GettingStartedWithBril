@@ -269,14 +269,7 @@ def rename_vars(bb, bbs, d_tree, var_renames, is_entry=False, args=None):
     bb[2][key] = new_key
   bb = (bb[0], bb[1], bb[2], new_phi_nodes, True) # mark that the phi node dest was renamed
 
-  if is_entry:
-    start_idx = get_index_of_first_inst(bb)
-    for arg in args:
-      bb[0].insert(start_idx, {'op': 'id', 'args': [arg['name']], 'dest': push_alias(arg['name'], var_renames)})
-      print(f'var_renames: {var_renames}', file=sys.stderr)
-    start_idx = len(args) + start_idx
-  else:
-    start_idx = get_index_of_first_inst(bb)
+  start_idx = get_index_of_first_inst(bb)
   for inst in bb[0][start_idx:]:
     if 'args' in inst:
       for index,arg in enumerate(inst['args']):
@@ -378,7 +371,14 @@ for function in prog['functions']:
   d_tree.display()
   var_renames = {}
 
-  bbs = rename_vars(bbs[0], bbs, d_tree, var_renames,True, function['args'])
+  arg_insts = []
+  arg_block = ([], None, None, None)
+  if 'args' in function and len(function['args']) > 0:
+    for arg in function['args']:
+      arg_inst = {'op': 'id', 'dest': push_alias(arg['name'], var_renames), 'args': [arg['name']]}
+      arg_block[0].append(arg_inst)
+    # arg_block = (arg_insts)
+  bbs  = rename_vars(bbs[0], bbs, d_tree, var_renames,False, None)
 
 
   for bb in bbs:
@@ -387,11 +387,9 @@ for function in prog['functions']:
 
   # rename the phi nodes
   bbs = rename_phis(bbs)
-
-  # substitute the phi nodes for the instructions
   bbs = sub_phis_for_insts(bbs)
   function['instrs'] = []
-  for bb in bbs:
+  for bb in [arg_block] + bbs:
     for inst in bb[0]:
       function['instrs'].append(inst)
 
