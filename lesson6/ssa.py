@@ -377,6 +377,7 @@ for function in prog['functions']:
     for arg in function['args']:
       arg_inst = {'op': 'id', 'dest': push_alias(arg['name'], var_renames), 'args': [arg['name']]}
       arg_block[0].append(arg_inst)
+      bbs[0][2][arg['name']] = get_alias(arg['name'], var_renames)
       if get_alias(arg['name'], var_renames) not in bbs[0][3]:
         bbs[0][3][get_alias(arg['name'], var_renames)] = []
        # add the phi node for the argument
