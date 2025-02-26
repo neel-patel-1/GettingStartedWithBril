@@ -1,5 +1,7 @@
 ### Lesson 6: Convert to/from ssa
 
+ bril2json < test_cases/arg_reassign.bril | python3 ssa.py | bril2txt | tee arg_reassign.ssa
+
 * validate the to ssa conversion
 ```sh
 turnt --save ./benchmarks/*.bril
