@@ -1,0 +1,12 @@
+@main(b: int, max: int) {
+.while.cond:
+  two: int = const 2;
+  cond : bool = lt b max;
+  br cond .while.body .end;
+.while.body:
+  b: int = mul b two;
+  print b;
+  jmp .while.cond;
+.end:
+  print b;
+}
