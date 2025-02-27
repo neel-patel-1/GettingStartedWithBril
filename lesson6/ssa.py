@@ -389,13 +389,10 @@ for function in prog['functions']:
     for arg in function['args']:
       arg_block_alias = get_alias(arg['name'], var_renames)
       print(f'arg_block_alias: {arg_block_alias}', file=sys.stderr)
-      entry_block_phi_dst = push_alias(arg['name'], var_renames)
-      entry_bb_arg_phi_inst = {'op': 'phi', 'args': [arg_block_alias], 'dest': entry_block_phi_dst, 'labels': ['ArgBlock']}
-      start_idx = get_index_of_first_inst(bbs[0])
-      bbs[0][0].insert(start_idx, entry_bb_arg_phi_inst)
-      bbs[0][3][entry_block_phi_dst] = [(arg_block_alias, 'ArgBlock')]
+      entry_block_phi_dst = get_alias(arg['name'], var_renames)
+      bbs[0][3][arg['name']] = [(arg_block_alias, 'ArgBlock')]
       bbs[0][2][arg['name']] = entry_block_phi_dst
-    bbs  = rename_vars(bbs[0], bbs, d_tree, var_renames,True, len(function['args']))
+    bbs  = rename_vars(bbs[0], bbs, d_tree, var_renames,True, 0)
   else:
     bbs = rename_vars(bbs[0], bbs, d_tree, var_renames)
 
