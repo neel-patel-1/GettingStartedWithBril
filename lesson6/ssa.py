@@ -113,6 +113,11 @@ def form_bbs(function):
   instrs = function['instrs']
   bb = []
   bb_label = instrs[0]['label'] if 'label' in instrs[0] else 'Entry'
+  if 'label' in instrs[0]:
+    bb_label = instrs[0]['label']
+  else:
+    bb_label = 'Entry'
+    bb = [{'label': 'Entry'}]
   for instr in instrs:
     bb.append(instr)
     if 'label' in instr and len(bb) == 1:

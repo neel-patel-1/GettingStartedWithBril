@@ -1,6 +1,10 @@
 ### Lesson 6: Convert to/from ssa
 
- bril2json < test_cases/arg_reassign.bril | python3 ssa.py | bril2txt | tee arg_reassign.ssa
+
+works with args:
+bril2json < bril2json < test_cases/arg_reassign.bril | brili 1 5 | brili 1 5
+bril2json < test_cases/arg_reassign.bril | python3 ssa.py | bril2txt | tee arg_reassign.ssa
+bril2json < arg_reassign.ssa | python3 from_ssa.py  | brili 1 5
 
 * validate the to ssa conversion
 ```sh
