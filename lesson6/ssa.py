@@ -270,6 +270,8 @@ def rename_vars(bb, bbs, d_tree, var_renames, is_entry=False, args=None):
   bb = (bb[0], bb[1], bb[2], new_phi_nodes, True) # mark that the phi node dest was renamed
 
   start_idx = get_index_of_first_inst(bb)
+  if is_entry and args > 0:
+    start_idx += args
   for inst in bb[0][start_idx:]:
     if 'args' in inst:
       for index,arg in enumerate(inst['args']):
@@ -331,6 +333,12 @@ for function in prog['functions']:
           defs[inst['dest']] = []
         defs[inst['dest']].append(bb[1])
 
+  if 'args' in function:
+    for arg in function['args']:
+      if arg['name'] not in defs:
+        defs[arg['name']] = []
+      defs[arg['name']].append('ArgBlock')
+
   #Initialize the dominator map
   initialize_bb_doms(bbs)
   while dom_map_changed:
@@ -371,18 +379,25 @@ for function in prog['functions']:
   d_tree.display()
   var_renames = {}
 
-  arg_insts = []
   arg_block = ([], 'ArgBlock', None, None)
   if 'args' in function and len(function['args']) > 0:
+    arg_block[0].append({'label': 'ArgBlock'})
     for arg in function['args']:
       arg_inst = {'op': 'id', 'dest': push_alias(arg['name'], var_renames), 'args': [arg['name']]}
       arg_block[0].append(arg_inst)
-      bbs[0][2][arg['name']] = get_alias(arg['name'], var_renames)
-      if get_alias(arg['name'], var_renames) not in bbs[0][3]:
-        bbs[0][3][get_alias(arg['name'], var_renames)] = []
-       # add the phi node for the argument
-      bbs[0][3][get_alias(arg['name'], var_renames)].append((get_alias(arg['name'], var_renames), 'ArgBlock'))
-  bbs  = rename_vars(bbs[0], bbs, d_tree, var_renames,False, None)
+
+    for arg in function['args']:
+      arg_block_alias = get_alias(arg['name'], var_renames)
+      print(f'arg_block_alias: {arg_block_alias}', file=sys.stderr)
+      entry_block_phi_dst = push_alias(arg['name'], var_renames)
+      entry_bb_arg_phi_inst = {'op': 'phi', 'args': [arg_block_alias], 'dest': entry_block_phi_dst, 'labels': ['ArgBlock']}
+      start_idx = get_index_of_first_inst(bbs[0])
+      bbs[0][0].insert(start_idx, entry_bb_arg_phi_inst)
+      bbs[0][3][entry_block_phi_dst] = [(arg_block_alias, 'ArgBlock')]
+      bbs[0][2][arg['name']] = entry_block_phi_dst
+    bbs  = rename_vars(bbs[0], bbs, d_tree, var_renames,True, len(function['args']))
+  else:
+    bbs = rename_vars(bbs[0], bbs, d_tree, var_renames)
 
 
   for bb in bbs:
