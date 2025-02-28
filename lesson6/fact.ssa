@@ -1,21 +1,30 @@
-@main {
-  v1: int = const 1;
-  v2: int = const 8;
-  v3: int = const 0;
-.header:
-  v13 = phi v9 .body;
-  v5 = phi v2 v10 .Entry .body;
-  v4 = phi v1 v8 .Entry .body;
-  v6: int = const 0;
-  v7: bool = gt v5 v6;
-  br v7 .body .end;
-.body:
-  v8: int = mul v4 v5;
-  v9: int = const 1;
-  v10: int = sub v5 v9;
-  jmp .header;
-.end:
-  v12 = phi v5 .header;
-  v11 = phi v4 .header;
-  print v11;
+@main(a: int) {
+.ArgBlock:
+  v14 = id a;
+.Entry:
+  v15 = phi v14 .ArgBlock;
+  v16: int = call @fact v15;
+  print v16;
+  v17: int = const 0;
+}
+@fact(a: int): int {
+.ArgBlock:
+  v11 = id a;
+.Entry:
+  v12 = phi v11 .ArgBlock;
+  v13: int = id v12;
+  v14: int = const 0;
+  v15: bool = eq v13 v14;
+  br v15 .then.0 .else.0;
+.then.0:
+  v16: int = const 1;
+  ret v16;
+.else.0:
+  v17: int = id v12;
+  v18: int = id v12;
+  v19: int = const 1;
+  v20: int = sub v18 v19;
+  v21: int = call @fact v20;
+  v22: int = mul v17 v21;
+  ret v22;
 }

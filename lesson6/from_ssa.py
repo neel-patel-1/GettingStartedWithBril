@@ -326,9 +326,12 @@ def create_inset(bb,bb_list):
   return inset
 
 def insert_before_terminator(bb, inst):
-  if bb[-1]['op'] in TERMINATORS:
-    bb.insert(-1, inst)
-  else:
+  if 'op' in bb[-1]:
+    if bb[-1]['op'] in TERMINATORS:
+      bb.insert(-1, inst)
+    else:
+      bb.append(inst)
+  elif 'label' in bb[-1]:
     bb.append(inst)
 
 
@@ -401,21 +404,25 @@ for function in prog['functions']:
   print(f'defs: {defs}', file=sys.stderr)
   # --------
 
+  arg_block_additions = set()
   function['instrs'] = []
   new_bbs = [bb[0] for bb in bbs]
   for index,bb in enumerate(bbs):
     for inst in bb[0]:
       if 'op' in inst and inst['op'] == 'phi':
         print(inst, file=sys.stderr)
-        predecessors = pred_map[bb[1]]
-        # for arg in inst['args']:
-          # for predecessor in predecessors:
-          #   if arg in outsets[bbs[predecessor][1]]:
-          #     print(f'{arg} is in {bbs[predecessor][1]}\'s outset', file=sys.stderr)
-          #     new_bbs[predecessor].append({'op': 'id', 'dest': inst['dest'], 'args': [arg]})
-        for label in inst['labels']:
-          b_idx = bb_list_idx(bbs, label)
-          insert_before_terminator(new_bbs[b_idx], {'op': 'id', 'dest': inst['dest'], 'args': [inst['args'][inst['labels'].index(label)]]})
+        if bb[1] in pred_map:
+          predecessors = pred_map[bb[1]]
+          for label in inst['labels']:
+            b_idx = bb_list_idx(bbs, label)
+            for arg in inst['args']:
+              if arg not in arg_block_additions:
+                arg_block_additions.add(arg)
+                new_bbs[0].insert(1,{'op': 'const', 'dest': arg, 'type': 'int', 'value': 0  })
+            # if inst['dest'] not in arg_block_additions:
+            #   arg_block_additions.add(inst['dest'])
+            #   new_bbs[0].insert(1,{'op': 'const', 'dest': inst['dest'], 'type': 'int', 'value': 0  })
+            insert_before_terminator(new_bbs[b_idx], {'op': 'id', 'dest': inst['dest'], 'args': [inst['args'][inst['labels'].index(label)]]})
     new_bbs[index] = [inst for inst in new_bbs[index] if 'op' not in inst or ('op' in inst and inst['op'] != 'phi')]
   for bb in new_bbs:
     function['instrs'] += bb
