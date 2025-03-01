@@ -1,5 +1,6 @@
 extract = 'total_dyn_inst: (\d+)'
 benchmarks = '../tools/benchmarks/*.bril'
+timeout = 10
 
 [runs.baseline]
 pipeline = [
@@ -7,10 +8,20 @@ pipeline = [
     "brili -p {args}",
 ]
 
-[runs.and_back]
+[runs.roundtrip]
 pipeline = [
     "bril2json",
     "python3 ssa.py",
+    "python3 from_ssa.py",
+    "brili -p {args}",
+]
+
+[runs.roundtrip_lvn_dce]
+pipeline = [
+    "bril2json",
+    "python3 ssa.py",
+    "python3 ../first-optimizations/lvn.py",
+    "python3 ../first-optimizations/dce.py",
     "python3 from_ssa.py",
     "brili -p {args}",
 ]
