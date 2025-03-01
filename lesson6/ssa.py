@@ -256,6 +256,12 @@ def get_index_of_first_inst(bb):
   for index, inst in enumerate(bb[0]):
     if 'op' in inst:
       return index
+  if len(bb[0]) == 1:
+    if 'label' in bb[0][0]:
+      return 1
+    else:
+      print(f'Error: Single Inst basic block is not label-only', file=sys.stderr)
+      sys.exit(1)
   return -1
 
 def get_alias(name, var_renames):
@@ -266,6 +272,7 @@ def get_alias(name, var_renames):
     exit(1)
 
 def rename_vars(bb, bbs, d_tree, var_renames, is_entry=False, args=None):
+  print(f'Traversing {bb[1]} with stack: {var_renames}')
   # rename the phi nodes destinations first since they may be consumed by subsequent instructions
   new_phi_nodes = {}
   for key, value in bb[3].items():
@@ -293,12 +300,16 @@ def rename_vars(bb, bbs, d_tree, var_renames, is_entry=False, args=None):
           bbs[bb_list_idx(bbs, s)][3][succ_thinks_it_has_this_name].append((get_alias(var, var_renames), bb[1])) # add this block's name for the variable to the phi node
   bbs[bb_list_idx(bbs, bb[1])] = bb
   new_bbs = bbs
-  for bb in d_tree.find_node(d_tree.root, bb[1]).children:
-    new_bbs = rename_vars(bbs[bb_list_idx(bbs, bb.value)], new_bbs, d_tree, var_renames)
+  c_var_copies = var_renames.copy()
+  for cbb in d_tree.find_node(d_tree.root, bb[1]).children:
+    print(f'name: {bb[1]} this should always be the same: {c_var_cpy}')
+    new_bbs = rename_vars(bbs[bb_list_idx(bbs, cbb.value)], new_bbs, d_tree, c_var_cpy)
   return new_bbs
 
 def sub_phis_for_insts(bbs):
   for bb in bbs:
+    # print(f'name: {bb[1]}', file=sys.stderr)
+    # print(f'phis: {bb[3]}', file=sys.stderr)
     for key, value in bb[3].items():
       phi_inst = {'op': 'phi', 'dest': key, 'args': [var[0] for var in value], 'labels': [var[1] for var in value]}
       bb[0].insert(get_index_of_first_inst(bb), phi_inst)
@@ -321,6 +332,8 @@ for function in prog['functions']:
   dom_map.clear()
   pred_map.clear()
   succ_map.clear()
+  defs.clear()
+
 
   bbs = form_bbs(function)
   form_predecessor_map(bbs)
@@ -401,10 +414,6 @@ for function in prog['functions']:
   else:
     bbs = rename_vars(bbs[0], bbs, d_tree, var_renames)
 
-
-  for bb in bbs:
-    print(f'BB: {bb[1]}', file=sys.stderr)
-    print(f'Phi Nodes: {bb[3]}', file=sys.stderr)
 
   # rename the phi nodes
   bbs = rename_phis(bbs)

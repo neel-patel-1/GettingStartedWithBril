@@ -22,6 +22,7 @@
   br v12 .then.7 .else.7;
 .then.7:
   v13: int = id i;
+  print v13;
   ret v13;
 .else.7:
 .endif.7:
