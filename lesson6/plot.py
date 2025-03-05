@@ -14,8 +14,8 @@ df_pivot = df.pivot(index='benchmark', columns='run', values='result', )
 df_pivot['baseline'] = pd.to_numeric(df_pivot['baseline'], errors='coerce')
 df_pivot['roundtrip'] = pd.to_numeric(df_pivot['roundtrip'], errors='coerce')
 df_pivot['roundtrip_lvn_dce'] = pd.to_numeric(df_pivot['roundtrip_lvn_dce'], errors='coerce')
-df_pivot['roundtrip'] = ((df_pivot['roundtrip'] - df_pivot['baseline']) / df_pivot['baseline'])
-df_pivot['roundtrip_opt'] = ((df_pivot['roundtrip_lvn_dce'] - df_pivot['baseline']) / df_pivot['baseline'])
+df_pivot['roundtrip'] = ((df_pivot['roundtrip']) / df_pivot['baseline'])
+df_pivot['roundtrip_opt'] = (((df_pivot['roundtrip_lvn_dce']) / df_pivot['baseline']))
 
 # Plotting
 benchmarks = df_pivot.index
@@ -26,16 +26,16 @@ fig, ax = plt.subplots(figsize=(15, 8))
 
 # Create bars for DCE and LVN improvements
 bars_dce = ax.bar(x - 0.5 * width, df_pivot['roundtrip'], width, label='Roundtrip')
-bars_lvn = ax.bar(x + 0.5 * width, df_pivot['roundtrip_lvn_dce'], width, label='RountripOpt')
+bars_lvn = ax.bar(x + 0.5 * width, df_pivot['roundtrip_opt'], width, label='RountripOpt')
 
 # Add labels, title, and legend
 ax.set_xlabel('Benchmark', fontsize=12)
-ax.set_ylabel('Normalized Dynamic Instruction Count (Log Scale)', fontsize=12)
+ax.set_ylabel('Dynamic Instruction Count (Normalized to Baseline)', fontsize=12)
 #ax.set_title('Performance Improvements of DCE and LVN Over Baseline', fontsize=16)
 ax.set_xticks(x)
 ax.set_xticklabels(benchmarks, rotation=90, fontsize=10)
 ax.legend()
-ax.set_yscale('log')
+# ax.set_yscale('log')
 
 # Add percentage values above bars
 labeled_heights = set()
