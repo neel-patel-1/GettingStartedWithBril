@@ -4,3 +4,6 @@
 [submodule "turnt"]
 	path = turnt
 	url = https://github.com/cucapra/turnt.git
+[submodule "lesson7/llvm-pass-skeleton"]
+	path = lesson7/llvm-pass-skeleton
+	url = https://github.com/sampsyo/llvm-pass-skeleton.git
