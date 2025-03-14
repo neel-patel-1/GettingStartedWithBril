@@ -24,6 +24,8 @@ v: int = id zero;
   jmp .inner.for.cond;
 .inner.for.end:
 
+jmp .outer.for.cond;
+
 .outer.for.end:
 
 print v;
