@@ -91,15 +91,32 @@ namespace {
         }
 
         void registerHistogramFunction(Module &M, LLVMContext &Context) {
-            Function *Atexit = M.getFunction("atexit");
-            if (!Atexit) {
-                FunctionType *AtexitType = FunctionType::get(Type::getInt32Ty(Context), {FunctionType::getVoidTy(Context)->getPointerTo()}, false);
-                Atexit = Function::Create(AtexitType, Function::ExternalLinkage, "atexit", M);
-            }
+            // Get or create `llvm.global_dtors`
+            GlobalVariable *GV = M.getGlobalVariable("llvm.global_dtors");
+            if (!GV) {
+                // Define struct type: { i32, void ()*, i8* }
+                StructType *DtorType = StructType::get(
+                    Type::getInt32Ty(Context),   // Priority (i32)
+                    HistogramFunction->getType(), // Function pointer (void ()*)
+                    PointerType::get(Type::getInt8Ty(Context), 0)  // Null (i8*)
+                );
 
-            IRBuilder<> Builder(Context);
-            Builder.CreateCall(Atexit, {HistogramFunction});
+                // Create array of destructors with priority 65535
+                Constant *DtorArray = ConstantArray::get(
+                    ArrayType::get(DtorType, 1),
+                    {ConstantStruct::get(DtorType,
+                                         {ConstantInt::get(Type::getInt32Ty(Context), 65535),  // High priority
+                                          HistogramFunction,  // Function to execute
+                                          Constant::getNullValue(PointerType::get(Type::getInt8Ty(Context), 0))})}
+                );
+
+                GV = new GlobalVariable(
+                    M, DtorArray->getType(), false, GlobalValue::AppendingLinkage, DtorArray, "llvm.global_dtors");
+            } else {
+                errs() << "Warning: llvm.global_dtors already exists.\n";
+            }
         }
+
     };
 }
 
