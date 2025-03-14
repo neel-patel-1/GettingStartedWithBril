@@ -1,0 +1,31 @@
+@main() {
+zero: int = const 0;
+one: int = const 1;
+hundred: int = const 100;
+fifteen: int = const 15;
+
+v: int = id zero;
+
+.outer.for.cond:
+  lt_100: bool = lt v hundred;
+  br lt_100 .outer.for.body .outer.for.end;
+
+.outer.for.body:
+  inner_iter: int = const 0;
+
+.inner.for.cond:
+  lt_15: bool = lt inner_iter fifteen;
+  br lt_15 .inner.for.body .inner.for.end;
+
+.inner.for.body:
+    v: int = add v one;
+    print v;
+  inner_iter: int = add inner_iter one;
+  jmp .inner.for.cond;
+.inner.for.end:
+
+.outer.for.end:
+
+print v;
+
+}
