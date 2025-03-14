@@ -4,8 +4,8 @@
 #define MAX_ENTRIES 1024
 #define HIST_BINS 10
 
-uint64_t timestamps[MAX_ENTRIES];
-int timestampIndex;
+extern uint64_t timestamps[MAX_ENTRIES];
+extern int timestampIndex;
 
 void computeHistogram() {
     if (timestampIndex < 2) {
