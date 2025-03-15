@@ -14,6 +14,7 @@ using namespace llvm;
 namespace {
 struct LICMInductionElimPass : public PassInfoMixin<LICMInductionElimPass> {
   bool processLoop(Loop *L, ScalarEvolution &SE) {
+    errs() <<"Processing loop: " << *L << "\n";
     bool modified = false;
     for (Loop *SubLoop : L->getSubLoops())
       modified |= processLoop(SubLoop, SE);
@@ -53,9 +54,13 @@ struct LICMInductionElimPass : public PassInfoMixin<LICMInductionElimPass> {
     auto &LI = FAM.getResult<LoopAnalysis>(F);
     auto &SE = FAM.getResult<ScalarEvolutionAnalysis>(F);
     bool modified = false;
+    errs() << "Running LICMInductionElimPass on function: " << F.getName() << "\n";
     // Process all top-level loops in the function.
-    for (Loop *L : LI)
+    for (Loop *L : LI){
+        // Process each loop and its subloops.
+        errs() << "Processing top-level loop: " << *L << "\n";
       modified |= processLoop(L, SE);
+    }
 
     // We have modified the IR if we hoisted any instructions.
     return (modified ? PreservedAnalyses::none() : PreservedAnalyses::all());
