@@ -5,13 +5,9 @@ build/licm/LICM.so: licm/LICM.cpp
 	make && \
 	cd ..
 
-test: test.cpp
-	clang++ -g -emit-llvm -c test.cpp -o test.bc
-	llvm-dis-18 -o test.ll test.bc
-	opt-18 -load-pass-plugin=build/licm/LICM.so -passes=licm < test.ll > test.opt.bc
-	llvm-dis-18 -o test.opt.ll test.opt.bc
-	llc-18 -filetype=obj test.opt.bc -o test.o
-	clang++ -g -o test test.o
+test: test.cpp build/licm/LICM.so
+	clang++-18 -g -fPIE -c test.cpp -o test.o
+	clang++-18 -fPIE -pie -o test test.o
 
 clean:
 	rm -f *.o
