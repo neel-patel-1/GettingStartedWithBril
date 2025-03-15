@@ -1,12 +1,17 @@
-build/licm/LICM.so: licm/LICM.cpp
+build/licm/LICMPass.so: licm/LICM.cpp
 	mkdir -p build && \
 	cd build && \
 	cmake .. && \
 	make && \
 	cd ..
 
-test: test.cpp build/licm/LICM.so
+.PHONY: test
+
+test: test.cpp build/licm/LICMPass.so
 	clang++-18 -g -fPIE -emit-llvm -c test.cpp -o test.bc
+	llvm-dis-18 -o test.ll test.bc
+	opt-18 -load-pass-plugin=build/licm/LICMPass.so -passes=licm-indvar-elim < test.ll > test.opt.bc
+	llvm-dis-18 -o test.opt.ll test.opt.bc
 	clang++-18 -o test.o -c test.bc
 	clang++-18 -fPIE -pie -o test test.o
 
