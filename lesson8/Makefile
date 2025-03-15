@@ -6,7 +6,8 @@ build/licm/LICM.so: licm/LICM.cpp
 	cd ..
 
 test: test.cpp build/licm/LICM.so
-	clang++-18 -g -fPIE -c test.cpp -o test.o
+	clang++-18 -g -fPIE -emit-llvm -c test.cpp -o test.bc
+	clang++-18 -o test.o -c test.bc
 	clang++-18 -fPIE -pie -o test test.o
 
 clean:
