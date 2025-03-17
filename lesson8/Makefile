@@ -1,4 +1,3 @@
-PASSES=loop-simplify,indvars,lcssa
 build/licm/LICMPass.so: licm/LICM.cpp
 	mkdir -p build && \
 	cd build && \
