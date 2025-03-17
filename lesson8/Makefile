@@ -6,11 +6,11 @@ build/licm/LICMPass.so: licm/LICM.cpp
 	make && \
 	cd ..
 
-.PHONY: test_impl test test_opt
+.PHONY: test_impl test test_indvar_elim test_dependent_passes.ll clean
 
-test_impl: test test_opt
+test_impl: test test_indvar_elim
 	@echo "Optimized:"
-	./test_opt
+	./test_indvar_elim
 	@echo "Original:"
 	./test
 
@@ -21,11 +21,14 @@ test: test.cpp build/licm/LICMPass.so
 	clang++-18 -o test.o -c test.bc
 	clang++-18 -fPIE -pie -o test test.o
 
-test_opt: test build/licm/LICMPass.so
-	opt-18 -load-pass-plugin=build/licm/LICMPass.so -passes="licm-indvar-elim" -S test.ll > test.opt.ll
+test_dependent_passes.ll: test.ll
+	@cp test.ll test_dependent_passes.ll
+
+test_indvar_elim: test_dependent_passes.ll build/licm/LICMPass.so
+	opt-18 -load-pass-plugin=build/licm/LICMPass.so -passes="licm-indvar-elim" -S test_dependent_passes.ll > test.opt.ll
 	llvm-as-18 -o test.opt.bc test.opt.ll
-	clang++-18 -o test_opt.o -c test.opt.bc
-	clang++-18 -fPIE -pie -o test_opt test_opt.o
+	clang++-18 -o test_indvar_elim.o -c test.opt.bc
+	clang++-18 -fPIE -pie -o test_indvar_elim test_indvar_elim.o
 
 clean:
 	rm -f *.o
