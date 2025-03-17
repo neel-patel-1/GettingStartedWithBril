@@ -75,10 +75,10 @@ extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo llvmGetPassPluginIn
     LLVM_PLUGIN_API_VERSION, "LICMInductionElimPass", "v0.1",
     [](PassBuilder &PB) {
       PB.registerPipelineParsingCallback(
-        [](StringRef Name, FunctionPassManager &FPM,
-           ArrayRef<PassBuilder::PipelineElement>) {
+        [](StringRef Name, ModulePassManager &MPM,
+            ArrayRef<PassBuilder::PipelineElement>) {
           if (Name == "licm-indvar-elim") {
-            FPM.addPass(LICMInductionElimPass());
+            MPM.addPass(createModuleToFunctionPassAdaptor(LICMInductionElimPass()));
             return true;
           }
           return false;
