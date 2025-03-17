@@ -8,13 +8,13 @@ build/licm/LICMPass.so: licm/LICM.cpp
 .PHONY: test_impl test test_opt
 
 test_impl: test test_opt
-	@echo "Original:"
-	./test
 	@echo "Optimized:"
 	./test_opt
+	@echo "Original:"
+	./test
 
 test: test.cpp build/licm/LICMPass.so
-	clang++-18 -g -fPIE -O2 -emit-llvm -c test.cpp -o test.bc
+	clang++-18 -g -fPIE -O0 -emit-llvm -c test.cpp -o test.bc
 	llvm-dis-18 -o test.ll test.bc
 	clang++-18 -o test.o -c test.bc
 	clang++-18 -fPIE -pie -o test test.o
