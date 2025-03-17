@@ -20,6 +20,6 @@ clean:
 	rm -f *.bc
 	rm -f *.opt.bc
 	rm -f *.opt.ll
-	# rm -rf build
-	rm -f something
-	rm -f something.ll
+	rm -rf build
+	rm -f test
+	rm -f *.ll

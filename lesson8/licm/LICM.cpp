@@ -65,6 +65,7 @@ struct LICMInductionElimPass : public PassInfoMixin<LICMInductionElimPass> {
     // We have modified the IR if we hoisted any instructions.
     return (modified ? PreservedAnalyses::none() : PreservedAnalyses::all());
   }
+
 };
 } // end anonymous namespace
 

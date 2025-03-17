@@ -1,0 +1,8 @@
+build/
+test
+test.bc
+test.ll
+test.o
+test.opt.bc
+test.opt.ll
+
