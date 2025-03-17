@@ -10,7 +10,7 @@ uint64_t func(){
 
   start = __rdtsc();
   int x, y, z, w, a, b, c, d, e, f, g, h, j, k, l, m, n, o, p;
-  for (int i = 0; i < 1000000000; ++i) {
+  for (int i = 0; i < 10000000; ++i) {
     // This loop is a simple induction variable
     // that can be optimized by LICM.
     x = 2 * i + 1;
