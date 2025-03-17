@@ -7,7 +7,7 @@ using namespace llvm;
 
 namespace {
 
-struct SkeletonPass : public PassInfoMixin<SkeletonPass> {
+struct LICMIndvarElim : public PassInfoMixin<LICMIndvarElim> {
   // This run method is invoked on each Module.
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {
     for (auto &F : M) {
@@ -21,15 +21,15 @@ struct SkeletonPass : public PassInfoMixin<SkeletonPass> {
 
 extern "C" LLVM_ATTRIBUTE_WEAK PassPluginLibraryInfo llvmGetPassPluginInfo() {
   return {
-    LLVM_PLUGIN_API_VERSION, "SkeletonPass", "v0.1",
+    LLVM_PLUGIN_API_VERSION, "LICMIndvarElim", "v0.1",
     [](PassBuilder &PB) {
       // Register a callback that allows our pass to be invoked with:
       //   -passes="skeleton-pass"
       PB.registerPipelineParsingCallback(
         [](StringRef Name, ModulePassManager &MPM,
            ArrayRef<PassBuilder::PipelineElement>) {
-          if (Name == "skeleton-pass") {
-            MPM.addPass(SkeletonPass());
+          if (Name == "licm-indvar-elim") {
+            MPM.addPass(LICMIndvarElim());
             return true;
           }
           return false;
