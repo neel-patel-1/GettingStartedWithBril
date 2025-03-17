@@ -14,17 +14,14 @@ test_impl: test test_indvar_elim
 	./test
 
 test.ll: test.cpp
-	clang++-18 -g -O2 -emit-llvm -S test.cpp -o test.ll
+	clang++-18 -g -O0 -emit-llvm -S test.cpp -o test.ll
 
 test: test.ll
 	clang++-18 -o test.o -c test.ll
 	clang++-18 -o test test.o
 
-test_dependent_passes.ll: test.ll
-	opt-18 -O2 -S test.ll > test_dependent_passes.ll
-
 test_indvar_elim: test_dependent_passes.ll build/licm/LICMPass.so
-	opt-18 -load-pass-plugin=build/licm/LICMPass.so -passes="licm-indvar-elim" -S test_dependent_passes.ll > test.opt.ll
+	opt-18 -load-pass-plugin=build/licm/LICMPass.so -passes="licm-indvar-elim" -S test.ll > test.opt.ll
 	llvm-as-18 -o test.opt.bc test.opt.ll
 	clang++-18 -o test_indvar_elim.o -c test.opt.bc
 	clang++-18 -fPIE -pie -o test_indvar_elim test_indvar_elim.o
