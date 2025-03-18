@@ -30,6 +30,7 @@ struct LICMInductionElimModulePass : public PassInfoMixin<LICMInductionElimModul
     // Ensure the loop has a preheader; if not, create one.
     BasicBlock *Preheader = L->getLoopPreheader();
     if (!Preheader) {
+      errs() << "Loop does not have a preheader: " << *L << "\n";
       // Note: Pass a nullptr for MemorySSAUpdater, then a bool.
       Preheader = InsertPreheaderForLoop(L, &DT, &LI, /*MSSAU=*/nullptr, /*PreserveLCSSA=*/false);
       if (!Preheader) {
@@ -45,8 +46,10 @@ struct LICMInductionElimModulePass : public PassInfoMixin<LICMInductionElimModul
       // Use a safe iterator since we might move instructions.
       for (auto It = BB->begin(), End = BB->end(); It != End; ) {
         Instruction *Inst = &*It++;
-        if (L->isLoopInvariant(Inst))
+        if (L->isLoopInvariant(Inst)){
+          errs() << "Loop invariant: " << *Inst << "\n";
           continue;
+        }
 
         const SCEV *S = SE.getSCEV(Inst);
         if (isa<SCEVCouldNotCompute>(S))
