@@ -17,6 +17,10 @@ test_impl: test test_indvar_elim
 	@echo "Original:"
 	./test
 
+test_indvar_impl: test_indvar_elim
+	@echo "Optimized:"
+	./test_indvar_elim
+
 test.ll: test.cpp
 	$(CLANG) -g -O0 -emit-llvm -S test.cpp -o test.ll
 
