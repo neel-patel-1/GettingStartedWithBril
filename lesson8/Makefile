@@ -1,6 +1,6 @@
-CLANG=clang++-15
-OPT=opt-15
-LLVM_AS=llvm-as-15
+CLANG=clang++-18
+OPT=opt-18
+LLVM_AS=llvm-as-18
 
 build/licm/LICMPass.so: licm/LICM.cpp
 	mkdir -p build && \
@@ -28,7 +28,7 @@ test_indvar_elim: test.ll build/licm/LICMPass.so
 	$(OPT) -load-pass-plugin=build/licm/LICMPass.so -passes="licm-indvar-elim" -S test.ll > test.opt.ll
 	$(LLVM_AS) -o test.opt.bc test.opt.ll
 	$(CLANG) -o test_indvar_elim.o -c test.opt.bc
-	$(CLANG) -fPIE -pie -o test_indvar_elim test_indvar_elim.o
+	$(CLANG) -o test_indvar_elim test_indvar_elim.o
 
 clean:
 	rm -f *.o
@@ -38,3 +38,4 @@ clean:
 	rm -rf build
 	rm -f test
 	rm -f *.ll
+	rm -f test_indvar_elim test_opt
