@@ -22,6 +22,7 @@ struct LICMInductionElimModulePass : public PassInfoMixin<LICMInductionElimModul
   bool processLoop(Loop *L, ScalarEvolution &SE, DominatorTree &DT, LoopInfo &LI) {
     bool modified = false;
 
+    errs() << "Processing loop: " << *L << "\n";
     // Process subloops first.
     for (Loop *SubLoop : L->getSubLoops())
       modified |= processLoop(SubLoop, SE, DT, LI);
@@ -67,6 +68,7 @@ struct LICMInductionElimModulePass : public PassInfoMixin<LICMInductionElimModul
   // Process every function in the module.
   bool processFunction(Function &F, LoopInfo &LI, ScalarEvolution &SE, DominatorTree &DT) {
     bool modified = false;
+    errs() << "Processing function: " << F.getName() << "\n";
     for (Loop *L : LI)
       modified |= processLoop(L, SE, DT, LI);
     return modified;
@@ -78,6 +80,8 @@ struct LICMInductionElimModulePass : public PassInfoMixin<LICMInductionElimModul
 
     // Obtain a FunctionAnalysisManager for functions in the module.
     auto &FAM = MAM.getResult<FunctionAnalysisManagerModuleProxy>(M).getManager();
+
+    errs() << "Processing module: " << M.getName() << "\n";
 
     for (Function &F : M) {
       if (F.isDeclaration())
