@@ -6,3 +6,8 @@ test.o
 test.opt.bc
 test.opt.ll
 
+test_licm
+test_licm.ll
+test_licm.o
+test_mem2reg.ll
+
