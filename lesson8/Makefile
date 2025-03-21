@@ -2,7 +2,7 @@ CLANG=clang-18
 OPT=opt-18
 LLVM_AS=llvm-as-18
 
-.PHONY: all
+.PHONY: all test_licm.ll
 
 all: clean
 
