@@ -1,6 +1,10 @@
-CLANG=clang++-18
+CLANG=clang-18
 OPT=opt-18
 LLVM_AS=llvm-as-18
+
+.PHONY: all
+
+all: clean
 
 build/licm/LICMPass.so: licm/LICM.cpp
 	mkdir -p build && \
@@ -9,30 +13,19 @@ build/licm/LICMPass.so: licm/LICM.cpp
 	make && \
 	cd ..
 
-.PHONY: test_impl test test_indvar_elim test.ll clean test.ll
+test.ll: test.c
+	$(CLANG) -S -O1 -Xclang -disable-llvm-passes -emit-llvm -S test.c -o test.ll
 
-test_impl: test test_indvar_elim
-	@echo "Optimized:"
-	./test_indvar_elim
-	@echo "Original:"
-	./test
+test_mem2reg.ll: test.ll
+	$(OPT) -passes=mem2reg -S test.ll -o test_mem2reg.ll
 
-test_indvar_impl: test_indvar_elim
-	@echo "Optimized:"
-	./test_indvar_elim
-
-test.ll: test.cpp
-	$(CLANG) -g -O0 -Xclang -disable-llvm-passes -emit-llvm -S test.cpp -o test.ll
+test_licm.ll: test_mem2reg.ll build/licm/LICMPass.so
+	$(OPT) -load build/licm/LICMPass.so -passes=licm-invariant -S test_mem2reg.ll -o test_licm.ll
 
 test: test.ll
 	$(CLANG) -o test.o -c test.ll
 	$(CLANG) -o test test.o
 
-test_indvar_elim: test.ll build/licm/LICMPass.so
-	$(OPT) -load-pass-plugin=build/licm/LICMPass.so -passes="licm-invariant" -S test.ll > test.opt.ll
-	$(LLVM_AS) -o test.opt.bc test.opt.ll
-	$(CLANG) -o test_indvar_elim.o -c test.opt.bc
-	$(CLANG) -o test_indvar_elim test_indvar_elim.o
 
 clean:
 	rm -f *.o
