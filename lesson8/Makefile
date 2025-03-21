@@ -22,6 +22,10 @@ test_mem2reg.ll: test.ll
 test_licm.ll: test_mem2reg.ll build/licm/LICMPass.so
 	$(OPT) -load-pass-plugin build/licm/LICMPass.so -passes=licm-invariant -S test_mem2reg.ll -o test_licm.ll
 
+test_licm: test_licm.ll
+	$(CLANG) -o test_licm.o -c test_licm.ll
+	$(CLANG) -o test_licm test_licm.o
+
 test: test.ll
 	$(CLANG) -o test.o -c test.ll
 	$(CLANG) -o test test.o

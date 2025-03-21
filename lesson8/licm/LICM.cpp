@@ -16,21 +16,22 @@ using namespace llvm;
 namespace {
 
 struct LICMInvariantModulePass : public PassInfoMixin<LICMInvariantModulePass> {
+  bool checkInvariant(Loop &L, Value &V) {
+    if (auto I = dyn_cast<Instruction>(&V)) {
+      return !L.contains(I);
+    }
+    return true;
+  }
 
-  // Recursively process a loop.
+  // Recursively process a loop until convergence
   bool processLoop(Loop *L, DominatorTree &DT, LoopInfo &LI) {
     bool modified = false;
-    errs() << "Processing loop: " << *L << "\n";
 
-    // Process subloops first.
     for (Loop *SubLoop : L->getSubLoops())
       modified |= processLoop(SubLoop, DT, LI);
 
-    // Ensure the loop has a preheader; if not, create one.
     BasicBlock *Preheader = L->getLoopPreheader();
     if (!Preheader) {
-      errs() << "Loop does not have a preheader: " << *L << "\n";
-      // Pass a nullptr for MemorySSAUpdater.
       Preheader = InsertPreheaderForLoop(L, &DT, &LI, /*MSSAU=*/nullptr, /*PreserveLCSSA=*/false);
       if (!Preheader) {
         errs() << "Warning: Failed to insert preheader for loop: " << *L << "\n";
@@ -40,25 +41,29 @@ struct LICMInvariantModulePass : public PassInfoMixin<LICMInvariantModulePass> {
       }
     }
 
-    // Iterate over each instruction in the loop.
+hoist:
     for (BasicBlock *BB : L->getBlocks()) {
-      // Use a safe iterator since we might move instructions.
       for (auto It = BB->begin(), End = BB->end(); It != End; ) {
         Instruction *Inst = &*It++;
-        // Skip PHI nodes and terminators.
         if (isa<PHINode>(Inst) || Inst->isTerminator())
           continue;
-        // Use the free function to check if it's safe to speculatively execute.
         if (!isSafeToSpeculativelyExecute(Inst))
           continue;
-        // If the instruction is loop invariant and not already in the preheader, hoist it.
-        if (L->isLoopInvariant(Inst)) {
-          Inst->moveBefore(Preheader->getTerminator());
-          errs() << "Hoisted invariant instruction: " << *Inst << "\n";
-          modified = true;
-        } else {
-          errs() << "Instruction is not loop invariant: " << *Inst << "\n";
-        }
+        // if (Inst->mayReadOrWriteMemory()) {
+          // if any of the arguments are not invariant, skip this instruction
+          bool allInvariant = true;
+          for (int i=0; i<Inst->getNumOperands(); ++i) {
+            if (!checkInvariant(*L, *Inst->getOperand(i))) {
+              allInvariant = false;
+              break;
+            }
+          }
+          if (!allInvariant)
+            continue;
+        // }
+        Inst->moveBefore(Preheader->getTerminator());
+        modified = true;
+        goto hoist;
       }
     }
     return modified;
