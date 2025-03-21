@@ -5,10 +5,11 @@ volatile int sink;  // Prevent removal of computed result
 void foo() {
     int sum = 0;
     // A simple loop with an induction variable 'i'
+    int x;
+    const int y = 3;
     for (int i = 0; i < 1000; i++) {
         // Compute an affine expression: 2*i + 1
-        int x = 2 * i + 1;
-        sum += x;
+        x = 2 * y;
     }
     // Store the result in a volatile global variable.
     sink = sum;

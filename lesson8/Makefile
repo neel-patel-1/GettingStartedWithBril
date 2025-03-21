@@ -22,14 +22,14 @@ test_indvar_impl: test_indvar_elim
 	./test_indvar_elim
 
 test.ll: test.cpp
-	$(CLANG) -g -O0 -emit-llvm -S test.cpp -o test.ll
+	$(CLANG) -g -O0 -Xclang -disable-llvm-passes -emit-llvm -S test.cpp -o test.ll
 
 test: test.ll
 	$(CLANG) -o test.o -c test.ll
 	$(CLANG) -o test test.o
 
 test_indvar_elim: test.ll build/licm/LICMPass.so
-	$(OPT) -load-pass-plugin=build/licm/LICMPass.so -passes="licm-indvar-elim" -S test.ll > test.opt.ll
+	$(OPT) -load-pass-plugin=build/licm/LICMPass.so -passes="licm-invariant" -S test.ll > test.opt.ll
 	$(LLVM_AS) -o test.opt.bc test.opt.ll
 	$(CLANG) -o test_indvar_elim.o -c test.opt.bc
 	$(CLANG) -o test_indvar_elim test_indvar_elim.o
