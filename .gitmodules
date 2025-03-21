@@ -7,3 +7,6 @@
 [submodule "lesson7/llvm-pass-skeleton"]
 	path = lesson7/llvm-pass-skeleton
 	url = https://github.com/sampsyo/llvm-pass-skeleton.git
+[submodule "lesson8/benchmarks/PolyBenchC-4.2.1"]
+	path = lesson8/benchmarks/PolyBenchC-4.2.1
+	url = https://github.com/MatthiasJReisinger/PolyBenchC-4.2.1
