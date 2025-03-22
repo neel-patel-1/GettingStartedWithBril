@@ -2,9 +2,9 @@ CLANG=clang-18
 OPT=opt-18
 LLVM_AS=llvm-as-18
 
-.PHONY: all test_licm.ll
+.PHONY: all clean
 
-all: clean
+all: test_licm test
 
 build/licm/LICMPass.so: licm/LICM.cpp
 	mkdir -p build && \

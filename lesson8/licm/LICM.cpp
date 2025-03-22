@@ -63,6 +63,7 @@ hoist:
         // }
         Inst->moveBefore(Preheader->getTerminator());
         modified = true;
+        errs() << "Hoisted instruction: " << *Inst << "\n";
         goto hoist;
       }
     }
