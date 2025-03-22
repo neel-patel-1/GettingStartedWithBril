@@ -95,8 +95,18 @@ def main():
         sys.exit(1)
 
     print("Parsed benchmarks:")
+    total_speedup = 0
+    max_speedup = 0
     for bench in benchmarks:
-        print(f"Benchmark: {bench[0]}, mem2reg time: {bench[1]}, licm time: {bench[2]}, ratio: {bench[2]/bench[1]:.2f}")
+        speedup = bench[1] / bench[2]
+        total_speedup += speedup
+        if speedup > max_speedup:
+            max_speedup = speedup
+        print(f"Benchmark: {bench[0]}, mem2reg time: {bench[1]}, licm time: {bench[2]}, speedup: {speedup:.2f}")
+
+    average_speedup = total_speedup / len(benchmarks)
+    print(f"Average speedup: {average_speedup:.2f}")
+    print(f"Maximum speedup: {max_speedup:.2f}")
 
     plot_benchmarks(benchmarks)
 
