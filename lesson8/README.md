@@ -20,4 +20,6 @@ cd benchmarks/ && ./compile_bench.sh |& tee hoisted.log
 
 grep Hoisted hoisted.log  | wc -l
 # 1407
+
+python3 plot.py benchmarks/executed.log
 ```
