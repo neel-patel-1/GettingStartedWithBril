@@ -10,3 +10,7 @@
 * how to create traces that enable reinsertion into the original program?
   * need start instruction
   * need last instruction
+
+[speculate](https://capra.cs.cornell.edu/bril/lang/spec.html) enables rollback when the guard is triggered
+* the code is morphed to be speculative with the guards we want to enforce
+* what condition do we want to enforce -- a literal condition -- e.g., a branch is not triggered that continues the loop and multiplies v by 2 instead of proceeding to the inner 15 increment loop
