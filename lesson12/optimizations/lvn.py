@@ -10,6 +10,7 @@ goes through insts, checks for control flow to determining the guards to insert
 seen_conditions = {}
 
 def opt_insts(trace_insts):
+  conditions_to_guard_on = []
   for inst in trace_insts:
     if 'cond' in inst:
       condition = { 'op': inst['op'], 'args': inst['args'] }
@@ -31,9 +32,8 @@ def opt_insts(trace_insts):
           condition_to_guard_on['satisfy'] = True
         elif false_label == inst['label']:
           condition_to_guard_on['satisfy'] = False
-
-
-
+        conditions_to_guard_on.append(condition_to_guard_on)
+  return conditions_to_guard_on
 
 '''
 for each file in traces/<function_name>_<start_inst_no>.json:
@@ -45,6 +45,16 @@ for each file in traces/<function_name>_<start_inst_no>.json:
 trace_files = []
 traces_dir = "traces"
 if os.path.exists(traces_dir) and os.path.isdir(traces_dir):
-  trace_files = [f for f in os.listdir(traces_dir) if os.path.isfile(os.path.join(traces_dir, f))]
+  trace_files = [f for f in os.listdir(traces_dir) if os.path.isfile(os.path.join(traces_dir, f)) and f.endswith('.json')]
   trace_files.sort(key=lambda x: (x.split('_')[0], -int(x.split('_')[1].split('.')[0])))
-print(trace_files)
+  print(f"Found {len(trace_files)} trace files in {traces_dir}:")
+
+  # read in and listify the files and emit the guard instructions produced
+  all_instructions = []
+  for trace_file in trace_files:
+    with open(os.path.join(traces_dir, trace_file), 'r') as f:
+      trace_insts = json.load(f)
+      guard_insts = opt_insts(trace_insts)
+      print(f"Guard instructions for {trace_file}:")
+      for guard_inst in guard_insts:
+        print(guard_inst)
