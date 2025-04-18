@@ -960,9 +960,20 @@ async function evalProg(prog: bril.Program) {
     args.splice(pidx, 1);
   }
 
+  // First argument is the program name
+  if (args.length < 1) {
+    throw error("no program name provided");
+  }
+  let progName = args[0];
+  args.splice(0, 1);
+  prog.name = progName;
+
   // Remaining arguments are for the main function.k
   let expected = main.args || [];
   let newEnv = parseMainArguments(expected, args);
+
+  const programName = "traces/" + (prog.name || "unknown_program");
+  await Deno.mkdir(programName, { recursive: true });
 
   let state: State = {
     funcs: prog.functions,
@@ -973,7 +984,7 @@ async function evalProg(prog: bril.Program) {
     curlabel: null,
     specparent: null,
     tracing: true,
-    trace_file: "traces/main_0",
+    trace_file: `${programName}/main_0`,
     inst_trace: [],
   }
 
@@ -998,7 +1009,13 @@ async function evalProg(prog: bril.Program) {
 
 async function main() {
   try {
-    let prog = JSON.parse(await readStdin()) as bril.Program;
+    if (Deno.args.length < 1) {
+      throw error("No input file provided");
+    }
+    const filePath = Deno.args[0];
+    const fileContent = await Deno.readTextFile(filePath);
+    let prog = JSON.parse(fileContent) as bril.Program;
+    prog.name = filePath;
     await evalProg(prog);
   }
   catch(e) {
