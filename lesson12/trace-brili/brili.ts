@@ -860,6 +860,7 @@ function evalFunc(func: bril.Function, state: State): Value | null {
         }
       }
     } else if ('label' in line) {
+      state.inst_trace.push(line);
       // Update CFG tracking for SSA phi nodes.
       state.lastlabel = state.curlabel;
       state.curlabel = line.label;
@@ -972,7 +973,7 @@ async function evalProg(prog: bril.Program) {
     curlabel: null,
     specparent: null,
     tracing: true,
-    trace_file: "main_0",
+    trace_file: "traces/main_0",
     inst_trace: [],
   }
 

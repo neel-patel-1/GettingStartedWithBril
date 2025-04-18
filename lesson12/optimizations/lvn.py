@@ -46,4 +46,5 @@ trace_files = []
 traces_dir = "traces"
 if os.path.exists(traces_dir) and os.path.isdir(traces_dir):
   trace_files = [f for f in os.listdir(traces_dir) if os.path.isfile(os.path.join(traces_dir, f))]
+  trace_files.sort(key=lambda x: (x.split('_')[0], -int(x.split('_')[1].split('.')[0])))
 print(trace_files)
