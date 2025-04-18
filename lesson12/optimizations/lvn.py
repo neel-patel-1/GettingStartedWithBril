@@ -1,6 +1,7 @@
 import json
 import sys
 from collections import OrderedDict
+import os
 
 '''
 goes through insts, checks for control flow to determining the guards to insert
@@ -40,5 +41,9 @@ for each file in traces/<function_name>_<start_inst_no>.json:
   opt_insts = optimize(trace_insts)
   for each inst in the trace:
     insert the instruction at the insertion point
-
 '''
+trace_files = []
+traces_dir = "traces"
+if os.path.exists(traces_dir) and os.path.isdir(traces_dir):
+  trace_files = [f for f in os.listdir(traces_dir) if os.path.isfile(os.path.join(traces_dir, f))]
+print(trace_files)
