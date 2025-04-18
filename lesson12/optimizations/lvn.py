@@ -2,7 +2,7 @@ import json
 import sys
 from collections import OrderedDict
 import os
-DEBUG = True
+DEBUG = False
 
 def debug_print(message):
   if DEBUG:
@@ -62,6 +62,51 @@ for each file in traces/<function_name>_<start_inst_no>.json:
   for each inst in the trace:
     insert the instruction at the insertion point
 '''
+if len(sys.argv) < 2:
+  print("Usage: python3 lvn.py <original_file>")
+  sys.exit(1)
+
+original_file = sys.argv[1]
+if not os.path.exists(original_file):
+  print(f"Error: File {original_file} does not exist.")
+  sys.exit(1)
+
+with open(original_file, 'r') as f:
+  original_insts = json.load(f)
+
+traces_dir = os.path.join("traces", os.path.basename(original_file))
+print(f"Looking for traces in {traces_dir}")
+trace_files = []
+exit
+
+for trace_file in trace_files:
+  function_name, start_inst_no = trace_file.split('_')
+  start_inst_no = int(start_inst_no.split('.')[0])
+  with open(os.path.join(traces_dir, trace_file), 'r') as f:
+    trace_insts = json.load(f)
+    guard_insts = get_guard_insts(trace_insts)
+    prepend_inst = {'op': 'speculate'}
+    prepend_insts = [prepend_inst]
+    for guard_inst in guard_insts:
+      prepend_inst = {
+        'op': guard_inst['op'],
+        'args': guard_inst['args'],
+        'dest': 'cond'
+      }
+      prepend_insts.append(prepend_inst)
+      prepend_inst = {
+        'op': 'guard',
+        'args': ['cond'],
+        'labels': ['recover']
+      }
+      prepend_insts.append(prepend_inst)
+    prepend_insts += trace_insts
+    prepend_inst = {'label': 'recover'}
+    prepend_insts.append(prepend_inst)
+    original_insts[start_inst_no:start_inst_no] = prepend_insts
+
+with open(opt_file, 'w') as f:
+  json.dump(original_insts, f, indent=2)
 trace_files = []
 traces_dir = "traces"
 if os.path.exists(traces_dir) and os.path.isdir(traces_dir):
@@ -98,6 +143,7 @@ if os.path.exists(traces_dir) and os.path.isdir(traces_dir):
         'label': 'recover',
       }
       prepend_insts.append(prepend_inst)
-      print(f"Prepend instructions for {trace_file}:")
+      debug_print(f"Prepend instructions for {trace_file}:")
       for inst in prepend_insts:
-        print(inst)
+        debug_print(inst)
+      # insert the instructions at the offset of the function specified by the trace file <function_name>_<start_inst_no>.json
