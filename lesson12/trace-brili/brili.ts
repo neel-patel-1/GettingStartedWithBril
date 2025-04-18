@@ -966,7 +966,7 @@ async function evalProg(prog: bril.Program) {
   }
   let progName = args[0];
   args.splice(0, 1);
-  prog.name = progName;
+  prog.name = progName.split('/').pop() || progName;
 
   // Remaining arguments are for the main function.k
   let expected = main.args || [];
