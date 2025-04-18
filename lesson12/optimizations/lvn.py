@@ -8,9 +8,6 @@ def debug_print(message):
   if DEBUG:
     print(message)
 
-'''
-goes through insts, checks for control flow to determining the guards to insert
-'''
 
 seen_conditions = {}
 opposite_ops = {
@@ -22,7 +19,10 @@ opposite_ops = {
   'ge': 'lt'
 }
 
-def opt_insts(trace_insts):
+'''
+goes through insts, checks for control flow to determining the guards to insert
+'''
+def get_guard_insts(trace_insts):
   conditions_to_guard_on = []
   expecting_label = False
   for inst in trace_insts:
@@ -74,7 +74,7 @@ if os.path.exists(traces_dir) and os.path.isdir(traces_dir):
   for trace_file in trace_files:
     with open(os.path.join(traces_dir, trace_file), 'r') as f:
       trace_insts = json.load(f)
-      guard_insts = opt_insts(trace_insts)
+      guard_insts = get_guard_insts(trace_insts)
       debug_print(f"Guard instructions for {trace_file}:")
       prepend_inst = {
         'op': 'speculate'
@@ -93,6 +93,7 @@ if os.path.exists(traces_dir) and os.path.isdir(traces_dir):
           'labels': ['recover']
         }
         prepend_insts.append(prepend_inst)
+      prepend_insts += trace_insts
       prepend_inst = {
         'label': 'recover',
       }
