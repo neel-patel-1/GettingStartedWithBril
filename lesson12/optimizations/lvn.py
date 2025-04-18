@@ -62,22 +62,26 @@ for each file in traces/<function_name>_<start_inst_no>.json:
   for each inst in the trace:
     insert the instruction at the insertion point
 '''
-if len(sys.argv) < 2:
-  print("Usage: python3 lvn.py <original_file>")
+if len(sys.argv) < 3:
+  print("Usage: python3 lvn.py <original_file> <opt_file>")
   sys.exit(1)
 
 original_file = sys.argv[1]
+opt_file = sys.argv[2]
 if not os.path.exists(original_file):
   print(f"Error: File {original_file} does not exist.")
   sys.exit(1)
+
 
 with open(original_file, 'r') as f:
   original_insts = json.load(f)
 
 traces_dir = os.path.join("traces", os.path.basename(original_file))
-print(f"Looking for traces in {traces_dir}")
+debug_print(f"Looking for traces in {traces_dir}")
 trace_files = []
-exit
+trace_files = [f for f in os.listdir(traces_dir) if os.path.isfile(os.path.join(traces_dir, f)) and f.endswith('.json')]
+trace_files.sort(key=lambda x: (x.split('_')[0], -int(x.split('_')[1].split('.')[0])))
+debug_print(f"Found {len(trace_files)} traces in {traces_dir}")
 
 for trace_file in trace_files:
   function_name, start_inst_no = trace_file.split('_')
@@ -103,10 +107,10 @@ for trace_file in trace_files:
     prepend_insts += trace_insts
     prepend_inst = {'label': 'recover'}
     prepend_insts.append(prepend_inst)
-    original_insts[start_inst_no:start_inst_no] = prepend_insts
 
 with open(opt_file, 'w') as f:
   json.dump(original_insts, f, indent=2)
+exit(0)
 trace_files = []
 traces_dir = "traces"
 if os.path.exists(traces_dir) and os.path.isdir(traces_dir):
