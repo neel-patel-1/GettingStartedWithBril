@@ -972,7 +972,7 @@ async function evalProg(prog: bril.Program) {
     curlabel: null,
     specparent: null,
     tracing: true,
-    trace_file: "main" + toString(0),
+    trace_file: "main_0",
     inst_trace: [],
   }
 
