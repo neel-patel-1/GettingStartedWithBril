@@ -372,6 +372,9 @@ function evalCall(instr: bril.Operation, state: State): Action {
     lastlabel: null,
     curlabel: null,
     specparent: null,  // Speculation not allowed.
+    tracing: state.tracing,
+    trace_file: state.trace_file,
+    inst_trace: state.inst_trace,
   }
   let retVal = evalFunc(func, newState);
   state.icount = newState.icount;
@@ -990,7 +993,7 @@ async function evalProg(prog: bril.Program) {
 
   evalFunc(main, state);
 
-  state.tracing = false;
+  // state.tracing = false;
   if (state.inst_trace.length > 0) {
     const traceFileName = state.trace_file + ".json";
     await Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
