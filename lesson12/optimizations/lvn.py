@@ -1,203 +1,275 @@
+"""Local value numbering for Bril.
+"""
 import json
 import sys
-from collections import OrderedDict
-import os
+from collections import namedtuple
 
-DEBUG = False
 
-def debug_print(message):
-  if DEBUG:
-    print(message)
+# A Value uniquely represents a computation in terms of sub-values.
+Value = namedtuple('Value', ['op', 'args'])
 
-counter = 0
-seen_varse  = set()
-def get_fresh_name():
-  global counter
-  counter += 1
-  new_name = f'v{counter}'
-  while new_name in seen_varse:
-    counter += 1
-    new_name = f'v{counter}'
-  return new_name
 
-def update_var_names(instr):
-  if 'args' in instr:
-    for arg in instr['args']:
-      if arg not in seen_varse:
-        seen_varse.add(arg)
+class Numbering(dict):
+    """A dict mapping anything to numbers that can generate new numbers
+    for you when adding new values.
+    """
 
-expr_num_map = OrderedDict()
-var2num = {}
-alias_table = {}
-def get_table_repr(expr):
-  global expr_num_map, alias_table, var2num
-  # Const
-  if type(expr) == int or type(expr) == bool or type(expr) == str:
-    if expr in expr_num_map:
-      return (True, list(expr_num_map.keys()).index(expr)) # Literal we've seen
-    else:
-      return (False, (expr)) # New literal
+    def __init__(self, init={}):
+        super(Numbering, self).__init__(init)
+        self._next_fresh = 0
 
-  # Check if any aliases exist for this variable name already
-  if 'args' in expr:
-    new_args = []
-    for arg in expr['args']:
-      if arg in alias_table:
-        new_args.append(alias_table[arg])
-      else:
-        new_args.append(arg)
-    expr['args'] = new_args
+    def _fresh(self):
+        n = self._next_fresh
+        self._next_fresh = n + 1
+        return n
 
-  if 'op' in expr:
-    if expr['op'] in ('add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'ge', 'le', 'and', 'or'):
-      # arguments not in the table, make a placeholder entry
-      if expr['args'][0] not in var2num:
-        var2num[expr['args'][0]] = len(expr_num_map)
-        expr_num_map[expr['args'][0]] = expr['args'][0]
-      if expr['args'][1] not in var2num:
-        var2num[expr['args'][1]] = len(expr_num_map)
-        expr_num_map[expr['args'][1]] = expr['args'][1]
+    def add(self, key):
+        """Associate the key with a new, fresh number and return it. The
+        value may already be in the map; if so, it is overwritten and
+        the old number is forgotten.
+        """
+        n = self._fresh()
+        self[key] = n
+        return n
 
-      arg1num = var2num[expr['args'][0]]
-      arg2num = var2num[expr['args'][1]]
 
-      # commutativity
-      if expr['op'] in ('add', 'mul', 'and', 'or', 'eq'):
-        arg1num, arg2num = min(arg1num, arg2num), max(arg1num, arg2num)
+def last_writes(instrs):
+    """Given a block of instructions, return a list of bools---one per
+    instruction---that indicates whether that instruction is the last
+    write for its variable.
+    """
+    out = [False] * len(instrs)
+    seen = set()
+    for idx, instr in reversed(list(enumerate(instrs))):
+        if 'dest' in instr:
+            dest = instr['dest']
+            if dest not in seen:
+                out[idx] = True
+                seen.add(instr['dest'])
+    return out
 
-      # constant fold
-      arg1expr = list(expr_num_map.keys())[arg1num]
-      arg2expr = list(expr_num_map.keys())[arg2num]
-      if (arg1expr[0] == 'const' and arg2expr[0] == 'const'):
-        if expr['op'] in ('add'):
-          key = ('const', 'int', arg1expr[2] + arg2expr[2])
-        if expr['op'] in ('sub'):
-          key = ('const', 'int', arg1expr[2] - arg2expr[2])
-        if expr['op'] in ('mul'):
-          key = ('const', 'int', arg1expr[2] * arg2expr[2])
-        if expr['op'] in ('div'):
-          key = ('const', 'int', arg1expr[2] // arg2expr[2])
-        if expr['op'] in ('lt'):
-          key = ('const', 'bool', arg1expr[2] < arg2expr[2])
-        if expr['op'] in ('eq'):
-          key = ('const', 'bool', arg1expr[2] == arg2expr[2])
-        if expr['op'] in ('gt'):
-          key = ('const', 'bool', arg1expr[2] > arg2expr[2])
-        if expr['op'] in ('ge'):
-          key = ('const', 'bool', arg1expr[2] >= arg2expr[2])
-        if expr['op'] in ('le'):
-          key = ('const', 'bool', arg1expr[2] <= arg2expr[2])
-        if expr['op'] in ('and'):
-          key = ('const', 'bool', arg1expr[2] and arg2expr[2])
-        if expr['op'] in ('or'):
-          key = ('const', 'bool', arg1expr[2] or arg2expr[2])
-        if key in expr_num_map:
-          var2num[expr['dest']] = list(expr_num_map.keys()).index(key)
-          return (True, list(expr_num_map.keys()).index(key))
-        else:
-          var2num[expr['dest']] = len(expr_num_map)
-          expr_num_map[key] = expr['dest']
-          return (False, key)
 
-      if (expr['op'], arg1num, arg2num) in expr_num_map: #already in the table
-        var2num[expr['dest']] = list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num))
-        return (True, list(expr_num_map.keys()).index((expr['op'], arg1num, arg2num)))
-      else: # not in the table
-        var2num[expr['dest']] = len(expr_num_map)
-        expr_num_map[(expr['op'], arg1num, arg2num)] = expr['dest']
-        return (False, (expr['op'], arg1num, arg2num))
+def read_first(instrs):
+    """Given a block of instructions, return a set of variable names
+    that are read before they are written.
+    """
+    read = set()
+    written = set()
+    for instr in instrs:
+        read.update(set(instr.get('args', [])) - written)
+        if 'dest' in instr:
+            written.add(instr['dest'])
+    return read
 
-    if expr['op'] in ('id'):
-      if expr['args'][0] in var2num: # the arg is in the current environment with a assigned table entry
-        var2num[expr['dest']] = var2num[expr['args'][0]]
-        return (True, var2num[expr['args'][0]])
-      elif ('id', expr['args'][0]) in expr_num_map: # the arg not in the environment (live on entry), but someone else has already assigned to it
-        var2num[expr['dest']] = list(expr_num_map.keys()).index(('id', expr['args'][0]))
-        return (True, list(expr_num_map.keys()).index(('id', expr['args'][0])))
-      else:
-        var2num[expr['dest']] = len(expr_num_map)
-        if expr['args'][0] in var2num: # the variable has been assigned in this bb
-          expr_num_map[(expr['op'], expr['args'][0])] = expr['args'][0]
-        else: # the variable is live on entry and we are responsible for supplying the value now
-          expr_num_map[(expr['op'], expr['args'][0])] = expr['dest']
 
-        return (False, (expr['op'], expr['args'][0]))
+def lvn_block(block, lookup, canonicalize, fold):
+    """Use local value numbering to optimize a basic block. Modify the
+    instructions in place.
 
-    if expr['op'] in ('const'):
-        key = (expr['op'], expr['type'], expr['value'])
-        dest = expr['dest']
-        if key in expr_num_map:
-          var2num[dest] = list(expr_num_map.keys()).index(key)
-          return (True, list(expr_num_map.keys()).index(key))
-        else:
-          var2num[dest] = len(expr_num_map)
-          expr_num_map[key] = dest
-          return (False, key)
+    You can extend the basic LVN algorithm to bring interesting language
+    semantics with these functions:
 
-    if expr['op'] in ('jmp'):
-      return (False, expr['op'], expr)
-    if expr['op'] in ('print'):
-      return (False, expr['op'], expr)
+    - `lookup`. Arguments: a value-to-number map and a value. Return the
+      corresponding number (or None if it does not exist).
+    - `canonicalize`. Argument: a value. Returns an equivalent value in
+      a canonical form.
+    - `fold`. Arguments: a number-to-constant map  and a value. Return a
+      new constant if it can be computed directly (or None otherwise).
+    """
+    # The current value of every defined variable. We'll update this
+    # every time a variable is modified. Different variables can have
+    # the same value number (if they represent identical computations).
+    var2num = Numbering()
 
-    # TODO handle other ops
+    # The canonical variable holding a given value. Every time we're
+    # forced to compute a new value, we'll keep track of it here so we
+    # can reuse it later.
+    value2num = {}
 
-  # Label
-  return (False, ['label', expr])
+    # The *canonical* variable name holding a given numbered value.
+    # There is only one canonical variable per value number (so this is
+    # not the inverse of var2num). To make matters even more
+    # complicated, we will also keep a *list* of possible names here,
+    # where the first is the canonical one to use. This is only relevant
+    # when doing copy-propagation, and it helps with situations where a
+    # copy-propagated variable is later "clobbered" so we can fall back
+    # to a different variable holding the same value.
+    num2vars = {}
 
-trace_insts = json.load(sys.stdin)
-optimized_insts = []
-for instr in trace_insts:
-  # debug_print(f"LVN: Processing instruction: {instr}")
-  # Check if we are re-assigning
-  update_var_names(instr)
-  if 'dest' in instr:
-    if instr['dest'] in var2num:
-      if instr['dest'] not in expr_num_map: # not a placeholder, then we have a re-assignment
-        self_ref = False
+    # Track constant values for values assigned with `const`.
+    num2const = {}
+
+    # Initialize the table with numbers for input variables. These
+    # variables are their own canonical source.
+    for var in read_first(block):
+        num = var2num.add(var)
+        num2vars[num] = [var]
+
+    for instr, last_write in zip(block, last_writes(block)):
+        # Look up the value numbers for all variable arguments,
+        # generating new numbers for unseen variables.
+        argvars = instr.get('args', [])
+        argnums = tuple(var2num[var] for var in argvars)
+
+        # Update argument variable names to canonical variables.
         if 'args' in instr:
-          for arg in instr['args']:
-            if instr['dest'] == arg:
-              self_ref = True
-        if not self_ref:
-          renamed = True
-          debug_print(f"Renaming {instr['dest']} to a new name")
-          new_name = get_fresh_name()
-          alias_table[instr['dest']] = new_name
-          instr['dest'] = new_name
-        else: # remove the placeholder entry
-          del var2num[instr['dest']]
+            instr['args'] = [num2vars[n][0] for n in argnums]
 
-  subst_expr = get_table_repr(instr)
-  if subst_expr[0] == True:
-      new_source = list(expr_num_map.items())[subst_expr[1]][1]
-      new_instr = instr.copy()
-      new_instr['dest'] = instr['dest']
-      new_instr['args'] = [new_source]
-      new_instr['op'] = 'id'
+        # If we write to a variable, we "clobber" any previous value it
+        # may have held. Remove any entries that point to this variable
+        # as the "home" for old values.
+        if 'dest' in instr:
+            for rhs in num2vars.values():
+                if instr['dest'] in rhs:
+                    rhs.remove(instr['dest'])
 
-  elif subst_expr[1][0] == 'const':
-    new_instr = {
-      'dest': instr['dest'],
-      'op': 'const',
-      'type': instr['type'],
-      'value': subst_expr[1][2]
-    }
-  else:
-    new_instr = instr.copy()
-    if 'op' in instr:
-      if 'args' in instr:
-        new_args = []
-        for arg in instr['args']:
-          if arg in var2num:
-            if arg in alias_table:
-              arg = alias_table[arg]
-            argnum = var2num[arg]
-            argname = list(expr_num_map.items())[argnum][1]
-            new_args.append(argname)
-          else:
-            new_args.append(arg)
-        new_instr['args'] = new_args
-  debug_print(f"LVN: New instruction: {new_instr}")
-  optimized_insts.append(new_instr)
-debug_print(f'Optimized Instructions: {optimized_insts}')
-print(json.dumps(optimized_insts, indent=2))
+        # Non-call value operations are candidates for replacement. (We
+        # could conceivably include calls to pure functions as values,
+        # but determining purity would require an interprocedural
+        # analysis.)
+        val = None
+        if 'dest' in instr and 'args' in instr and instr['op'] != 'call':
+            # Construct a Value for this computation.
+            val = canonicalize(Value(instr['op'], argnums))
+
+            # Is this value already available?
+            num = lookup(value2num, val)
+            if num is not None:
+                # Mark this variable as containing the value.
+                var2num[instr['dest']] = num
+
+                # Replace the instruction with a copy or a constant.
+                if num in num2const:  # Value is a constant.
+                    instr.update({
+                        'op': 'const',
+                        'value': num2const[num],
+                    })
+                    del instr['args']
+                else:  # Value is in a variable.
+                    instr.update({
+                        'op': 'id',
+                        'args': [num2vars[num][0]],
+                    })
+                    num2vars[num].append(instr['dest'])
+                continue
+
+        # If this instruction produces a result, give it a number.
+        if 'dest' in instr:
+            newnum = var2num.add(instr['dest'])
+
+            # Record constant values.
+            if instr['op'] == 'const':
+                num2const[newnum] = instr['value']
+
+            if last_write:
+                # Preserve the variable name for other blocks.
+                var = instr['dest']
+            else:
+                # We must put the value in a new variable so it can be
+                # reused by another computation in the feature (in case
+                # the current variable name is reassigned before then).
+                var = 'lvn.{}'.format(newnum)
+
+            # Record the variable name and update the instruction.
+            num2vars[newnum] = [var]
+            instr['dest'] = var
+
+            if val is not None:
+                # Is this value foldable to a constant?
+                const = fold(num2const, val)
+                if const is not None:
+                    num2const[newnum] = const
+                    instr.update({
+                        'op': 'const',
+                        'value': const,
+                    })
+                    del instr['args']
+                    continue
+
+                # If not, record the new variable as the canonical
+                # source for the newly computed value.
+                value2num[val] = newnum
+
+
+def _lookup(value2num, value):
+    """Value lookup function with propagation through `id` values.
+    """
+    if value.op == 'id':
+        return value.args[0]  # Use the underlying value number.
+    else:
+        return value2num.get(value)
+
+
+FOLDABLE_OPS = {
+    'add': lambda a, b: a + b,
+    'mul': lambda a, b: a * b,
+    'sub': lambda a, b: a - b,
+    'div': lambda a, b: a // b,
+    'gt': lambda a, b: a > b,
+    'lt': lambda a, b: a < b,
+    'ge': lambda a, b: a >= b,
+    'le': lambda a, b: a <= b,
+    'ne': lambda a, b: a != b,
+    'eq': lambda a, b: a == b,
+    'or': lambda a, b: a or b,
+    'and': lambda a, b: a and b,
+    'not': lambda a: not a
+}
+
+
+def _fold(num2const, value):
+    if value.op in FOLDABLE_OPS:
+        try:
+            const_args = [num2const[n] for n in value.args]
+            return FOLDABLE_OPS[value.op](*const_args)
+        except KeyError:  # At least one argument is not a constant.
+            if value.op in {'eq', 'ne', 'le', 'ge'} and \
+               value.args[0] == value.args[1]:
+                # Equivalent arguments may be evaluated for equality.
+                # E.g. `eq x x`, where `x` is not a constant evaluates
+                # to `true`.
+                return value.op != 'ne'
+
+            if value.op in {'and', 'or'} and \
+               any(v in num2const for v in value.args):
+                # Short circuiting the logical operators `and` and `or`
+                # for two cases: (1) `and x c0` -> false, where `c0` a
+                # constant that evaluates to `false`. (2) `or x c1`  ->
+                # true, where `c1` a constant that evaluates to `true`.
+                const_val = num2const[value.args[0]
+                                      if value.args[0] in num2const
+                                      else value.args[1]]
+                if (value.op == 'and' and not const_val) or \
+                   (value.op == 'or' and const_val):
+                    return const_val
+            return None
+        except ZeroDivisionError:  # If we hit a dynamic error, bail!
+            return None
+    else:
+        return None
+
+
+def _canonicalize(value):
+    """Cannibalize values for commutative math operators.
+    """
+    if value.op in ('add', 'mul'):
+        return Value(value.op, tuple(sorted(value.args)))
+    else:
+        return value
+
+
+def lvn(block, prop=False, canon=False, fold=False):
+    """Apply the local value numbering optimization to every instruction in the provided trace
+    """
+    lvn_block(
+        block,
+        lookup=_lookup if prop else lambda v2n, v: v2n.get(v),
+        canonicalize=_canonicalize if canon else lambda v: v,
+        fold=_fold if fold else lambda n2c, v: None,
+    )
+
+
+if __name__ == '__main__':
+    bril = json.load(sys.stdin)
+    lvn(bril, '-p' in sys.argv, '-c' in sys.argv, '-f' in sys.argv)
+    json.dump(bril, sys.stdout, indent=2, sort_keys=True)

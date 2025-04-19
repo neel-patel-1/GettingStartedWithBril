@@ -17,50 +17,38 @@ __version__ = '0.0.1'
 # Text format parser.
 
 GRAMMAR = r"""
-start: (struct | func)*
+start: instr*
 
-struct: STRUCT IDENT "=" "{" mbr* "}"
-mbr: IDENT ":" type ";"
+?instr: const
+      | vop
+      | eop
+      | label
 
-func: FUNC ["(" arg_list? ")"] [tyann] "{" instr* "}"
-arg_list: | arg ("," arg)*
-arg: IDENT ":" type
-?instr: const | vop | eop | label
+const: IDENT "=" "const" lit ";"
+vop  : IDENT "=" op        ";"
+eop  : op                  ";"
+label: LABEL               ":"
 
-const.4: IDENT [tyann] "=" "const" lit ";"
-vop.3: IDENT [tyann] "=" op ";"
-eop.2: op ";"
-label.1: LABEL ":"
+op   : IDENT (IDENT | FUNC | LABEL)*
 
-op: IDENT (FUNC | LABEL | IDENT)*
+lit  : SIGNED_INT   -> int
+     | SIGNED_FLOAT -> float
+     | BOOL         -> bool
+     | "nullptr"    -> nullptr
+     | CHAR         -> char
 
-?tyann: ":" type
-
-lit: SIGNED_INT  -> int
-  | BOOL         -> bool
-  | SIGNED_FLOAT -> float
-  | "nullptr"    -> nullptr
-  | CHAR         -> char
-
-type: IDENT "<" type ">"  -> paramtype
-    | IDENT               -> primtype
-
-BOOL: "true" | "false"
-STRUCT: "struct"
-CHAR:  /'.'/ | /'\\[0abtnvfr]'/
-IDENT: ("_"|"%"|LETTER) ("_"|"%"|"."|LETTER|DIGIT)*
-FUNC: "@" IDENT
+FUNC : "@" IDENT
 LABEL: "." IDENT
-COMMENT: /#.*/
-
+BOOL : "true" | "false"
+CHAR : /'.'/ | /'\\[0abtnvfr]'/
+IDENT: ("_"|LETTER) ("_"|"."|LETTER|DIGIT)*
 
 %import common.SIGNED_INT
 %import common.SIGNED_FLOAT
-%import common.WS
 %import common.LETTER
 %import common.DIGIT
+%import common.WS
 %ignore WS
-%ignore COMMENT
 """.strip()
 
 control_chars = {
@@ -329,8 +317,11 @@ def print_func(func):
 
 
 def print_prog(prog):
-    for func in prog['functions']:
-        print_func(func)
+    for instr_or_label in prog:
+        if 'label' in instr_or_label:
+            print_label(instr_or_label)
+        else:
+            print_instr(instr_or_label)
 
 
 # Command-line entry points.
@@ -341,3 +332,8 @@ def bril2json():
 
 def bril2txt():
     print_prog(json.load(sys.stdin))
+
+if __name__ == "__main__":
+    # We’ll always run the “textify JSON” path: read JSON from stdin,
+    # pretty‑print it to text on stdout.
+    bril2txt()

@@ -12,17 +12,16 @@
 @main(x: int) {
   one: int = const 1;
   hundred: int = const 100;
-  y: int = add x one;
   cond: bool = lt x hundred;
   br cond .then .else;
 .then:
-  x: int = call @f x;
+  y: int = call @f x;
   jmp .done;
 .else:
-  x: int = call @g x;
+  y: int = call @g x;
   jmp .done;
 .done:
-  print x;
+  print y;
   ret;
 
 }
