@@ -46,21 +46,20 @@ for index, inst in enumerate(trace):
         new_name = f"{var}_inlined_{index}"
         rename_map[var] = new_name
 
-    # Update the function's instructions with renamed variables
-    for instr in functions[name]["instrs"]:
-      if "dest" in instr and instr["dest"] in rename_map:
-        instr["dest"] = rename_map[instr["dest"]]
-      if "args" in instr:
-        instr["args"] = [rename_map[arg] if arg in rename_map else arg for arg in instr["args"]]
 
     # TODO: handle recursion
     continue
   if inlining:
     if 'args' in inst:
-      inst['args'] = [
+      inst['args'] = [ # rename arguments to the caller's variable names until they are reassigned
         arg_map[arg] if arg in arg_map and arg not in [i['dest'] for i in trace_insts if 'dest' in i] else arg
         for arg in inst['args']
       ]
+    # Rename local variables inside the function if they share names with variables before the function call
+    if "dest" in inst and inst["dest"] in rename_map:
+      inst["dest"] = rename_map[inst["dest"]]
+    if "args" in inst:
+      inst["args"] = [rename_map[arg] if arg in rename_map else arg for arg in inst["args"]]
 
   trace_insts.append(inst)
 
