@@ -37,6 +37,22 @@ for index, inst in enumerate(trace):
       args = inst['args']
       arg_map = {param["name"]: args[i] for i, param in enumerate(functions[name]["args"])}
     inlining = True
+    # Rename local variables inside the function if they share names with variables before the function call
+    local_vars = {instr["dest"] for instr in functions[name]["instrs"] if "dest" in instr}
+    used_vars = {instr["dest"] for instr in trace_insts if "dest" in instr}
+    rename_map = {}
+    for var in local_vars:
+      if var in used_vars:
+        new_name = f"{var}_inlined_{index}"
+        rename_map[var] = new_name
+
+    # Update the function's instructions with renamed variables
+    for instr in functions[name]["instrs"]:
+      if "dest" in instr and instr["dest"] in rename_map:
+        instr["dest"] = rename_map[instr["dest"]]
+      if "args" in instr:
+        instr["args"] = [rename_map[arg] if arg in rename_map else arg for arg in instr["args"]]
+
     # TODO: handle recursion
     continue
   if inlining:

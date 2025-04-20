@@ -44,5 +44,5 @@ python3 ./optimizations/dce.py tdce+  < opt/traces/example.json/main_0.lvn.json 
 ```
 
 ```sh
-python3 ./optimizations/inline.py examples/example.json opt/traces/example.json/main_0.lvn.json
+ python3 ./optimizations/inline.py examples/example.json opt/traces/example.json/main_0.lvn.json | python3 optimizations/lvn.py -c -p -f | python3 optimizations/dce.py | python3 ./utils/trace2txt.py
 ```
