@@ -31,10 +31,10 @@ python3 ./optimizations/dce.py tdce+  < opt/traces/example.json/main_0.lvn.json 
   cond: bool = lt x hundred;
   br cond .then .else;
 .then:
-  y: int = call @f x;
+  y: int = call @f x;  // wait for ret to do an assignment
   one: int = const 1;
-  b: int = sub a one;
-  ret b;
+  b: int = sub a one; // replace a with x
+  ret b; // assign y to b
   jmp .done;
 .done:
   print y;
