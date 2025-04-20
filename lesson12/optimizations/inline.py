@@ -22,7 +22,30 @@ for func in bril["functions"]:
   functions[func["name"]] = func
 
 trace_insts = []
-for inst in trace:
+inlining = False
+for index, inst in enumerate(trace):
+  if 'op' in inst and inst['op'] == 'ret':
+    inlining = False
+    # TODO: handle recursion
+    continue
+  if 'op' in inst and inst['op'] == 'call':
+    name = inst['funcs'][0]
+    if name not in functions:
+      print(f"Error: Function {name} not found in original file.")
+      sys.exit(1)
+    if 'args' in inst:
+      args = inst['args']
+      arg_map = {param["name"]: args[i] for i, param in enumerate(functions[name]["args"])}
+    inlining = True
+    # TODO: handle recursion
+    continue
+  if inlining:
+    if 'args' in inst:
+      inst['args'] = [
+        arg_map[arg] if arg in arg_map and arg not in [i['dest'] for i in trace_insts if 'dest' in i] else arg
+        for arg in inst['args']
+      ]
+
   trace_insts.append(inst)
 
 json.dump(trace_insts, sys.stdout, indent=2, sort_keys=True)

@@ -26,6 +26,8 @@ python3 ./utils/trace2txt.py < opt/traces/example.json/main_0.lvn.json
 ```sh
 python3 ./optimizations/dce.py tdce+  < opt/traces/example.json/main_0.lvn.json | python3 ./utils/trace2txt.py
 ```
+
+```
   lvn.2: int = const 1;
   hundred: int = const 100;
   cond: bool = lt x hundred;
@@ -41,3 +43,6 @@ python3 ./optimizations/dce.py tdce+  < opt/traces/example.json/main_0.lvn.json 
   ret;
 ```
 
+```sh
+python3 ./optimizations/inline.py examples/example.json opt/traces/example.json/main_0.lvn.json
+```
