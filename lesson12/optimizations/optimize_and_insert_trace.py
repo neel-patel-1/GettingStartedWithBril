@@ -91,8 +91,6 @@ for trace_file in trace_files:
   with open(os.path.join(traces_dir, trace_file), 'r') as f:
     trace_insts = json.load(f)
     guards = get_guard_insts(trace_insts)
-    spec_inst = {'op': 'speculate'}
-    guard_insts = [spec_inst]
     for guard_inst in guards:
       cond_inst = {
         'op': guard_inst['op'],
@@ -120,6 +118,9 @@ for trace_file in trace_files:
           break
 
     recover_inst = {'label': 'recover'}
+    trace_insts.append(recover_inst)
+    spec_inst = {'op': 'speculate'}
+    trace_insts.insert(0, spec_inst)
 
     os.makedirs(guard_trace_dir, exist_ok=True)
     opt_trace_file = os.path.join(guard_trace_dir, trace_file)
