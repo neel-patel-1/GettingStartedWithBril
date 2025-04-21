@@ -90,30 +90,41 @@ for trace_file in trace_files:
   start_inst_no = int(start_inst_no.split('.')[0])
   with open(os.path.join(traces_dir, trace_file), 'r') as f:
     trace_insts = json.load(f)
-    guard_insts = get_guard_insts(trace_insts)
-    prepend_inst = {'op': 'speculate'}
-    prepend_insts = [prepend_inst]
-    for guard_inst in guard_insts:
-      prepend_inst = {
+    guards = get_guard_insts(trace_insts)
+    spec_inst = {'op': 'speculate'}
+    guard_insts = [spec_inst]
+    for guard_inst in guards:
+      cond_inst = {
         'op': guard_inst['op'],
         'args': guard_inst['args'],
         'dest': 'cond'
       }
-      prepend_insts.append(prepend_inst)
-      prepend_inst = {
+      guard_inst = {
         'op': 'guard',
         'args': ['cond'],
         'labels': ['recover']
       }
-      prepend_insts.append(prepend_inst)
-    prepend_insts += trace_insts
-    prepend_inst = {'label': 'recover'}
-    prepend_insts.append(prepend_inst)
+      # find the safe location to put the cond and guard
+      # Data structure to track which cond_inst args have been seen
+      seen_args = set()
+
+      # Iterate through the instructions to find the insertion point
+      for i, inst in enumerate(trace_insts):
+        if 'args' in inst:
+          seen_args.update(inst['args'])
+        # Check if all args of cond_inst are seen
+        if all(arg in seen_args for arg in cond_inst['args']):
+          # Insert cond_inst and guard_inst at this location
+          trace_insts.insert(i, cond_inst)
+          trace_insts.insert(i + 1, guard_inst)
+          break
+
+    recover_inst = {'label': 'recover'}
 
     os.makedirs(guard_trace_dir, exist_ok=True)
     opt_trace_file = os.path.join(guard_trace_dir, trace_file)
     with open(opt_trace_file, 'w') as opt_f:
-      json.dump(prepend_insts, opt_f, indent=2)
+      json.dump(trace_insts, opt_f, indent=2)
 
 # Load the original file
 
