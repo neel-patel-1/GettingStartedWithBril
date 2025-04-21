@@ -69,3 +69,5 @@
   y: int = call @f x;  // wait for ret to do an assignment
 
   for all the instructions up until the next "ret", replace any instance of functions[name][args][any_index] with inst[args][the_corresponding_index]
+  if a replaced argument ever shows up as the destination of an instruction, don't substitute it anymore
+  if the inst uses args and the args are in the arg_map, replace them with the arguments in the arg_map, as long as the argument has not been assigned since inlining began

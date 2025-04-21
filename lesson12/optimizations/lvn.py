@@ -1,4 +1,4 @@
-"""Local value numbering for Bril.
+"""Local value numbering for Bril. -- modified from sampsyo's implementation to handle traces
 """
 import json
 import sys

@@ -2,7 +2,7 @@ import json
 import sys
 from collections import OrderedDict
 import os
-DEBUG = True
+DEBUG = False
 
 def debug_print(message):
   if DEBUG:
@@ -76,7 +76,7 @@ if not os.path.exists(original_file):
 with open(original_file, 'r') as f:
   original_insts = json.load(f)
 
-traces_dir = os.path.join("traces", os.path.basename(original_file))
+traces_dir = os.path.join("opt/traces", os.path.basename(original_file))
 debug_print(f"Looking for traces in {traces_dir}")
 trace_files = []
 trace_files = [f for f in os.listdir(traces_dir) if os.path.isfile(os.path.join(traces_dir, f)) and f.endswith('.json')]
@@ -116,5 +116,14 @@ for trace_file in trace_files:
     with open(opt_trace_file, 'w') as opt_f:
       json.dump(prepend_insts, opt_f, indent=2)
 
-with open(opt_file, 'w') as f:
-  json.dump(original_insts, f, indent=2)
+# Insert the output of the optimization pass into the original program.
+for trace_file in trace_files:
+  function_name, start_inst_no = trace_file.split('_')
+  start_inst_no = int(start_inst_no.split('.')[0])
+  with open(os.path.join(opt_trace_dir, trace_file), 'r') as f:
+    opt_insts = json.load(f)
+    for i, inst in enumerate(original_insts):
+      if 'label' in inst and inst['label'] == function_name:
+        original_insts[i:i] = opt_insts
+        break
+json.dump(original_insts, sys.stdout, indent=2, sort_keys=True)

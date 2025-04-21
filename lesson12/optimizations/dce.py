@@ -1,5 +1,4 @@
-"""Trivial dead code elimination for Bril programs---a demonstration of
-local optimization.
+"""Trivial dead code elimination for Bril programs -- modified from sampsyo's implementation to handle traces
 """
 
 import sys
