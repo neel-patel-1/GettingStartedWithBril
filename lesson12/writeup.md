@@ -71,3 +71,10 @@
   for all the instructions up until the next "ret", replace any instance of functions[name][args][any_index] with inst[args][the_corresponding_index]
   if a replaced argument ever shows up as the destination of an instruction, don't substitute it anymore
   if the inst uses args and the args are in the arg_map, replace them with the arguments in the arg_map, as long as the argument has not been assigned since inlining began
+
+
+python3 ./optimizations/inline.py examples/example.json traces/example.json/main_0.json | python3 optimizations/lvn.py  -p -f | python3 optimizations/dce.py > opt/traces/example.json/main_0.lvn.dce.json
+
+Can remove cond and branch, since we guard for ithe condition
+y is undefined
+* need to add the assignment to b after the call for inlining

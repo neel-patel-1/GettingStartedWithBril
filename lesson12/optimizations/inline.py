@@ -24,11 +24,30 @@ for func in bril["functions"]:
 trace_insts = []
 inlining = False
 for index, inst in enumerate(trace):
-  if 'op' in inst and inst['op'] == 'ret':
+  if 'op' in inst and inst['op'] == 'ret' and inlining:
+    # if the function returns a value, and it is being assigned in a call function, assign the caller's destination variable to the return value
+
+    print(f"Ret Inst: {inst}", file=sys.stderr)
+    if var_to_assign is None:
+      print(f"Error: No destination variable to assign the return value to.", file=sys.stderr)
+      sys.exit(1)
+    print(f"Dest to assign: {var_to_assign}", file=sys.stderr)
+    caller_assign = {
+      'op': 'id',
+      'type': type_to_assign,
+      'dest': var_to_assign,
+      'args': [inst['args'][0]]
+    }
+    trace_insts.append(caller_assign)
+
     inlining = False
+    var_to_assign = None
     # TODO: handle recursion
     continue
   if 'op' in inst and inst['op'] == 'call':
+    if 'dest' in inst:
+      var_to_assign = inst['dest']
+      type_to_assign = inst['type']
     name = inst['funcs'][0]
     if name not in functions:
       print(f"Error: Function {name} not found in original file.")
