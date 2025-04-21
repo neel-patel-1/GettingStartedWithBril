@@ -2,11 +2,11 @@ import json
 import sys
 from collections import OrderedDict
 import os
-DEBUG = False
+DEBUG = True
 
 def debug_print(message):
   if DEBUG:
-    print(message)
+    print(message, file=sys.stderr)
 
 
 seen_conditions = {}
@@ -62,12 +62,11 @@ for each file in traces/<function_name>_<start_inst_no>.json:
   for each inst in the trace:
     insert the instruction at the insertion point
 '''
-if len(sys.argv) < 3:
-  print("Usage: python3 lvn.py <original_file> <opt_file>")
+if len(sys.argv) < 2:
+  print("Usage: python3 lvn.py <original_file> -- should have optimized traces in opt/traces/<original_file>/ ")
   sys.exit(1)
 
 original_file = sys.argv[1]
-opt_file = sys.argv[2]
 if not os.path.exists(original_file):
   print(f"Error: File {original_file} does not exist.")
   sys.exit(1)
@@ -83,8 +82,8 @@ trace_files = [f for f in os.listdir(traces_dir) if os.path.isfile(os.path.join(
 trace_files.sort(key=lambda x: (x.split('_')[0], -int(x.split('_')[1].split('.')[0])))
 debug_print(f"Found {len(trace_files)} traces in {traces_dir}")
 
-opt_trace_dir = os.path.join("opt", "traces", os.path.basename(original_file))
-debug_print(f"Emitting optimized traces in {opt_trace_dir}")
+guard_trace_dir = os.path.join("guarded", "traces", os.path.basename(original_file))
+debug_print(f"Emitting wrapped traces in {guard_trace_dir}")
 
 for trace_file in trace_files:
   function_name, start_inst_no = trace_file.split('_')
@@ -111,19 +110,34 @@ for trace_file in trace_files:
     prepend_inst = {'label': 'recover'}
     prepend_insts.append(prepend_inst)
 
-    os.makedirs(opt_trace_dir, exist_ok=True)
-    opt_trace_file = os.path.join(opt_trace_dir, trace_file)
+    os.makedirs(guard_trace_dir, exist_ok=True)
+    opt_trace_file = os.path.join(guard_trace_dir, trace_file)
     with open(opt_trace_file, 'w') as opt_f:
       json.dump(prepend_insts, opt_f, indent=2)
 
-# Insert the output of the optimization pass into the original program.
-for trace_file in trace_files:
-  function_name, start_inst_no = trace_file.split('_')
-  start_inst_no = int(start_inst_no.split('.')[0])
-  with open(os.path.join(opt_trace_dir, trace_file), 'r') as f:
-    opt_insts = json.load(f)
-    for i, inst in enumerate(original_insts):
-      if 'label' in inst and inst['label'] == function_name:
-        original_insts[i:i] = opt_insts
-        break
+# Load the original file
+
+# for each guarded trace, grouped by function and in reverse order, insert the guarded trace into the location spepcified by the start_inst_no
+guarded_trace_files = [f for f in os.listdir(guard_trace_dir) if os.path.isfile(os.path.join(guard_trace_dir, f)) and f.endswith('.json')]
+guarded_trace_files.sort(key=lambda x: (x.split('_')[0], -int(x.split('_')[1].split('.')[0])))
+for guarded_trace_file in guarded_trace_files:
+  function_name, start_inst_no = guarded_trace_file.split('_')
+  debug_print(f"Processing guarded trace file: {guarded_trace_file}")
+  # Locate the function with the right name
+  for func in original_insts['functions']:
+    if func['name'] == function_name:
+      # insert the guarded trace at the right location
+      start_inst_no = int(start_inst_no.split('.')[0])
+      debug_print(f"Found function {function_name} at index {start_inst_no}")
+      # Read the guarded trace
+      with open(os.path.join(guard_trace_dir, guarded_trace_file), 'r') as f:
+        guarded_trace_insts = json.load(f)
+        debug_print(f"Guarded trace instructions: {guarded_trace_insts}")
+        # Insert the guarded trace at the right location
+        func['instrs'] = func['instrs'][:start_inst_no] + guarded_trace_insts + func['instrs'][start_inst_no:]
+        debug_print(f"Inserted {len(guarded_trace_insts)} instructions into function {function_name} at index {start_inst_no}")
+      break
+
+
+
 json.dump(original_insts, sys.stdout, indent=2, sort_keys=True)
