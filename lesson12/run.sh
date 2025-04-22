@@ -25,6 +25,10 @@ bril2txt < $INPUT_JSON
 mkdir -p $OPT_TRACES
 for trace in ${TRACE_DIR}/*; do
   cp $trace $OPT_TRACES/$(basename $trace)
+  mkdir -p filled/$(basename $trace)
+  python3 ./utils/trace2txt.py < $trace > filled/$(basename $trace).bril
+  python3 optimizations/fill_labels.py filled/$(basename $trace).bril > filled/$(basename $trace).filled.bril
+  python3 ./utils/txt2trace.py < filled/$(basename $trace).filled.bril > $trace/$(basename $trace).filled.json
 done
 echo "Reinserted Traces -- No Optimizations: "
 python3 ./optimizations/optimize_and_insert_trace.py $INPUT_JSON > $OUTPUT
@@ -32,7 +36,6 @@ bril2txt < $OUTPUT
 brili -p ${ARGS} < $OUTPUT
 
   # apply optimizations to the trace
-mkdir -p $OPT_TRACES
 for trace in ${TRACE_DIR}/*; do
   python3 ./optimizations/inline.py ${INPUT_JSON} ${trace} | python3 optimizations/lvn.py  -p -f > $OPT_TRACES/$(basename $trace)
 done
