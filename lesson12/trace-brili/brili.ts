@@ -421,10 +421,26 @@ function evalCall(instr: bril.Operation, state: State): Action {
  * otherwise, return "next" to indicate that we should proceed to the next
  * instruction or "end" to terminate the function.
  */
-function evalInstr(instr: bril.Instruction, state: State): Action {
+function evalInstr(instr: bril.Instruction, state: State, func: bril.Function): Action {
   state.icount += BigInt(1);
-  if (state.tracing) {
+  if (instr.count == undefined) {
+    instr.count = 0;
+  }
+  instr.count += 1;
+  if (instr.count >= hotnessThreshold ) {
+    console.log("hot instr:" + instr);
     state.inst_trace.push(instr);
+  }
+  else  {
+    if (state.inst_trace.length > 0) {
+      const traceFileName = state.trace_file + "_" + state.curlabel + "_" + state.labelOffset + ".json";
+      console.log("Cold Instruction Hit. Trace stopped. writing trace to file: " + traceFileName);
+      state.inst_trace.pop();
+      Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
+      state.inst_trace = [];
+      state.trace_file = state.dir_name + "/" + func.name + "_" + state.curlabel + "_" + state.labelOffset;
+      console.log("Cold Instruction Hit hit. Trace stopped. next trace file: " + state.trace_file);
+    }
   }
 
   // Check that we have the right number of arguments.
@@ -795,8 +811,8 @@ function evalFunc(func: bril.Function, state: State): Value | null {
   for (let i = 0; i < func.instrs.length; ++i) {
     let line = func.instrs[i];
     if ('op' in line) {
-      // Run an instruction.
-      let action = evalInstr(line, state);
+      // Run an instruction./conso
+      let action = evalInstr(line, state, func);
 
       if (line.op == "print"){
         // Write to file
@@ -869,7 +885,7 @@ function evalFunc(func: bril.Function, state: State): Value | null {
         }
       }
     } else if ('label' in line) {
-      state.inst_trace.push(line);
+      // state.inst_trace.push(line);
       // Update CFG tracking for SSA phi nodes.
       state.lastlabel = state.curlabel;
       state.curlabel = line.label;
