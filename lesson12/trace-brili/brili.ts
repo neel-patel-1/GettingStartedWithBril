@@ -1,7 +1,7 @@
 import * as bril from './bril-ts/bril.ts';
 import {readStdin, unreachable} from './bril-ts/util.ts';
 
-const hotnessThreshold = 0;
+const hotnessThreshold = 2;
 /**
  * An interpreter error to print to the console.
  */
@@ -431,6 +431,10 @@ function evalInstr(instr: bril.Instruction, state: State, func: bril.Function): 
   }
   instr.count += 1;
   if (instr.count >= hotnessThreshold ) {
+    console.log("Hot Instr: " + instr.op)
+    if ( state.trace_file == undefined){
+      state.trace_file = state.dir_name + "/" + func.name + "_" + state.curlabel + "_" + state.labelOffset;
+    }
     if (instr.op != 'print'){
       state.inst_trace.push(instr);
       state.trace_length++;
@@ -1022,7 +1026,7 @@ async function evalProg(prog: bril.Program) {
     trace_length: 0,
   }
 
-  state.trace_file = state.dir_name + "/" + "main" + "_" + state.curlabel + "_" + state.labelOffset;
+  // state.trace_file = state.dir_name + "/" + "main" + "_" + state.curlabel + "_" + state.labelOffset;
 
   evalFunc(main, state);
 
