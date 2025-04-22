@@ -378,7 +378,7 @@ function evalCall(instr: bril.Operation, state: State): Action {
     tracing: state.tracing,
     trace_file: state.trace_file,
     inst_trace: state.inst_trace,
-    trace_length: 0,
+    trace_length: state.trace_length,
   }
   let retVal = evalFunc(func, newState);
   state.icount = newState.icount;
@@ -425,12 +425,12 @@ function evalCall(instr: bril.Operation, state: State): Action {
  */
 function evalInstr(instr: bril.Instruction, state: State, func: bril.Function): Action {
   state.icount += BigInt(1);
+  console.log("Instr: " + instr.op + " LabelOffset: " + state.labelOffset)
   if (instr.count == undefined) {
     instr.count = 0;
   }
   instr.count += 1;
   if (instr.count >= hotnessThreshold ) {
-    console.log("hot instr:" + instr);
     if (instr.op != 'print'){
       state.inst_trace.push(instr);
       state.trace_length++;
@@ -814,6 +814,7 @@ function evalInstr(instr: bril.Instruction, state: State, func: bril.Function): 
 }
 
 function evalFunc(func: bril.Function, state: State): Value | null {
+  state.labelOffset = 0;
   for (let i = 0; i < func.instrs.length; ++i) {
     let line = func.instrs[i];
     if ('op' in line) {
@@ -821,6 +822,7 @@ function evalFunc(func: bril.Function, state: State): Value | null {
       let action = evalInstr(line, state, func);
 
       if (line.op == "print"){
+        console.log("Line has op " + line.op)
         // Write to file
         if (state.trace_length > 0) {
           const traceFileName = state.trace_file + "_" + state.curlabel + "_" + state.labelOffset + ".json";
@@ -1017,6 +1019,7 @@ async function evalProg(prog: bril.Program) {
     labelOffset: 0,
     trace_file: null,
     inst_trace: [],
+    trace_length: 0,
   }
 
   state.trace_file = state.dir_name + "/" + "main" + "_" + state.curlabel + "_" + state.labelOffset;
