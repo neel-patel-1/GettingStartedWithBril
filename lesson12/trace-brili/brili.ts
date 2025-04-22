@@ -1,7 +1,7 @@
 import * as bril from './bril-ts/bril.ts';
 import {readStdin, unreachable} from './bril-ts/util.ts';
 
-const hotnessThreshold = 2;
+const hotnessThreshold = 0;
 /**
  * An interpreter error to print to the console.
  */
@@ -328,6 +328,7 @@ type State = {
   tracing: boolean,
   trace_file: string,
   inst_trace: bril.Instruction[],
+  trace_length: number,
   labelOffset: number,
   dir_name: string,
 }
@@ -377,6 +378,7 @@ function evalCall(instr: bril.Operation, state: State): Action {
     tracing: state.tracing,
     trace_file: state.trace_file,
     inst_trace: state.inst_trace,
+    trace_length: 0,
   }
   let retVal = evalFunc(func, newState);
   state.icount = newState.icount;
@@ -429,10 +431,13 @@ function evalInstr(instr: bril.Instruction, state: State, func: bril.Function): 
   instr.count += 1;
   if (instr.count >= hotnessThreshold ) {
     console.log("hot instr:" + instr);
-    state.inst_trace.push(instr);
+    if (instr.op != 'print'){
+      state.inst_trace.push(instr);
+      state.trace_length++;
+    }
   }
   else  {
-    if (state.inst_trace.length > 0) {
+    if (state.trace_length > 0) {
       const traceFileName = state.trace_file + "_" + state.curlabel + "_" + state.labelOffset + ".json";
       console.log("Cold Instruction Hit. Trace stopped. writing trace to file: " + traceFileName);
       state.inst_trace.pop();
@@ -440,6 +445,7 @@ function evalInstr(instr: bril.Instruction, state: State, func: bril.Function): 
       state.inst_trace = [];
       state.trace_file = state.dir_name + "/" + func.name + "_" + state.curlabel + "_" + state.labelOffset;
       console.log("Cold Instruction Hit hit. Trace stopped. next trace file: " + state.trace_file);
+      state.trace_length = 0;
     }
   }
 
@@ -816,14 +822,14 @@ function evalFunc(func: bril.Function, state: State): Value | null {
 
       if (line.op == "print"){
         // Write to file
-        if (state.inst_trace.length > 0) {
+        if (state.trace_length > 0) {
           const traceFileName = state.trace_file + "_" + state.curlabel + "_" + state.labelOffset + ".json";
           console.log("Print hit. Trace stopped. writing trace to file: " + traceFileName);
           state.inst_trace.pop();
           Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
           state.inst_trace = [];
           state.trace_file = state.dir_name + "/" + func.name + "_" + state.curlabel + "_" + state.labelOffset;
-          //state.trace_file = func.name + "_" + state.curlabel + "_" + state.labelOffset;
+          state.trace_length = 0;
           console.log("Print hit. Trace stopped. next trace file: " + state.trace_file);
         }
       }
@@ -885,7 +891,7 @@ function evalFunc(func: bril.Function, state: State): Value | null {
         }
       }
     } else if ('label' in line) {
-      // state.inst_trace.push(line);
+      state.inst_trace.push(line);
       // Update CFG tracking for SSA phi nodes.
       state.lastlabel = state.curlabel;
       state.curlabel = line.label;
