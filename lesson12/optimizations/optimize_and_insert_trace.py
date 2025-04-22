@@ -117,10 +117,15 @@ for trace_file in trace_files:
           trace_insts.insert(i + 1, guard_inst)
           break
 
+    commit_inst = { 'op': 'commit' }
+    trace_insts.append(commit_inst)
     recover_inst = {'label': 'recover'}
     trace_insts.append(recover_inst)
     spec_inst = {'op': 'speculate'}
     trace_insts.insert(0, spec_inst)
+
+    # remove inst if op is in inst and op is in ['jmp', 'br', 'label'] or if label is in inst
+    trace_insts = [ inst for inst in trace_insts if 'op' in inst and inst['op'] not in ['jmp', 'br', 'label'] ]
 
     os.makedirs(guard_trace_dir, exist_ok=True)
     opt_trace_file = os.path.join(guard_trace_dir, trace_file)
