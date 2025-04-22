@@ -1,100 +1,110 @@
 #!/usr/bin/env python3
 import sys
-import re
+import json
 from collections import defaultdict
 
-LABEL_RE = re.compile(r'^(\.[A-Za-z0-9_\.]+):\s*$')
+def load_ir(path):
+    with open(path, 'r') as f:
+        return json.load(f)
 
-def find_labels(lines):
-    """Return list of (idx, label_name) for every label decl."""
-    labels = []
-    for idx, line in enumerate(lines):
-        m = LABEL_RE.match(line)
-        if m:
-            labels.append((idx, m.group(1)))
-    return labels
+def is_label_stmt(stmt):
+    # A pure label declaration has exactly one key "label"
+    return isinstance(stmt, dict) and stmt.keys() == {"label"}
 
-def extract_segments(lines, labels):
+def find_label_positions(ir):
+    # Return list of (index, label_name) for each label stmt
+    return [(i, stmt["label"]) for i, stmt in enumerate(ir) if is_label_stmt(stmt)]
+
+def extract_segments(ir, labels):
     """
-    For each adjacent pair of label decls (L1 at i, L2 at j),
-    record the raw lines between them (i+1 .. j-1).
+    For each adjacent pair of labels (L1 at i, L2 at j), record:
+      segments[(L1,L2)] → list of instruction‐lists between them
+      occs    [(L1,L2)] → list of (i, j) positions
     """
-    occs = defaultdict(list)
+    segments = defaultdict(list)
+    occs     = defaultdict(list)
+
     for (i, lab1), (j, lab2) in zip(labels, labels[1:]):
-        block = lines[i+1:j]
-        occs[(lab1, lab2)].append((i, j, block))
-    return occs
+        block = ir[i+1:j]
+        # keep only non‐label statements
+        instrs = [stmt for stmt in block if not is_label_stmt(stmt)]
+        segments[(lab1, lab2)].append(instrs)
+        occs[(lab1, lab2)].append((i, j))
 
-def compute_canonical(occs):
+    return segments, occs
+
+def compute_canonical(segments):
     """
-    For each (lab1,lab2), if there's at least one non-empty block
-    and all non-empty blocks are identical, record that as canonical.
+    For each pair (L1,L2), if there's ≥1 non‐empty block and
+    all non‐empty blocks are identical, record that as canonical.
     """
     canon = {}
-    for key, chunks in occs.items():
-        # strip out blank-only chunks
-        non_empty = [c for (_,_,c) in chunks if any(l.strip() for l in c)]
-        if non_empty and all(non_empty[0] == c for c in non_empty[1:]):
+    for key, lists in segments.items():
+        non_empty = [lst for lst in lists if lst]
+        if non_empty and all(lst == non_empty[0] for lst in non_empty[1:]):
             canon[key] = non_empty[0]
     return canon
 
-def fill_and_emit(lines, labels, occs, canon):
+def fill_ir(ir, labels, occs, canon):
     """
-    Walk through the file.  Whenever you hit a label at idx i
-    that’s followed by another label in labels, and (lab1,lab2) in canon,
-    emit:
-      - the label line
-      - either the original non-empty block (if present) or the canon block
-    then skip ahead to that next label.
-    Otherwise just emit the current line.
+    Walk through IR. Whenever you hit label@i with next label@j where
+    (lab1,lab2) in canon,
+      • emit the label stmt
+      • if original block non‐empty, emit it; else emit canon[(lab1,lab2)]
+      • skip ahead to j
+    Otherwise just copy stmt[i].
     """
-    # build quick lookups
     label_at = {i: lab for i, lab in labels}
-    next_label = {i: j for (i,_), (j,_) in zip(labels, labels[1:])}
+    next_idx = {i: j for (i,_), (j,_) in zip(labels, labels[1:])}
 
     out = []
     i = 0
-    while i < len(lines):
-        if i in label_at and i in next_label:
+    n = len(ir)
+    while i < n:
+        if i in label_at and i in next_idx:
             lab1 = label_at[i]
-            j = next_label[i]
+            j    = next_idx[i]
             lab2 = label_at[j]
-            key = (lab1, lab2)
+            key  = (lab1, lab2)
             if key in canon:
                 # emit the label itself
-                out.append(lines[i])
-                # check original between i+1 and j
-                orig = lines[i+1:j]
-                if any(l.strip() for l in orig):
-                    # has its own code → keep it
+                out.append(ir[i])
+                # original between i+1 and j
+                orig = [stmt for stmt in ir[i+1:j] if not is_label_stmt(stmt)]
+                if orig:
                     out.extend(orig)
                 else:
-                    # empty → fill with canonical
                     out.extend(canon[key])
-                # skip ahead to j
+                # jump to the next label
                 i = j
                 continue
 
-        # default: just emit this line
-        out.append(lines[i])
+        # default: copy current stmt
+        out.append(ir[i])
         i += 1
 
     return out
 
 def main():
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <input-file>", file=sys.stderr)
+    if len(sys.argv) not in (2,3):
+        print(f"Usage: {sys.argv[0]} <in.json> [<out.json>]", file=sys.stderr)
         sys.exit(1)
 
-    with open(sys.argv[1]) as f:
-        lines = f.readlines()
+    in_path  = sys.argv[1]
+    out_path = sys.argv[2] if len(sys.argv) == 3 else None
 
-    labels = find_labels(lines)
-    occs   = extract_segments(lines, labels)
-    canon  = compute_canonical(occs)
-    out    = fill_and_emit(lines, labels, occs, canon)
+    ir       = load_ir(in_path)
+    labels   = find_label_positions(ir)
+    segments, occs = extract_segments(ir, labels)
+    canon    = compute_canonical(segments)
+    new_ir   = fill_ir(ir, labels, occs, canon)
 
-    sys.stdout.write(''.join(out))
+    out_data = json.dumps(new_ir, indent=2)
+    if out_path:
+        with open(out_path, 'w') as f:
+            f.write(out_data)
+    else:
+        print(out_data)
 
 if __name__ == "__main__":
     main()
