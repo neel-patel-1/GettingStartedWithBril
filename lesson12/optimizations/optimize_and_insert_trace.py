@@ -40,7 +40,7 @@ def get_guard_insts(trace_insts):
       else:
         condition_to_guard_on = condition
         if false_label == inst['label']:
-          condition_to_guard_on ['op'] = opposite_ops[guard_inst['op']]
+          condition_to_guard_on ['op'] = opposite_ops[condition['op']]
         elif not true_label == inst['label']:
           raise ValueError("Expected to see a label from the last branch instruction, got: %s" % inst['label'])
         debug_print(f"GuardGen: Condition to guard on: {condition_to_guard_on}")
