@@ -132,7 +132,7 @@ for trace_file in trace_files:
 
     # remove inst if op is in inst and op is in ['jmp', 'br', 'label'] or if label is in inst
     trace_insts = [ inst for inst in trace_insts if 'op' in inst and inst['op'] not in ['jmp', 'br', 'label'] ]
-    jmp_after_inst = {'op': 'jmp', 'labels': ['trace_completed_' + str(start_inst_no)]}
+    jmp_after_inst = {'op': 'jmp', 'labels': ['trace_completed_' + label_st + "_" + str(start_inst_no)]}
     trace_insts.append(jmp_after_inst)
     debug_print(f"Added jmp instruction: {jmp_after_inst}")
     trace_id = function_name + label_st + str(start_inst_no) + label_fin + str(end_inst_no.split('.')[0])
@@ -167,7 +167,7 @@ for guarded_trace_file in guarded_trace_files:
 
       # add the trace_completed label after the replaced code
       stop_inst_no = int(end_inst_no.split('.')[0]) + label_instnos[label_fin]
-      func['instrs'].insert(stop_inst_no, {'label': 'trace_completed_' + str(start_inst_no)})
+      func['instrs'].insert(stop_inst_no, {'label': 'trace_completed_' + str(label_st) + "_" + str(start_inst_no)})
 
       # Read the guarded trace
       with open(os.path.join(guard_trace_dir, guarded_trace_file), 'r') as f:
