@@ -22,6 +22,15 @@ echo "Before optimization: "
 echo "-----------------------"
 bril2txt < $INPUT_JSON
 
+mkdir -p $OPT_TRACES
+for trace in ${TRACE_DIR}/*; do
+  cp $trace $OPT_TRACES/$(basename $trace)
+done
+echo "Reinserted Traces -- No Optimizations: "
+python3 ./optimizations/optimize_and_insert_trace.py $INPUT_JSON > $OUTPUT
+bril2txt < $OUTPUT
+brili -p ${ARGS} < $OUTPUT
+
   # apply optimizations to the trace
 mkdir -p $OPT_TRACES
 for trace in ${TRACE_DIR}/*; do
