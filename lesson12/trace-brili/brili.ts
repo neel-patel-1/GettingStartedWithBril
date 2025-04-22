@@ -1,6 +1,7 @@
 import * as bril from './bril-ts/bril.ts';
 import {readStdin, unreachable} from './bril-ts/util.ts';
 
+const hotnessThreshold = 2;
 /**
  * An interpreter error to print to the console.
  */
@@ -617,17 +618,6 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
 
   case "jmp": {
     const targetLabel = getLabel(instr, 0);
-    if (!state.seenlabels) {
-      state.seenlabels = new Set<string>();
-    }
-    if (state.seenlabels.has(targetLabel)){
-      if (state.tracing) {
-        console.log("Trace completed.\n");
-      }
-      // this jmp is a backedge, enable tracing if not already
-      state.tracing = true;
-      console.log("Trace started.\n");
-    }
     return {"action": "jump", "label": getLabel(instr, 0)};
   }
 
