@@ -324,10 +324,11 @@ type State = {
   specparent: State | null,
 
   // For trace-based optimization
-  seenlabels: Set<string> | null,
   tracing: boolean,
   trace_file: string,
   inst_trace: bril.Instruction[],
+  labelOffset: number,
+  dir_name: string,
 }
 
 /**
@@ -609,15 +610,6 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
       if (Object.is(-0, val)) { return "-0.00000000000000000" };
       if (typeof val == "number") { return val.toFixed(17) } else {return val.toString()}}
     );
-    // Stop trace
-    state.tracing = false;
-    // Write to file
-    if (state.inst_trace.length > 0) {
-      const traceFileName = state.trace_file + ".json";
-      Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
-      state.inst_trace = [];
-      state.trace_file = `${state.trace_file}_${state.icount}`;
-    }
 
     console.log(...values);
     return NEXT;
@@ -816,6 +808,20 @@ function evalFunc(func: bril.Function, state: State): Value | null {
       // Run an instruction.
       let action = evalInstr(line, state);
 
+      if (line.op == "print"){
+        // Write to file
+        if (state.inst_trace.length > 0) {
+          const traceFileName = state.trace_file + ".json";
+          console.log("Print hit. Trace stopped. writing trace to file: " + traceFileName);
+          state.inst_trace.pop();
+          Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
+          state.inst_trace = [];
+          state.trace_file = state.dir_name + "/" + func.name + "_" + state.curlabel + "_" + state.labelOffset;
+          //state.trace_file = func.name + "_" + state.curlabel + "_" + state.labelOffset;
+          console.log("Print hit. Trace stopped. next trace file: " + state.trace_file);
+        }
+      }
+
       // Take the prescribed action.
       switch (action.action) {
       case 'end': {
@@ -877,11 +883,9 @@ function evalFunc(func: bril.Function, state: State): Value | null {
       // Update CFG tracking for SSA phi nodes.
       state.lastlabel = state.curlabel;
       state.curlabel = line.label;
-      if (state.seenlabels == null) {
-        state.seenlabels = new Set<string>();
-      }
-      state.seenlabels?.add(line.label);
+      state.labelOffset = 0;
     }
+    state.labelOffset += 1;
   }
 
   // Reached the end of the function without hitting `ret`.
@@ -997,9 +1001,13 @@ async function evalProg(prog: bril.Program) {
     curlabel: null,
     specparent: null,
     tracing: true,
-    trace_file: `${programName}/main_0`,
+    dir_name: programName,
+    labelOffset: 0,
+    trace_file: null,
     inst_trace: [],
   }
+
+  state.trace_file = state.dir_name + "/" + "main" + "_" + state.curlabel + "_" + state.labelOffset;
 
   evalFunc(main, state);
 
