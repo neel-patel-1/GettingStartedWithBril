@@ -130,6 +130,8 @@ inter-procedural or not, we can view tracing as injecting a optimized code bubbl
 no hot path trace_start methodology yet, but need a way to test above trace generation methodology:
 * hot path, start tracing is orthogonal and we could start with trace at all opportunities
 
+* doing by labels introduces some other challenges: (1) we now need to find the label in the function or use null to know its before any labels, (2) we still need to go backwards - so this is same
+
 
 trace code naming convention:
 traces/<original_program_name>.json/<func_name>_<s_label>_<s_offset>_<e_label>_<e_offset>.json

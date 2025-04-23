@@ -79,14 +79,16 @@ traces_dir = os.path.join("opt/traces", os.path.basename(original_file))
 debug_print(f"Looking for traces in {traces_dir}")
 trace_files = []
 trace_files = [f for f in os.listdir(traces_dir) if os.path.isfile(os.path.join(traces_dir, f)) and f.endswith('.json')]
-trace_files.sort(key=lambda x: (x.split('_')[0], -int(x.split('_')[1].split('.')[0])))
+trace_files.sort(key=lambda x: (x.split('_')[0], x.split('_')[1], -int(x.split('_')[2].split('.')[0])))
 debug_print(f"Found {len(trace_files)} traces in {traces_dir}")
+debug_print(f"Trace files: {trace_files}")
+
 
 guard_trace_dir = os.path.join("guarded", "traces", os.path.basename(original_file))
-debug_print(f"Emitting wrapped traces in {guard_trace_dir}")
-
+debug_print(f"Putting guarded traces in {guard_trace_dir}")
+os.makedirs(guard_trace_dir, exist_ok=True)
 for trace_file in trace_files:
-  function_name, start_inst_no = trace_file.split('_')
+  function_name, label_name, start_inst_no = trace_file.split('_')
   start_inst_no = int(start_inst_no.split('.')[0])
   with open(os.path.join(traces_dir, trace_file), 'r') as f:
     trace_insts = json.load(f)
@@ -127,18 +129,22 @@ for trace_file in trace_files:
     # remove inst if op is in inst and op is in ['jmp', 'br', 'label'] or if label is in inst
     trace_insts = [ inst for inst in trace_insts if 'op' in inst and inst['op'] not in ['jmp', 'br', 'label'] ]
 
-    os.makedirs(guard_trace_dir, exist_ok=True)
-    opt_trace_file = os.path.join(guard_trace_dir, trace_file)
-    with open(opt_trace_file, 'w') as opt_f:
+    guarded_trace_file = os.path.join(guard_trace_dir, trace_file)
+    with open(guarded_trace_file, 'w') as opt_f:
       json.dump(trace_insts, opt_f, indent=2)
 
 # Load the original file
 
 # for each guarded trace, grouped by function and in reverse order, insert the guarded trace into the location spepcified by the start_inst_no
-guarded_trace_files = [f for f in os.listdir(guard_trace_dir) if os.path.isfile(os.path.join(guard_trace_dir, f)) and f.endswith('.json')]
-guarded_trace_files.sort(key=lambda x: (x.split('_')[0], -int(x.split('_')[1].split('.')[0])))
+guard_traces_dir = os.path.join("guarded/traces", os.path.basename(original_file))
+debug_print(f"Looking for guarded traces in {guard_traces_dir}")
+guarded_trace_files = [f for f in os.listdir(guard_traces_dir) if os.path.isfile(os.path.join(guard_traces_dir, f)) and f.endswith('.json')]
+debug_print(f"split: {[x.split('_') for x in guarded_trace_files]}")
+guarded_trace_files.sort(key=lambda x: (x.split('_')[0], -int(x.split('_')[2].split('.')[0])))
+debug_print(f"Guarded trace files: {guarded_trace_files}")
+exit
 for guarded_trace_file in guarded_trace_files:
-  function_name, start_inst_no = guarded_trace_file.split('_')
+  function_name, label_name, start_inst_no = guarded_trace_file.split('_')
   debug_print(f"Processing guarded trace file: {guarded_trace_file}")
   # Locate the function with the right name
   for func in original_insts['functions']:
