@@ -811,7 +811,7 @@ function evalFunc(func: bril.Function, state: State): Value | null {
       if (line.op == "print"){
         // Write to file
         if (state.inst_trace.length > 0) {
-          const traceFileName = state.trace_file + ".json";
+          const traceFileName = state.trace_file + "_" + state.curlabel + "_" + state.labelOffset + ".json";
           console.log("Print hit. Trace stopped. writing trace to file: " + traceFileName);
           state.inst_trace.pop();
           Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
@@ -1013,7 +1013,7 @@ async function evalProg(prog: bril.Program) {
 
   // state.tracing = false;
   if (state.inst_trace.length > 0) {
-    const traceFileName = state.trace_file + ".json";
+    const traceFileName = state.trace_file + "_" + state.curlabel + "_" + state.labelOffset + ".json";
     await Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
   }
 

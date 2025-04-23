@@ -95,8 +95,7 @@ guard_trace_dir = os.path.join("guarded", "traces", os.path.basename(original_fi
 debug_print(f"Putting guarded traces in {guard_trace_dir}")
 os.makedirs(guard_trace_dir, exist_ok=True)
 for trace_file in trace_files:
-  function_name, label_name, start_inst_no = trace_file.split('_')
-  start_inst_no = int(start_inst_no.split('.')[0])
+  function_name, label_st, start_inst_no, label_fin, end_inst_no = trace_file.split('_')
   with open(os.path.join(traces_dir, trace_file), 'r') as f:
     trace_insts = json.load(f)
     guards = get_guard_insts(trace_insts)
@@ -150,16 +149,18 @@ guarded_trace_files.sort(key=lambda x: (x.split('_')[0], -int(x.split('_')[2].sp
 debug_print(f"Guarded trace files: {guarded_trace_files}")
 exit
 for guarded_trace_file in guarded_trace_files:
-  function_name, label_name, start_inst_no = guarded_trace_file.split('_')
+  function_name, label_st, start_inst_no, label_fin, end_inst_no = guarded_trace_file.split('_')
   debug_print(f"Processing guarded trace file: {guarded_trace_file}")
   # Locate the function with the right name
   for func in original_insts['functions']:
     if func['name'] == function_name:
+      # add the trace_completed label after the replaced code
       # get label offsets from start of function
       label_instnos = get_label_instnos(func['instrs'])
       # insert the guarded trace at the right location
-      start_inst_no = int(start_inst_no.split('.')[0]) + label_instnos[label_name]
-      debug_print(f"Found {function_name}_{label_name} at index {start_inst_no}")
+      start_inst_no = int(start_inst_no) + label_instnos[label_st]
+      stop_inst_no = int(end_inst_no.split('.')[0]) + label_instnos[label_fin]
+      debug_print(f"Found {function_name}_{label_st} at index {start_inst_no}")
       # Read the guarded trace
       with open(os.path.join(guard_trace_dir, guarded_trace_file), 'r') as f:
         guarded_trace_insts = json.load(f)
