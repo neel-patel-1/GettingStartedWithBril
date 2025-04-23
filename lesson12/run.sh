@@ -15,7 +15,8 @@ OG_BRILI=brili
 
 cat $INPUT | bril2json > $INPUT_JSON
 # run through trace brili to generate the traces
-deno run --allow-read=./examples --allow-write=. $TRACE_BRILI $INPUT_JSON -p ${ARGS}
+deno run --allow-read=./examples --allow-write=. $TRACE_BRILI $INPUT_JSON ${ARGS}
+brili -p ${ARGS} < $INPUT_JSON
 echo "Before optimization: "
 echo "-----------------------"
 bril2txt < $INPUT_JSON

@@ -132,6 +132,10 @@ for trace_file in trace_files:
 
     # remove inst if op is in inst and op is in ['jmp', 'br', 'label'] or if label is in inst
     trace_insts = [ inst for inst in trace_insts if 'op' in inst and inst['op'] not in ['jmp', 'br', 'label'] ]
+    jmp_after_inst = {'op': 'jmp', 'labels': ['trace_completed_' + str(start_inst_no)]}
+    trace_insts.append(jmp_after_inst)
+    debug_print(f"Added jmp instruction: {jmp_after_inst}")
+    trace_id = function_name + label_st + str(start_inst_no) + label_fin + str(end_inst_no.split('.')[0])
     recover_inst = {'label': 'recover'}
     trace_insts.append(recover_inst)
 
@@ -154,20 +158,27 @@ for guarded_trace_file in guarded_trace_files:
   # Locate the function with the right name
   for func in original_insts['functions']:
     if func['name'] == function_name:
-      # add the trace_completed label after the replaced code
       # get label offsets from start of function
       label_instnos = get_label_instnos(func['instrs'])
-      # insert the guarded trace at the right location
-      start_inst_no = int(start_inst_no) + label_instnos[label_st]
-      stop_inst_no = int(end_inst_no.split('.')[0]) + label_instnos[label_fin]
+
+      # get start location of the guarded trace
+      func_start_inst_no = int(start_inst_no) + label_instnos[label_st]
       debug_print(f"Found {function_name}_{label_st} at index {start_inst_no}")
+
+      # add the trace_completed label after the replaced code
+      stop_inst_no = int(end_inst_no.split('.')[0]) + label_instnos[label_fin]
+      trace_id = function_name + label_st + str(start_inst_no) + label_fin + str(end_inst_no.split('.')[0])
+
+      func['instrs'].insert(stop_inst_no-1, {'label': 'trace_completed_' + str(start_inst_no)})
+
       # Read the guarded trace
       with open(os.path.join(guard_trace_dir, guarded_trace_file), 'r') as f:
         guarded_trace_insts = json.load(f)
         debug_print(f"Guarded trace instructions: {guarded_trace_insts}")
+
         # Insert the guarded trace at the right location
-        func['instrs'] = func['instrs'][:start_inst_no] + guarded_trace_insts + func['instrs'][start_inst_no:]
-        debug_print(f"Inserted {len(guarded_trace_insts)} instructions into function {function_name} at index {start_inst_no}")
+        func['instrs'] = func['instrs'][:func_start_inst_no] + guarded_trace_insts + func['instrs'][func_start_inst_no:]
+        debug_print(f"Inserted {len(guarded_trace_insts)} instructions into function {function_name} at index {func_start_inst_no}")
       break
 
 
