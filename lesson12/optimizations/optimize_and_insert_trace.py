@@ -19,6 +19,13 @@ opposite_ops = {
   'ge': 'lt'
 }
 
+def get_label_instnos(func_insts):
+  label_instnos = {}
+  for i, inst in enumerate(func_insts):
+    if 'label' in inst:
+      label_instnos[inst['label']] = i
+  label_instnos['null'] = 0
+  return label_instnos
 '''
 goes through insts, checks for control flow to determining the guards to insert
 '''
@@ -121,19 +128,18 @@ for trace_file in trace_files:
 
     commit_inst = { 'op': 'commit' }
     trace_insts.append(commit_inst)
-    recover_inst = {'label': 'recover'}
-    trace_insts.append(recover_inst)
     spec_inst = {'op': 'speculate'}
     trace_insts.insert(0, spec_inst)
 
     # remove inst if op is in inst and op is in ['jmp', 'br', 'label'] or if label is in inst
     trace_insts = [ inst for inst in trace_insts if 'op' in inst and inst['op'] not in ['jmp', 'br', 'label'] ]
+    recover_inst = {'label': 'recover'}
+    trace_insts.append(recover_inst)
 
     guarded_trace_file = os.path.join(guard_trace_dir, trace_file)
     with open(guarded_trace_file, 'w') as opt_f:
       json.dump(trace_insts, opt_f, indent=2)
 
-# Load the original file
 
 # for each guarded trace, grouped by function and in reverse order, insert the guarded trace into the location spepcified by the start_inst_no
 guard_traces_dir = os.path.join("guarded/traces", os.path.basename(original_file))
@@ -149,9 +155,11 @@ for guarded_trace_file in guarded_trace_files:
   # Locate the function with the right name
   for func in original_insts['functions']:
     if func['name'] == function_name:
+      # get label offsets from start of function
+      label_instnos = get_label_instnos(func['instrs'])
       # insert the guarded trace at the right location
-      start_inst_no = int(start_inst_no.split('.')[0])
-      debug_print(f"Found function {function_name} at index {start_inst_no}")
+      start_inst_no = int(start_inst_no.split('.')[0]) + label_instnos[label_name]
+      debug_print(f"Found {function_name}_{label_name} at index {start_inst_no}")
       # Read the guarded trace
       with open(os.path.join(guard_trace_dir, guarded_trace_file), 'r') as f:
         guarded_trace_insts = json.load(f)
