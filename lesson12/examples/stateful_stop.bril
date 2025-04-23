@@ -1,0 +1,11 @@
+
+@main() {
+  one: int = const 1;
+  hundred: int = const 100;
+  print hundred;
+
+  two_hundred: int = const 200;
+  print two_hundred;
+  three_hundred: int = const 300;
+  print three_hundred;
+}

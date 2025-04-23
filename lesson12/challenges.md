@@ -127,7 +127,7 @@ inter-procedural or not, we can view tracing as injecting a optimized code bubbl
     * we always terminate the trace before call instructions
  location original code
 
-no hot path trace_start methodology yet, but need a way to test above trace generation methodology
+no hot path trace_start methodology yet, but need a way to test above trace generation methodology:
 * hot path, start tracing is orthogonal and we could start with trace at all opportunities
 
 

@@ -609,6 +609,16 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
       if (Object.is(-0, val)) { return "-0.00000000000000000" };
       if (typeof val == "number") { return val.toFixed(17) } else {return val.toString()}}
     );
+    // Stop trace
+    state.tracing = false;
+    // Write to file
+    if (state.inst_trace.length > 0) {
+      const traceFileName = state.trace_file + ".json";
+      Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
+      state.inst_trace = [];
+      state.trace_file = `${state.trace_file}_${state.icount}`;
+    }
+
     console.log(...values);
     return NEXT;
   }
