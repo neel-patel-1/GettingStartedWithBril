@@ -110,6 +110,7 @@ MODES = {
 
 
 def localopt():
+    global block
     modify_func = trivial_dce_plus
 
     # Apply the change to all the functions in the input program.
