@@ -177,8 +177,6 @@ for guarded_trace_file in guarded_trace_files:
         # Insert the guarded trace at the right location
         func['instrs'] = func['instrs'][:func_start_inst_no+1] + guarded_trace_insts + func['instrs'][func_start_inst_no+1:]
         debug_print(f"Inserted {len(guarded_trace_insts)} instructions into function {function_name} at index {func_start_inst_no}")
-        json.dump(original_insts, sys.stdout, indent=2, sort_keys=True)
-        exit(0)
       break
 
 
