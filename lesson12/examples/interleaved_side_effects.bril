@@ -1,0 +1,34 @@
+
+@main() {
+  one: int = const 1;
+  hundred: int = const 100;
+  print hundred;
+  two_hundred: int = const 200;
+  print two_hundred;
+  three_hundred: int = const 300;
+  print three_hundred;
+  four_hundred: int = const 400;
+  print four_hundred;
+  five_hundred: int = const 500;
+  print five_hundred;
+  six_hundred: int = const 600;
+  print six_hundred;
+  seven_hundred: int = const 700;
+  print seven_hundred;
+  eight_hundred: int = const 800;
+  print eight_hundred;
+  nine_hundred: int = const 900;
+  print nine_hundred;
+  one_thousand: int = const 1000;
+  print one_thousand;
+  one_thousand_one_hundred: int = const 1100;
+  print one_thousand_one_hundred;
+  one_thousand_two_hundred: int = const 1200;
+  print one_thousand_two_hundred;
+  one_thousand_three_hundred: int = const 1300;
+  print one_thousand_three_hundred;
+  one_thousand_four_hundred: int = const 1400;
+  print one_thousand_four_hundred;
+  one_thousand_five_hundred: int = const 1500;
+  print one_thousand_five_hundred;
+}
