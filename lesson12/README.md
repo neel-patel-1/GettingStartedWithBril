@@ -1,48 +1,18 @@
 # Lesson 12
 
 ```sh
-deno run --allow-read=./examples --allow-write=. ./trace-brili/brili.ts examples/example.json 10
-
-python3 ./optimizations/lvn.py -p -c -f < traces/example.json/main_0.json  > opt/traces/example.json/main_0.lvn.json
-python3 ./utils/trace2txt.py < opt/traces/example.json/main_0.lvn.json
+./run.sh <example_name> <example_args>
+# e.g.,
+./run.sh example 10
 ```
 
-```
-  lvn.2: int = const 1;
-  hundred: int = const 100;
-  cond: bool = lt x hundred;
-  br cond .then .else;
-.then:
-  y: int = call @f x;
-  one: int = const 1;
-  b: int = sub a one;
-  ret b;
-  jmp .done;
-.done:
-  print y;
-  ret;
-```
 
 ```sh
-python3 ./optimizations/dce.py tdce+  < opt/traces/example.json/main_0.lvn.json | python3 ./utils/trace2txt.py
-```
-
-```
-  lvn.2: int = const 1;
-  hundred: int = const 100;
-  cond: bool = lt x hundred;
-  br cond .then .else;
-.then:
-  y: int = call @f x;  // wait for ret to do an assignment
-  one: int = const 1;
-  b: int = sub a one; // replace a with x
-  ret b; // assign y to b
-  jmp .done;
-.done:
-  print y;
-  ret;
-```
-
-```sh
- python3 ./optimizations/inline.py examples/example.json opt/traces/example.json/main_0.lvn.json | python3 optimizations/lvn.py -c -p -f | python3 optimizations/dce.py | python3 ./utils/trace2txt.py
+(1) runs the unmodified version of the example through trace-brili, then (2) applies inlining and lvn to the trace
+4:13
+then (3) reinserts the trace into the program, and (4) applies dce
+4:14
+then (5) reruns regular brili, printing dynamic instruction count
+4:14
+of the "optimized" program
 ```

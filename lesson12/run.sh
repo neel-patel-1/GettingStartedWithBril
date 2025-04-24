@@ -25,7 +25,6 @@ bril2txt < $INPUT_JSON
   # apply optimizations to the trace
 mkdir -p $OPT_TRACES
 for trace in ${TRACE_DIR}/*; do
-  #python3 ./optimizations/inline.py ${INPUT_JSON} ${trace} | python3 optimizations/lvn.py  -p -f | python3 optimizations/dce.py > $OPT_TRACES/$(basename $trace)
   python3 ./optimizations/inline.py ${INPUT_JSON} ${trace} | python3 optimizations/lvn.py  -p -f > $OPT_TRACES/$(basename $trace)
 done
 
