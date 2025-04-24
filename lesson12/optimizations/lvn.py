@@ -98,6 +98,7 @@ def lvn_block(block, lookup, canonicalize, fold):
 
     # Track constant values for values assigned with `const`.
     num2const = {}
+    const2num = {}
 
     # Initialize the table with numbers for input variables. These
     # variables are their own canonical source.
@@ -106,6 +107,7 @@ def lvn_block(block, lookup, canonicalize, fold):
         num2vars[num] = [var]
 
     for instr, last_write in zip(block, last_writes(block)):
+        print(instr, file=sys.stderr)
         # Look up the value numbers for all variable arguments,
         # generating new numbers for unseen variables.
         argvars = instr.get('args', [])
@@ -122,6 +124,16 @@ def lvn_block(block, lookup, canonicalize, fold):
             for rhs in num2vars.values():
                 if instr['dest'] in rhs:
                     rhs.remove(instr['dest'])
+
+        print(f"var2num:{var2num}, value2num:{value2num}, num2vars:{num2vars}, num2const:{num2const} const2num{const2num}", file=sys.stderr)
+        # consts may have been assigned to a variable already
+        if 'op' in instr and instr['op'] == 'const' and instr['value'] in num2const.values():
+            print(f"Seen this const before: {instr['value']} -> {instr['dest']}", file=sys.stderr)
+            num = const2num[instr['value']]
+            var = num2vars[num].append(instr['dest'])
+            var2num[instr['dest']] = num
+            continue
+
 
         # Non-call value operations are candidates for replacement. (We
         # could conceivably include calls to pure functions as values,
@@ -160,6 +172,7 @@ def lvn_block(block, lookup, canonicalize, fold):
             # Record constant values.
             if instr['op'] == 'const':
                 num2const[newnum] = instr['value']
+                const2num[instr['value']] = newnum
 
             if last_write:
                 # Preserve the variable name for other blocks.
