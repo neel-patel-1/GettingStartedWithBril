@@ -13,9 +13,10 @@ OUTPUT=opt/${FNAME}.json
 TRACE_BRILI=./trace-brili/brili.ts
 OG_BRILI=brili
 
+rm -rf $TRACE_DIR $OPT_TRACES $OUTPUT $INPUT_JSON guarded/traces/$FNAME.json
 cat $INPUT | bril2json > $INPUT_JSON
 # run through trace brili to generate the traces
-deno run --allow-read=./examples --allow-write=. $TRACE_BRILI $INPUT_JSON ${ARGS}
+deno run --allow-read=./examples --allow-write=. $TRACE_BRILI $INPUT_JSON -p ${ARGS}
 brili -p ${ARGS} < $INPUT_JSON
 echo "Before optimization: "
 echo "-----------------------"

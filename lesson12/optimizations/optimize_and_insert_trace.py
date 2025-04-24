@@ -167,9 +167,7 @@ for guarded_trace_file in guarded_trace_files:
 
       # add the trace_completed label after the replaced code
       stop_inst_no = int(end_inst_no.split('.')[0]) + label_instnos[label_fin]
-      trace_id = function_name + label_st + str(start_inst_no) + label_fin + str(end_inst_no.split('.')[0])
-
-      func['instrs'].insert(stop_inst_no-1, {'label': 'trace_completed_' + str(start_inst_no)})
+      func['instrs'].insert(stop_inst_no, {'label': 'trace_completed_' + str(start_inst_no)})
 
       # Read the guarded trace
       with open(os.path.join(guard_trace_dir, guarded_trace_file), 'r') as f:
@@ -177,8 +175,10 @@ for guarded_trace_file in guarded_trace_files:
         debug_print(f"Guarded trace instructions: {guarded_trace_insts}")
 
         # Insert the guarded trace at the right location
-        func['instrs'] = func['instrs'][:func_start_inst_no] + guarded_trace_insts + func['instrs'][func_start_inst_no:]
+        func['instrs'] = func['instrs'][:func_start_inst_no+1] + guarded_trace_insts + func['instrs'][func_start_inst_no+1:]
         debug_print(f"Inserted {len(guarded_trace_insts)} instructions into function {function_name} at index {func_start_inst_no}")
+        json.dump(original_insts, sys.stdout, indent=2, sort_keys=True)
+        exit(0)
       break
 
 
