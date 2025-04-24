@@ -25,13 +25,13 @@ bril2txt < $INPUT_JSON
   # apply optimizations to the trace
 mkdir -p $OPT_TRACES
 for trace in ${TRACE_DIR}/*; do
-  python3 ./optimizations/inline.py ${INPUT_JSON} ${trace} | python3 optimizations/lvn.py  -p -f | python3 optimizations/dce.py > $OPT_TRACES/$(basename $trace)
-  #python3 ./optimizations/inline.py ${INPUT_JSON} ${trace} | python3 optimizations/lvn.py  -p -f > $OPT_TRACES/$(basename $trace)
+  #python3 ./optimizations/inline.py ${INPUT_JSON} ${trace} | python3 optimizations/lvn.py  -p -f | python3 optimizations/dce.py > $OPT_TRACES/$(basename $trace)
+  python3 ./optimizations/inline.py ${INPUT_JSON} ${trace} | python3 optimizations/lvn.py  -p -f > $OPT_TRACES/$(basename $trace)
 done
 
 # re-insert the traces
 echo "After optimization: "
 echo "-----------------------"
-python3 ./optimizations/optimize_and_insert_trace.py $INPUT_JSON > $OUTPUT
+python3 ./optimizations/optimize_and_insert_trace.py $INPUT_JSON | python3 ../bril/examples/tdce.py tdce+ > $OUTPUT
 bril2txt < $OUTPUT
 brili -p ${ARGS} < $OUTPUT
