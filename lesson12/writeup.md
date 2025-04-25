@@ -89,9 +89,9 @@ We run our optimizer on three of our own examples and one core bril benchmark.
 * `assign_and_print` repeatedly assigns to a variable and prints immediately. Since traces are emitted when operations with side-effects (prints) are invoked, this example generates many small traces.
 * TODO: benchmark
 
-| Program           | Dyn Inst Count (Unoptimized) | Dyn Inst Count (Optimized) |
+| Program           | Dyn Inst Count (Unoptimized)  | Dyn Inst Count (w/ Trace-based Opts ) |
 |-------------------|-------------------------------|-----------------------------|
-| `hot_loop`        | 28                           | 26                         |
+| `hot_loop`        | 30                            | 26                          |
 | `dead_code_inline`| TBD                           | TBD                         |
-| `assign_and_print`| 61                            | TBD                         |
-| `BENCHMARK`       | TBD   |  TBD        |
+| `assign_and_print`| 60                            | 121                         |
+| `BENCHMARK`       | TBD                           | TBD                         |
