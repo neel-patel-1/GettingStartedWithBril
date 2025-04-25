@@ -93,4 +93,4 @@ We run our optimizer on three of our own examples.
 |-------------------|-------------------------------|-----------------------------|
 | `hot_loop`        | TBD                           | TBD                         |
 | `dead_code_inline`| TBD                           | TBD                         |
-| `assign_and_print`| TBD                           | TBD                         |
+| `assign_and_print`| 61                            | TBD                         |
