@@ -82,3 +82,15 @@ Such a trace would cause the program to produce incorrect results. To address th
   cond: bool = lt it five;
   br cond .for.body .for.done;
 ```
+
+We run our optimizer on three of our own examples.
+* `hot_loop` tests our optimizers ability to detect hot loop headers/bodies and generate correct, optimized traces
+* `dead_code_inline` redefines a set of local variables in a callee function. Since our optimizer constructs inter-procedural traces, it inlines functions and eliminates the redundant variables.
+* `assign_and_print` repeatedly assigns to a variable and prints immediately. Since traces are emitted when operations with side-effects (prints) are invoked, this example generates many small traces.
+* TODO: benchmark
+
+| Program           | Dyn Inst Count (Unoptimized) | Dyn Inst Count (Optimized) |
+|-------------------|-------------------------------|-----------------------------|
+| `hot_loop`        | TBD                           | TBD                         |
+| `dead_code_inline`| TBD                           | TBD                         |
+| `assign_and_print`| TBD                           | TBD                         |
