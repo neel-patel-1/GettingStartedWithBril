@@ -4,7 +4,7 @@
 import sys
 import json
 
-DEBUG = True  # Set this to False to disable debug output
+DEBUG = False
 
 def debug_print(*args, **kwargs):
     """Print debug messages if DEBUG is enabled."""

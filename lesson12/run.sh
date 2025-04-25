@@ -23,11 +23,12 @@ OG_BRILI=brili
 rm -rf $TRACE_DIR $OPT_TRACES $OUTPUT $INPUT_JSON guarded/traces/$FNAME.json
 cat $INPUT | bril2json > $INPUT_JSON
 # run through trace brili to generate the traces
-deno run --allow-read=./examples --allow-write=. $TRACE_BRILI $INPUT_JSON -h ${H_THRESH} -p ${ARGS}
-brili -p ${ARGS} < $INPUT_JSON
+deno run --allow-read=./examples --allow-write=. $TRACE_BRILI $INPUT_JSON -h ${H_THRESH} ${ARGS}
 echo "Before optimization: "
 echo "-----------------------"
 bril2txt < $INPUT_JSON
+echo "Output:"
+brili -p ${ARGS} < $INPUT_JSON
 
 mkdir -p $OPT_TRACES
 rm -rf filled/
@@ -42,6 +43,7 @@ for trace in ${TRACE_DIR}/*; do
   no=$((no + 1))
 done
 echo "Reinserted Traces -- No Optimizations: "
+echo "-----------------------"
 python3 ./optimizations/optimize_and_insert_trace.py $INPUT_JSON > $OUTPUT
 bril2txt < $OUTPUT
 brili -p ${ARGS} < $OUTPUT
