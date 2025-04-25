@@ -15,5 +15,7 @@
 * For results from writeup:
 ```sh
 # hot loop
-./run.sh hot_loop -h=2 10
+./run.sh hot_loop 10 -h=2
+# assign and print statements
+./run.sh assign_and_print -h=0
 ```
