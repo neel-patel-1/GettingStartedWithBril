@@ -35,6 +35,7 @@ interface Op {
   funcs?: Ident[];
   labels?: Ident[];
   pos?: Position;
+  count?: number;
 }
 
 /**

@@ -1,6 +1,7 @@
 import * as bril from './bril-ts/bril.ts';
 import {readStdin, unreachable} from './bril-ts/util.ts';
 
+const hotnessThreshold = 2;
 /**
  * An interpreter error to print to the console.
  */
@@ -327,6 +328,7 @@ type State = {
   tracing: boolean,
   trace_file: string,
   inst_trace: bril.Instruction[],
+  trace_length: number,
   labelOffset: number,
   dir_name: string,
 }
@@ -376,6 +378,7 @@ function evalCall(instr: bril.Operation, state: State): Action {
     tracing: state.tracing,
     trace_file: state.trace_file,
     inst_trace: state.inst_trace,
+    trace_length: state.trace_length,
   }
   let retVal = evalFunc(func, newState);
   state.icount = newState.icount;
@@ -420,10 +423,34 @@ function evalCall(instr: bril.Operation, state: State): Action {
  * otherwise, return "next" to indicate that we should proceed to the next
  * instruction or "end" to terminate the function.
  */
-function evalInstr(instr: bril.Instruction, state: State): Action {
+function evalInstr(instr: bril.Instruction, state: State, func: bril.Function): Action {
   state.icount += BigInt(1);
-  if (state.tracing) {
-    state.inst_trace.push(instr);
+  console.log("Instr: " + instr.op + " LabelOffset: " + state.labelOffset)
+  if (instr.count == undefined) {
+    instr.count = 0;
+  }
+  instr.count += 1;
+  if (instr.count >= hotnessThreshold ) {
+    console.log("Hot Instr: " + instr.op)
+    if ( state.trace_file == undefined){
+      state.trace_file = state.dir_name + "/" + func.name + "_" + state.curlabel + "_" + state.labelOffset;
+    }
+    if (instr.op != 'print'){
+      state.inst_trace.push(instr);
+      state.trace_length++;
+    }
+  }
+  else  {
+    if (state.trace_length > 0) {
+      const traceFileName = state.trace_file + "_" + state.curlabel + "_" + state.labelOffset + ".json";
+      console.log("Cold Instruction Hit. Trace stopped. writing trace to file: " + traceFileName);
+      state.inst_trace.pop();
+      Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
+      state.inst_trace = [];
+      state.trace_file = state.dir_name + "/" + func.name + "_" + state.curlabel + "_" + state.labelOffset;
+      console.log("Cold Instruction Hit hit. Trace stopped. next trace file: " + state.trace_file);
+      state.trace_length = 0;
+    }
   }
 
   // Check that we have the right number of arguments.
@@ -617,17 +644,6 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
 
   case "jmp": {
     const targetLabel = getLabel(instr, 0);
-    if (!state.seenlabels) {
-      state.seenlabels = new Set<string>();
-    }
-    if (state.seenlabels.has(targetLabel)){
-      if (state.tracing) {
-        console.log("Trace completed.\n");
-      }
-      // this jmp is a backedge, enable tracing if not already
-      state.tracing = true;
-      console.log("Trace started.\n");
-    }
     return {"action": "jump", "label": getLabel(instr, 0)};
   }
 
@@ -802,22 +818,24 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
 }
 
 function evalFunc(func: bril.Function, state: State): Value | null {
+  state.labelOffset = 0;
   for (let i = 0; i < func.instrs.length; ++i) {
     let line = func.instrs[i];
     if ('op' in line) {
-      // Run an instruction.
-      let action = evalInstr(line, state);
+      // Run an instruction./conso
+      let action = evalInstr(line, state, func);
 
       if (line.op == "print"){
+        console.log("Line has op " + line.op)
         // Write to file
-        if (state.inst_trace.length > 0) {
+        if (state.trace_length > 0) {
           const traceFileName = state.trace_file + "_" + state.curlabel + "_" + state.labelOffset + ".json";
           console.log("Print hit. Trace stopped. writing trace to file: " + traceFileName);
           state.inst_trace.pop();
           Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
           state.inst_trace = [];
           state.trace_file = state.dir_name + "/" + func.name + "_" + state.curlabel + "_" + state.labelOffset;
-          //state.trace_file = func.name + "_" + state.curlabel + "_" + state.labelOffset;
+          state.trace_length = 0;
           console.log("Print hit. Trace stopped. next trace file: " + state.trace_file);
         }
       }
@@ -1005,9 +1023,10 @@ async function evalProg(prog: bril.Program) {
     labelOffset: 0,
     trace_file: null,
     inst_trace: [],
+    trace_length: 0,
   }
 
-  state.trace_file = state.dir_name + "/" + "main" + "_" + state.curlabel + "_" + state.labelOffset;
+  // state.trace_file = state.dir_name + "/" + "main" + "_" + state.curlabel + "_" + state.labelOffset;
 
   evalFunc(main, state);
 

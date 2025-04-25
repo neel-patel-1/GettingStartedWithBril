@@ -22,8 +22,22 @@ echo "Before optimization: "
 echo "-----------------------"
 bril2txt < $INPUT_JSON
 
-  # apply optimizations to the trace
 mkdir -p $OPT_TRACES
+rm -rf filled/
+mkdir -p filled/$(basename $trace)
+no=0
+for trace in ${TRACE_DIR}/*; do
+  cp $trace $OPT_TRACES/$(basename $trace)
+  python3 optimizations/fill_labels.py $trace > filled/filled_${no}
+  cp -f filled/filled_${no} $trace
+  no=$((no + 1))
+done
+echo "Reinserted Traces -- No Optimizations: "
+python3 ./optimizations/optimize_and_insert_trace.py $INPUT_JSON > $OUTPUT
+bril2txt < $OUTPUT
+brili -p ${ARGS} < $OUTPUT
+
+  # apply optimizations to the trace
 for trace in ${TRACE_DIR}/*; do
   python3 ./optimizations/inline.py ${INPUT_JSON} ${trace} | python3 optimizations/lvn.py  -p -f > $OPT_TRACES/$(basename $trace)
 done

@@ -1,0 +1,21 @@
+@main(x: int) {
+  one: int = const 1;
+  five: int = const 5;
+
+  it: int = id one;
+  accum: int = const 0;
+
+.for.header:
+  cond: bool = lt it five;
+  br cond .for.body .for.done;
+
+.for.body:
+  it: int = add it one;
+  accum: int = add accum it;
+
+  jmp .for.header;
+
+.for.done:
+  print accum;
+  ret;
+}

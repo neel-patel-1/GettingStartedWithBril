@@ -1,0 +1,32 @@
+@f(a: int): int {
+  one: int = const 1;
+  b: int = sub a one;
+  cond: bool = lt b one;
+  br cond .then .else;
+  .then:
+  print b;
+  jmp .done;
+  .else:
+  .done:
+  ret b;
+}
+@g(a: int): int {
+  one: int = const 1;
+  b: int = add a one;
+  ret b;
+}
+@main(x: int) {
+  one: int = const 1;
+  hundred: int = const 100;
+  cond: bool = lt x hundred;
+  br cond .then .else;
+.then:
+  y: int = call @f x;
+  jmp .done;
+.else:
+  y: int = call @g x;
+  jmp .done;
+.done:
+  print y;
+  ret;
+}
