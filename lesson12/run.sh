@@ -46,6 +46,7 @@ echo "Reinserted Traces -- No Optimizations: "
 echo "-----------------------"
 python3 ./optimizations/optimize_and_insert_trace.py $INPUT_JSON > $OUTPUT
 bril2txt < $OUTPUT
+echo "Output:"
 brili -p ${ARGS} < $OUTPUT
 
   # apply optimizations to the trace
@@ -58,4 +59,5 @@ echo "After optimization: "
 echo "-----------------------"
 python3 ./optimizations/optimize_and_insert_trace.py $INPUT_JSON | python3 ../bril/examples/tdce.py tdce+ > $OUTPUT
 bril2txt < $OUTPUT
+echo "Output:"
 brili -p ${ARGS} < $OUTPUT
