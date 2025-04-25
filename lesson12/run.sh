@@ -28,6 +28,7 @@ mkdir -p filled/$(basename $trace)
 no=0
 for trace in ${TRACE_DIR}/*; do
   cp $trace $OPT_TRACES/$(basename $trace)
+  cp $trace ./trace_og_nofill
   python3 optimizations/fill_labels.py $trace > filled/filled_${no}
   cp -f filled/filled_${no} $trace
   no=$((no + 1))
