@@ -1,9 +1,15 @@
 #!/bin/bash
 FNAME=$1
 H_THRESH=2
-ARGS="${@:2}"
+for arg in "$@"; do
+  if [[ $arg == "-h="* ]]; then
+    H_THRESH=${arg#-h=}
+    break
+  fi
+done
+ARGS=$(for arg in "${@:2}"; do [[ $arg != -h=* ]] && echo -n "$arg "; done)
 if [ -z "$FNAME {ARGS}" ]; then
-  echo "Usage: $0 <filename>"
+  echo "Usage: $0 <filename> [-h=<threshold>] [additional arguments]"
   exit 1
 fi
 INPUT=examples/${FNAME}.bril

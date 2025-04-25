@@ -1,5 +1,6 @@
 # Lesson 12
 
+* Example Usage:
 ```sh
 ./run.sh <example_name> <example_args>
 # e.g.,
@@ -10,3 +11,9 @@
 3) reinserts the trace into the program
 4) applies dce to the full program
 5) reruns regular brili, printing dynamic instruction count of the "optimized" program
+
+* For results from writeup:
+```sh
+# hot loop
+./run.sh hot_loop -h=2 10
+```
