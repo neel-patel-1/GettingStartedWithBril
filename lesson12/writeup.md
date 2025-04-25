@@ -92,6 +92,6 @@ We run our optimizer on three of our own examples and one core bril benchmark.
 | Program           | Dyn Inst Count (Unoptimized)  | Dyn Inst Count (w/ Trace-based Opts ) |
 |-------------------|-------------------------------|-----------------------------|
 | `hot_loop`        | 30                            | 26                          |
-| `dead_code_inline`| TBD                           | TBD                         |
-| `assign_and_print`| 60                            | 121                         |
+| `dead_code_inline`| 134                           | 141                        |
+| `assign_and_print`| 60                            | 150                         |
 | `BENCHMARK`       | TBD                           | TBD                         |
