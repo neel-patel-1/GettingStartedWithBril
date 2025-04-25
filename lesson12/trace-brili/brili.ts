@@ -831,7 +831,7 @@ function evalFunc(func: bril.Function, state: State): Value | null {
         if (state.trace_length > 0) {
           const traceFileName = state.trace_file + "_" + state.curlabel + "_" + state.labelOffset + ".json";
           console.log("Print hit. Trace stopped. writing trace to file: " + traceFileName);
-          state.inst_trace.pop();
+          console.log("Trace Insts: " + state.inst_trace.length);
           Deno.writeTextFile(traceFileName, JSON.stringify(state.inst_trace, null, 2));
           state.inst_trace = [];
           state.trace_file = state.dir_name + "/" + func.name + "_" + state.curlabel + "_" + state.labelOffset;
