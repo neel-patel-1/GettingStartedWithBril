@@ -1,5 +1,6 @@
 #!/bin/bash
 FNAME=$1
+H_THRESH=0
 ARGS="${@:2}"
 if [ -z "$FNAME {ARGS}" ]; then
   echo "Usage: $0 <filename>"
@@ -16,7 +17,7 @@ OG_BRILI=brili
 rm -rf $TRACE_DIR $OPT_TRACES $OUTPUT $INPUT_JSON guarded/traces/$FNAME.json
 cat $INPUT | bril2json > $INPUT_JSON
 # run through trace brili to generate the traces
-deno run --allow-read=./examples --allow-write=. $TRACE_BRILI $INPUT_JSON -p ${ARGS}
+deno run --allow-read=./examples --allow-write=. $TRACE_BRILI $INPUT_JSON -h ${H_THRESH} -p ${ARGS}
 brili -p ${ARGS} < $INPUT_JSON
 echo "Before optimization: "
 echo "-----------------------"

@@ -1,7 +1,7 @@
 import * as bril from './bril-ts/bril.ts';
 import {readStdin, unreachable} from './bril-ts/util.ts';
 
-const hotnessThreshold = 2;
+let hotnessThreshold = 2;
 /**
  * An interpreter error to print to the console.
  */
@@ -993,6 +993,14 @@ async function evalProg(prog: bril.Program) {
   if (pidx > -1) {
     profiling = true;
     args.splice(pidx, 1);
+  }
+
+  // Silly argument parsing to find the `-h` flag.
+  let hidx = args.indexOf('-h');
+  if (hidx > -1) {
+    hotnessThreshold = Number(args[hidx + 1]);
+    args.splice(hidx, 2);
+    console.log("Hotness threshold set to " + hotnessThreshold);
   }
 
   // First argument is the program name
