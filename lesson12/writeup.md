@@ -94,3 +94,4 @@ We run our optimizer on three of our own examples and one core bril benchmark.
 | `hot_loop`        | 28                           | 26                         |
 | `dead_code_inline`| TBD                           | TBD                         |
 | `assign_and_print`| 61                            | TBD                         |
+| `BENCHMARK`       | TBD   |  TBD        |
