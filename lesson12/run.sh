@@ -1,6 +1,6 @@
 #!/bin/bash
 FNAME=$1
-H_THRESH=0
+H_THRESH=2
 ARGS="${@:2}"
 if [ -z "$FNAME {ARGS}" ]; then
   echo "Usage: $0 <filename>"
@@ -25,13 +25,14 @@ bril2txt < $INPUT_JSON
 
 mkdir -p $OPT_TRACES
 rm -rf filled/
-mkdir -p filled/$(basename $trace)
+mkdir -p filled/$(basename $INPUT_JSON)
 no=0
 for trace in ${TRACE_DIR}/*; do
   cp $trace $OPT_TRACES/$(basename $trace)
   cp $trace ./trace_og_nofill
   python3 optimizations/fill_labels.py $trace > filled/filled_${no}
   cp -f filled/filled_${no} $trace
+  cp -f filled/filled_${no} $OPT_TRACES/$(basename $trace)
   no=$((no + 1))
 done
 echo "Reinserted Traces -- No Optimizations: "
