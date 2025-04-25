@@ -4,6 +4,13 @@
 import sys
 import json
 
+DEBUG = True  # Set this to False to disable debug output
+
+def debug_print(*args, **kwargs):
+    """Print debug messages if DEBUG is enabled."""
+    if DEBUG:
+        print(*args, **kwargs)
+
 block = []
 
 def trivial_dce_pass():
@@ -33,6 +40,8 @@ def trivial_dce_pass():
 
     # Replace the block with the filtered one.
     block[:] = new_block
+
+    debug_print("After trivial_dce_pass:", block)
 
     return changed
 
@@ -83,6 +92,9 @@ def drop_killed_local(block):
                  if i not in to_drop]
     changed = len(new_block) != len(block)
     block[:] = new_block
+
+    debug_print("After drop_killed_local:", block)
+
     return changed
 
 
@@ -93,6 +105,9 @@ def drop_killed_pass():
     global block
     changed = False
     changed |= drop_killed_local(block)
+
+    debug_print("After drop_killed_pass:", block)
+
     return changed
 
 
@@ -115,7 +130,9 @@ def localopt():
 
     # Apply the change to all the functions in the input program.
     block = json.load(sys.stdin)
+    debug_print("Initial block:", block)
     modify_func()
+    debug_print("Final block:", block)
     json.dump(block, sys.stdout, indent=2, sort_keys=True)
 
 

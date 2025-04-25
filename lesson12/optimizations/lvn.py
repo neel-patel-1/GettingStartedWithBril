@@ -4,6 +4,12 @@ import json
 import sys
 from collections import namedtuple
 
+DEBUG = False
+
+def debug_print(*args, **kwargs):
+    """Print debug messages if DEBUG is enabled."""
+    if DEBUG:
+        print(*args, **kwargs)
 
 # A Value uniquely represents a computation in terms of sub-values.
 Value = namedtuple('Value', ['op', 'args'])
@@ -107,7 +113,7 @@ def lvn_block(block, lookup, canonicalize, fold):
         num2vars[num] = [var]
 
     for instr, last_write in zip(block, last_writes(block)):
-        print(instr, file=sys.stderr)
+        debug_print(instr)
         # Look up the value numbers for all variable arguments,
         # generating new numbers for unseen variables.
         argvars = instr.get('args', [])
@@ -125,10 +131,10 @@ def lvn_block(block, lookup, canonicalize, fold):
                 if instr['dest'] in rhs:
                     rhs.remove(instr['dest'])
 
-        print(f"var2num:{var2num}, value2num:{value2num}, num2vars:{num2vars}, num2const:{num2const} const2num{const2num}", file=sys.stderr)
+        debug_print(f"var2num:{var2num}, value2num:{value2num}, num2vars:{num2vars}, num2const:{num2const} const2num{const2num}", file=sys.stderr)
         # consts may have been assigned to a variable already
         if 'op' in instr and instr['op'] == 'const' and instr['value'] in num2const.values():
-            print(f"Seen this const before: {instr['value']} -> {instr['dest']}", file=sys.stderr)
+            debug_print(f"Seen this const before: {instr['value']} -> {instr['dest']}", file=sys.stderr)
             num = const2num[instr['value']]
             var = num2vars[num].append(instr['dest'])
             var2num[instr['dest']] = num
