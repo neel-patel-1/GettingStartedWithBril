@@ -85,13 +85,11 @@ Such a trace would cause the program to produce incorrect results. To address th
 
 We run our optimizer on three of our own examples and one core bril benchmark.
 * `hot_loop` tests our optimizers ability to detect hot loop headers/bodies and generate correct, optimized traces
-* `dead_code_inline` redefines a set of local variables in a callee function. Since our optimizer constructs inter-procedural traces, it inlines functions and eliminates the redundant variables.
 * `assign_and_print` repeatedly assigns to a variable and prints immediately. Since traces are emitted when operations with side-effects (prints) are invoked, this example generates many small traces.
-* TODO: benchmark
+* `loopfact` computes the factorial of a number using a loop. This example is similar to `hot_loop`, but with a bigger body.
 
 | Program           | Dyn Inst Count (Unoptimized)  | Dyn Inst Count (w/ Trace-based Opts ) |
 |-------------------|-------------------------------|-----------------------------|
 | `hot_loop`        | 30                            | 26                          |
-| `dead_code_inline`| 134                           | 141                        |
 | `assign_and_print`| 60                            | 150                         |
-| `BENCHMARK`       | TBD                           | TBD                         |
+| `loopfact`        | 116                           | 53                         |
