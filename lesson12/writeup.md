@@ -3,6 +3,7 @@ This task was a collaboration between @arnavm30 and @neel-patel-1. We implemente
 
 * **Hotness detection && Trace Collection**: We modify the baseline `brili` interpreter to implement hot code detection and trace collection. For hot code detection, we add a counter to the `Op`object to count the number of times an instruction is executed. When a *hotness_threshold* (2 in our implementation) is reached, `trace-brili` will begin emitting instructions to a trace file.
 * **Trace Optimization and Insertion**: Traces are optimized in a multi-stage pipeline. First traces are passed through `inline.py` to remove call and ret instructions, substitute arguments with the caller's variable names and handle any naming conflicts within the callee. Next, they are passed through `lvn.py` for local value numbering and `tdce.py` for dead code elimination. To prepare traces for insertion back into the original program,  `optimize_and_insert_trace.py` (1) wraps the optimized trace with a pair of *speculate* and *commit* instructions, (2) replaces each branch with a guard instruction, and (3) uses `trace-brili`'s <func>_<start_label>_<start_label_offset>_<end_label>_<end_label_offset> trace naming convention to find the code location to insert the optimized trace.
+* **Limitations**: Our implementation does not properly handle recursion. Our test cases and evaluation was limited to non-recursive programs.
 
 One interesting aspect of our implementation that highlights a challenge with trace insertion in an ahead-of-time, trace-based optimizer is shown in the below example when the optimizer is applied to code containing a loop. Before optimization [hot_loop.bril's]() loop body executes five times:
 ```
@@ -93,5 +94,4 @@ We run our optimizer on three of our own examples and one core bril benchmark.
 | `hot_loop`        | 30                            | 26                          |
 | `assign_and_print`| 60                            | 150                         |
 | `loopfact`        | 116                           | 53                         |
-
-* **Limitations**: Our implementation does not properly handle recursion. Our test cases and evaluation was limited to non-recursive programs.
+---
